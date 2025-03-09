@@ -2,6 +2,12 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
 import './App.css'
 import Home from './pages/Home'
 import About from './pages/About'
+import Contact from './pages/Contact'
+import Login from './pages/Login'
+import Player from './pages/Player'
+import Profile from './pages/Profile'
+import Signup from './pages/Signup'
+import Training from './pages/Training'
 
 function App() {
 
