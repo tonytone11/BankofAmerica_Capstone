@@ -1,12 +1,12 @@
-import { useState } from "react";
-
+import '../styles/Signup.css'
+import { useState } from "react"
 const Signup = () => {
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
     userName: "",
     email: "",
-    PhoneNumber:"",
+  
     password: "",
   });
 
@@ -33,7 +33,8 @@ const Signup = () => {
         throw new Error(data.error || "Registration failed");
       }
 
-      alert("Signup successful!");
+      //redirects to login page after sucessful registration
+      window.location.href = '/login';
       setErrorMessage(""); // Clear any previous errors
     } catch (error) {
       setErrorMessage(error.message); // Store error as a string
@@ -41,7 +42,9 @@ const Signup = () => {
   };
 
   return (
-    <div>
+    <div className='page-container'>
+    <div className="home-container">
+        <div className='main'>
       <h2>Signup</h2>
       {errorMessage && <p style={{ color: "red" }}>{errorMessage}</p>}
       <form onSubmit={handleSubmit}>
@@ -49,11 +52,13 @@ const Signup = () => {
         <input type="text" name="lastName" placeholder="Last Name" onChange={handleChange} required />
         <input type="text" name="userName" placeholder="Username" onChange={handleChange} required />
         <input type="email" name="email" placeholder="Email" onChange={handleChange} required />
-        <input type="phone" name="phone number" placeholder="Phone Number" onChange={handleChange} required />
+       
         <input type="password" name="password" placeholder="Password" onChange={handleChange} required />
         
         <button type="submit">Sign Up</button>
       </form>
+      </div>
+    </div>
     </div>
   );
 };

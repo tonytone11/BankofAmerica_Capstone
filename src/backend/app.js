@@ -41,18 +41,18 @@ connection.connect((err) => {
 // **Register Route**
 app.post('/register', async (req, res) => {
     try {
-        const { firstName, lastName, userName, email, phoneNumber, password } = req.body;
+        const { firstName, lastName, userName, email, password } = req.body;
 
         // Hash the password
         const hashedPassword = await bcrypt.hash(password, 10);
 
         // Insert user into the database
         const [results] = await connection.promise().query(
-            'INSERT INTO userInfo (firstName, lastName, userName, email,phoneNumber, password) VALUES (?, ?, ?, ?, ?,?)',
-            [firstName, lastName, userName, email, phoneNumber, hashedPassword]
+            'INSERT INTO userInfo (firstName, lastName, userName, email, password) VALUES (?, ?, ?, ?, ?)',
+            [firstName, lastName, userName, email, hashedPassword]
         );
 
-        res.status(201).json({ message: 'Registration successful!' });
+        res.status(201).json({ message: 'Registration successful!', redirectUrl: '/login'});
     } catch (error) {
         console.log(error);
 

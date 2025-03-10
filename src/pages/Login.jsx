@@ -1,5 +1,6 @@
 import { useState } from "react";
-
+import '../styles/Login.css'
+// import '../styles/Home.css'
 const Login = () => {
   const [formData, setFormData] = useState({
     userName: "",
@@ -30,6 +31,7 @@ const Login = () => {
       }
 
       alert(`Login successful! Welcome, ${data.message}`);
+      window.location.href = '/profile';
       setErrorMessage(""); // Clear previous errors
     } catch (error) {
       setErrorMessage(error.message); // Store error as a string
@@ -37,7 +39,11 @@ const Login = () => {
   };
 
   return (
-    <div>
+    
+    <div className="page-container">
+
+    <div className="home-container">
+        <div className="main">
       <h2>Login</h2>
       {errorMessage && <p style={{ color: "red" }}>{errorMessage}</p>}
       <form onSubmit={handleSubmit}>
@@ -45,7 +51,11 @@ const Login = () => {
         <input type="password" name="password" placeholder="Password" onChange={handleChange} required />
         <button type="submit">Login</button>
       </form>
+      </div>
     </div>
+    </div>
+
+
   );
 };
 
