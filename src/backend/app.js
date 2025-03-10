@@ -1,3 +1,4 @@
+// Import required modules
 const express = require('express');
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -6,12 +7,19 @@ const bodyParser = require('body-parser');
 const bcrypt = require('bcryptjs');
 const mysql = require('mysql2');
 const jwt = require('jsonwebtoken');
+const cors = require('cors'); // Fix for frontend-backend communication
 const path = require('path');
 
+// Load environment variables from .env file
 dotenv.config();
-app.use(express.static(path.join(__dirname, 'pages')));
+
+// Middleware setup
+app.use(cors()); // Allows frontend to communicate with backend
 app.use(express.urlencoded({ extended: false }));
 app.use(bodyParser.json());
+
+// Serve static files from the React build folder
+app.use(express.static(path.join(__dirname, 'client/build')));
 
 // **Database Connection**
 const connection = mysql.createConnection({
@@ -21,6 +29,7 @@ const connection = mysql.createConnection({
     database: process.env.DB_NAME || 'your-database-name'
 });
 
+// Connect to MySQL database
 connection.connect((err) => {
     if (err) {
         console.error('Database connection failed:', err.stack);
@@ -80,7 +89,7 @@ app.post('/login', async (req, res) => {
         }
 
         // Generate JWT Token
-        const token = jwt.sign({ id: user.id, userName: user.userName }, 'your_secret_key', { expiresIn: '1h' });
+        const token = jwt.sign({ id: user.id, userName: user.userName }, process.env.JWT_SECRET || 'your_secret_key', { expiresIn: '1h' });
 
         res.json({ message: `Welcome ${user.firstName}`, token });
     } catch (error) {
@@ -89,33 +98,9 @@ app.post('/login', async (req, res) => {
     }
 });
 
-// **Routes to Serve Pages**
-app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'frontend', 'Home', 'Home.jsx'));
-});
-
-app.get('/login', (req, res) => {
-    res.sendFile(path.join(__dirname, 'frontend', 'registration', 'login.html'));
-});
-
-app.get('/signup', (req, res) => {
-    res.sendFile(path.join(__dirname, 'pages', 'registration', 'signup.jsx'));
-});
-
-app.get('/about', (req, res) => {
-    res.sendFile(path.join(__dirname, 'pages', 'AboutUs', 'about.jsx'));
-});
-
-app.get('/progress', (req, res) => {
-    res.sendFile(path.join(__dirname, 'pages', 'progress', 'progress.jsx'));
-});
-
-app.get('/contact', (req, res) => {
-    res.sendFile(path.join(__dirname, 'pages', 'Contact', 'contact.jsx'));
-});
-
-app.get('/training', (req, res) => {
-    res.sendFile(path.join(__dirname, 'pages', 'Training', 'training.jsx'));
+// **Serve React Frontend**
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, 'client/build', 'index.html'));
 });
 
 // **Start Server**
