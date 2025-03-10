@@ -6,6 +6,7 @@ const Signup = () => {
     lastName: "",
     userName: "",
     email: "",
+    PhoneNumber:"",
     password: "",
   });
 
@@ -48,7 +49,9 @@ const Signup = () => {
         <input type="text" name="lastName" placeholder="Last Name" onChange={handleChange} required />
         <input type="text" name="userName" placeholder="Username" onChange={handleChange} required />
         <input type="email" name="email" placeholder="Email" onChange={handleChange} required />
+        <input type="phone" name="phone number" placeholder="Phone Number" onChange={handleChange} required />
         <input type="password" name="password" placeholder="Password" onChange={handleChange} required />
+        
         <button type="submit">Sign Up</button>
       </form>
     </div>

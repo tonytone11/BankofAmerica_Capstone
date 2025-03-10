@@ -19,14 +19,14 @@ app.use(express.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 // Serve static files from the React build folder
-app.use(express.static(path.join(__dirname, 'client/build')));
+app.use(express.static( 'pages'));
 
 // **Database Connection**
 const connection = mysql.createConnection({
-    host: process.env.DB_HOST || 'your-database-host',
-    user: process.env.DB_USER || 'your-database-user',
-    password: process.env.DB_PASS || 'your-database-password',
-    database: process.env.DB_NAME || 'your-database-name'
+    host: process.env.DB_HOST,
+    user: process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
+    database : process.env.DB_NAME
 });
 
 // Connect to MySQL database
@@ -41,15 +41,15 @@ connection.connect((err) => {
 // **Register Route**
 app.post('/register', async (req, res) => {
     try {
-        const { firstName, lastName, userName, email, password } = req.body;
+        const { firstName, lastName, userName, email, phoneNumber, password } = req.body;
 
         // Hash the password
         const hashedPassword = await bcrypt.hash(password, 10);
 
         // Insert user into the database
         const [results] = await connection.promise().query(
-            'INSERT INTO signup (firstName, lastName, userName, email, password) VALUES (?, ?, ?, ?, ?)',
-            [firstName, lastName, userName, email, hashedPassword]
+            'INSERT INTO userInfo (firstName, lastName, userName, email,phoneNumber, password) VALUES (?, ?, ?, ?, ?,?)',
+            [firstName, lastName, userName, email, phoneNumber, hashedPassword]
         );
 
         res.status(201).json({ message: 'Registration successful!' });
@@ -72,7 +72,7 @@ app.post('/login', async (req, res) => {
 
         // Fetch user from DB
         const [results] = await connection.promise().query(
-            'SELECT * FROM signup WHERE userName = ?',
+            'SELECT * FROM userInfo WHERE userName = ?',
             [userName]
         );
 
@@ -100,7 +100,7 @@ app.post('/login', async (req, res) => {
 
 // **Serve React Frontend**
 app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, 'client/build', 'index.html'));
+    res.sendFile(path.join('pages', 'Home.jsx'));
 });
 
 // **Start Server**
