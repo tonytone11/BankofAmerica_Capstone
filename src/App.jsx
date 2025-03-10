@@ -4,7 +4,9 @@ import Home from './pages/Home';
 import About from './pages/About';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
+import Player from './pages/Player';
 import './App.css';
+
 
 const PlaceholderPage = ({ title }) => {
   return (
@@ -25,7 +27,7 @@ const App = () => {
         <Route path="/" element={<Home />} />
         <Route path="/profile" element={<PlaceholderPage title="Profile" />} />
         <Route path="/training" element={<PlaceholderPage title="Training" />} />
-        <Route path="/players" element={<PlaceholderPage title="Players" />} />
+        <Route path="/players" element={<Player />} />
         <Route path="/about" element={<About />} />
         <Route path="/contact" element={<PlaceholderPage title="Contact" />} />
         <Route path="/login" element={<PlaceholderPage title="Login" />} />
