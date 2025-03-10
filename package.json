@@ -12,11 +12,14 @@
     "cy:run": "cypress run"
   },
   "dependencies": {
+    "cors": "^2.8.5",
     "cypress": "^14.1.0",
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
+    "mysql2": "^3.13.0",
     "react": "^19.0.0",
-    "react-dom": "^19.0.0"
+    "react-dom": "^19.0.0",
+    "react-router-dom": "^7.3.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.21.0",
