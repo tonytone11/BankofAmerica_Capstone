@@ -8,9 +8,9 @@ import Player from './pages/Player';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
 import Footer from './components/Footer';
-import Contact from './pages/Contact';
+import Player from './pages/Player';
 import './App.css';
-import Training from './pages/Training';
+
 
 const PlaceholderPage = ({ title }) => {
   return (
