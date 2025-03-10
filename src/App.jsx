@@ -1,30 +1,40 @@
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
-import './App.css'
-import Home from './pages/Home'
-import About from './pages/About'
-import Contact from './pages/Contact'
-import Login from './pages/Login'
-import Player from './pages/Player'
-import Profile from './pages/Profile'
-import Signup from './pages/Signup'
-import Training from './pages/Training'
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import Home from './pages/Home';
+import About from './pages/About';
+import Navbar from './components/Navbar';
+import Footer from './components/Footer';
+import './App.css';
 
-function App() {
+const PlaceholderPage = ({ title }) => {
+  return (
+    <div className="placeholder-page">
+      <div className="placeholder-content">
+        <h2>{title} Page</h2>
+        <p>This page is coming soon!</p>
+      </div>
+    </div>
+  );
+};
 
+const App = () => {
   return (
     <Router>
+      <Navbar />
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/profile" element={<Profile />} />
-        <Route path="/player" element={<Player />} />
-        <Route path="/training" element={<Training />} />
+        <Route path="/profile" element={<PlaceholderPage title="Profile" />} />
+        <Route path="/training" element={<PlaceholderPage title="Training" />} />
+        <Route path="/players" element={<PlaceholderPage title="Players" />} />
         <Route path="/about" element={<About />} />
-        <Route path="/contact" element={<Contact />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/signup" element={<Signup />} />
+        <Route path="/contact" element={<PlaceholderPage title="Contact" />} />
+        <Route path="/login" element={<PlaceholderPage title="Login" />} />
+        <Route path="/signup" element={<PlaceholderPage title="Sign Up" />} />
+        <Route path="*" element={<PlaceholderPage title="404 - Not Found" />} />
       </Routes>
+      <Footer />
     </Router>
-  )
-}
+  );
+};
 
-export default App
+export default App;
