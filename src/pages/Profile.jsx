@@ -86,7 +86,7 @@ export default function Profile() {
     return (
         <div className="page-container">
             <main className="profile-container">
-                <h1>MY PROFILE</h1>
+                <h1 className="profile_title_hero">MY PROFILE</h1>
                 
                 {/* Navigation Tabs */}
                 <div className="profile-tabs">
