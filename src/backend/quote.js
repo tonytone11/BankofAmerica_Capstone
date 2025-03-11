@@ -1,4 +1,6 @@
-const mysql = require('mysql2/promise');
+// const mysql = require('mysql2/promise');
+import mysql from 'mysql2/promise';
+
 
 // Database connection configuration
 const dbConfig = {
@@ -46,32 +48,20 @@ async function quotes() {
       connection.end();
     }
   }
-}
-
-// // Example usage in your frontend React component
-// async function updateQoutes() {
-//   try {
-//     const playerData = awaitquotes();
-    
-//     if (playerData) {
-//       // Update your component state or DOM elements
-//       document.querySelector('.player-info h3').textContent = playerData.name;
-//       document.querySelector('.player-team').textContent = playerData.country;
-//       document.querySelector('.player-quote').textContent = `"${playerData.quote}"`;
-//       document.querySelector('.player-story').textContent = playerData.career_summary;
-      
-//       // If you have an image element
-//       if (playerData.image_url) {
-//         document.querySelector('.player-image img').src = playerData.image_url;
-//         document.querySelector('.player-image img').alt = playerData.name;
-//       }
-//     }
-//   } catch (error) {
-//     console.error('Failed to update quotes:', error);
-//   }
-// }
-
-// Export functions if using modules
-module.exports = {
- quotes
 };
+
+ // Route to fetch quotes
+ app.get('/quotes', async (req, res) => {
+  try {
+      const quoteData = await quotes(); // Get quote from database
+      if (!quoteData) {
+          return res.status(404).json({ error: 'No quotes found' });
+      }
+      res.json(quoteData);
+  } catch (error) {
+      console.error('Error fetching quotes:', error);
+      res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+export { quotes };

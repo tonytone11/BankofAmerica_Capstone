@@ -1,7 +1,10 @@
-import { quotes } from '../backend/quote'
+
 import '../styles/Signup.css'
-import Quotes from './components/Quotes'
+// import Quotes from './components/Quotes'
 import { useState } from "react"
+// import Quotes from './components/Quotes.jsx';
+import Quotes from '../components/Quotes';
+
 const Signup = () => {
   const [formData, setFormData] = useState({
     firstName: "",
@@ -59,7 +62,7 @@ const Signup = () => {
         
         <button type="submit">Sign Up</button>
       </form>
-      {/* <Quotes/> */}
+      <Quotes/>
       </div>
     </div>
     </div>

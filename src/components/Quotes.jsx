@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
-const Quotes = () => {
+export default function Quotes() {
   const [playerData, setPlayerData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -11,7 +11,7 @@ const Quotes = () => {
     const fetchQuotes = async () => {
       try {
         setLoading(true);
-        const response = await axios.get('/api/daily-inspiration');
+        const response = await axios.get('/api/quotes');
         setPlayerData(response.data);
         setLoading(false);
       } catch (err) {
@@ -45,7 +45,6 @@ const Quotes = () => {
   );
 };
 
-export default Quotes;
 
 // Backend API endpoint (in your routes file where other API endpoints are defined)
 // Add this route to your existing Express router
@@ -53,36 +52,36 @@ export default Quotes;
 // Assuming you already have something like this in your app:
 // const db = require('../path/to/your/existing/db-connection');
 
-router.get('/api/daily-inspiration', async (req, res) => {
-  try {
-    // Use your existing database connection
-    // This assumes you have a function or method to execute queries
-    const result = await db.query(`
-      SELECT 
-        p.id,
-        p.name,
-        p.country,
-        p.career_summary,
-        p.image_url,
-        q.quote
-      FROM 
-        soccer_players p
-      JOIN 
-        players_quotes q ON p.id = q.player_id
-      ORDER BY RAND() 
-      LIMIT 1
-    `);
+// router.get('/api/daily-inspiration', async (req, res) => {
+//   try {
+//     // Use your existing database connection
+//     // This assumes you have a function or method to execute queries
+//     const result = await db.query(`
+//       SELECT 
+//         p.id,
+//         p.name,
+//         p.country,
+//         p.career_summary,
+//         p.image_url,
+//         q.quote
+//       FROM 
+//         soccer_players p
+//       JOIN 
+//         players_quotes q ON p.id = q.player_id
+//       ORDER BY RAND() 
+//       LIMIT 1
+//     `);
     
-    if (!result || result.length === 0) {
-      return res.status(404).json({ message: 'No inspiration found' });
-    }
+//     if (!result || result.length === 0) {
+//       return res.status(404).json({ message: 'No inspiration found' });
+//     }
     
-    res.json(result[0]);
-  } catch (error) {
-    console.error('Error fetching daily inspiration:', error);
-    res.status(500).json({ message: 'Server error' });
-  }
-});
+//     res.json(result[0]);
+//   } catch (error) {
+//     console.error('Error fetching daily inspiration:', error);
+//     res.status(500).json({ message: 'Server error' });
+//   }
+// });
 
-// Note: The above assumes your db connection handles closing connections automatically
-// If not, make sure to properly close connections after use
+// // Note: The above assumes your db connection handles closing connections automatically
+// // If not, make sure to properly close connections after use
