@@ -58,7 +58,7 @@ const About = () => {
             </div>
             
             {/* Hero Image Section */}
-            <div className="hero-image">
+            <div className="hero-imge">
             {/* <div className="image-placeholder">INSPIRING IMAGE OF YOUTH FOOTBALL</div> */}
             </div>
             
