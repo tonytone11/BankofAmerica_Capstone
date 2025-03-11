@@ -50,6 +50,7 @@ const Login = () => {
         <input type="text" name="userName" placeholder="Username" onChange={handleChange} required />
         <input type="password" name="password" placeholder="Password" onChange={handleChange} required />
         <button type="submit">Login</button>
+        <p>Dont have an account? <a href="/signup">sign up here</a></p>
       </form>
       </div>
     </div>
