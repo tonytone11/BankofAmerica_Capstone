@@ -1,87 +1,43 @@
-// Frontend React component (DailyInspiration.jsx)
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import React, { useState, useEffect } from "react";
+import data from './quotes.json' with { type: 'json' };
 
-export default function Quotes() {
-  const [playerData, setPlayerData] = useState(null);
-  const [loading, setLoading] = useState(true);
+export default function RandomPlayer() {
+  const [player, setPlayer] = useState(null);
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    const fetchQuotes = async () => {
-      try {
-        setLoading(true);
-        const response = await axios.get('/api/quotes');
-        setPlayerData(response.data);
-        setLoading(false);
-      } catch (err) {
-        console.error('Failed to fetch daily inspiration:', err);
-        setError('Failed to load player inspiration. Please try again later.');
-        setLoading(false);
+    try {
+      // Ensure data structure is valid
+      if (!data || !data.players || data.players.length === 0) {
+        throw new Error("No player data found.");
       }
-    };
 
-    fetchQuotes();
+      // Select a random player
+      const randomPlayer = data.players[Math.floor(Math.random() * data.players.length)];
+      setPlayer(randomPlayer);
+    } catch (err) {
+      console.error("Error fetching player data:", err.message);
+      setError("Failed to load player data. Please try again.");
+    }
   }, []);
 
-  if (loading) return <div className="loading">Loading inspiration...</div>;
-  if (error) return <div className="error">{error}</div>;
-  if (!playerData) return <div className="no-data">No inspiration available today.</div>;
+  if (error) return <p className="error-message">{error}</p>;
+  if (!player) return <p className="loading">Loading...</p>;
 
   return (
-    <div className="player-inspiration-card">
-      <div className="player-image">
-        {playerData.image_url && (
-          <img src={playerData.image_url} alt={playerData.name} />
-        )}
-      </div>
-      <div className="player-info">
-        <h3>{playerData.name}</h3>
-        <div className="player-team">{playerData.country}</div>
-        <div className="player-quote">"{playerData.quote}"</div>
-        <div className="player-story">{playerData.career_summary}</div>
-      </div>
+    <div className="player-card">
+      <img src={player.image_url} alt={player.name} className="player-image" />
+      <h2>{player.name} ({player.country})</h2>
+      <p><strong>Club:</strong> {player.club}</p>
+      <p>{player.career_summary}</p>
+      <h3>Quotes:</h3>
+      <ul>
+        {player.quotes.map((q, index) => (
+          <li key={index}>
+            "{q.quote}" <br /> <i>- {q.context}</i>
+          </li>
+        ))}
+      </ul>
     </div>
   );
-};
-
-
-// Backend API endpoint (in your routes file where other API endpoints are defined)
-// Add this route to your existing Express router
-
-// Assuming you already have something like this in your app:
-// const db = require('../path/to/your/existing/db-connection');
-
-// router.get('/api/daily-inspiration', async (req, res) => {
-//   try {
-//     // Use your existing database connection
-//     // This assumes you have a function or method to execute queries
-//     const result = await db.query(`
-//       SELECT 
-//         p.id,
-//         p.name,
-//         p.country,
-//         p.career_summary,
-//         p.image_url,
-//         q.quote
-//       FROM 
-//         soccer_players p
-//       JOIN 
-//         players_quotes q ON p.id = q.player_id
-//       ORDER BY RAND() 
-//       LIMIT 1
-//     `);
-    
-//     if (!result || result.length === 0) {
-//       return res.status(404).json({ message: 'No inspiration found' });
-//     }
-    
-//     res.json(result[0]);
-//   } catch (error) {
-//     console.error('Error fetching daily inspiration:', error);
-//     res.status(500).json({ message: 'Server error' });
-//   }
-// });
-
-// // Note: The above assumes your db connection handles closing connections automatically
-// // If not, make sure to properly close connections after use
+}

@@ -15,7 +15,7 @@ dotenv.config();
 
 // Middleware setup
 app.use(cors({
-    origin: 'http://localhost:3000', // React's development server URL
+    origin: 'http://localhost:3001', // React's development server URL
     methods: 'GET,POST',
     allowedHeaders: 'Content-Type, Authorization', // Allow Authorization header for JWT
 }));
@@ -23,7 +23,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 // Serve static files from the React build folder
-app.use(express.static(path.join(__dirname, '../../client/build')));
+app.use(express.static(path.join(__dirname, '../../pages/Home')));
 
 // **Database Connection**
 const connection = mysql.createConnection({
@@ -92,7 +92,7 @@ app.post('/login', async (req, res) => {
 
 // **Serve React Frontend (For any routes not matched)**
 app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, '../../client/build', 'index.html'));
+    res.sendFile(path.join(__dirname, '../../pages/Home'));
 });
 
 // **Start Server**
