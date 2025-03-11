@@ -1,5 +1,5 @@
 import React from 'react';
-// import SearchBar from '../components/SearchBar';
+import SearchBar from '../components/SearchBar';
 // import FilterBar from '../components/FilterBar';
 // import FeaturedPlayer from '../components/FeaturedPlayer';
 // import PlayerCatalog from '../components/PlayerCatalog';
@@ -17,11 +17,7 @@ function Player() {
 
                 {/* Search and Filter Bar */}
                 <section className="search-filter">
-                    <div className="search-bar">
-                        <div className="search-icon"></div>
-                        <input type="text" placeholder="Search for players by name..." />
-                    </div>
-
+                    <SearchBar />
                     <div className="filters">
                         <div className="filter-dropdown">
                             <span>Position</span>
@@ -42,9 +38,7 @@ function Player() {
 
                 {/* Featured Player Section */}
                 <section className="featured-player">
-                    <div className="player-image">
-                        <div className="placeholder">PLAYER PHOTO</div>
-                    </div>
+                    <div className="placeholder">PLAYER PHOTO</div>
 
                     <div className="player-details">
                         <h2>Jude Bellingham</h2>
