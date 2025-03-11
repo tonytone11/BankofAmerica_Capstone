@@ -4,8 +4,9 @@ import Home from './pages/Home';
 import About from './pages/About';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
-import Player from './pages/Player'
+import Player from './pages/Player';
 import './App.css';
+
 
 const PlaceholderPage = ({ title }) => {
   return (
