@@ -105,7 +105,7 @@
     font-weight: bold;
     cursor: pointer;
     text-decoration: none;
-    transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3 ease;
+    transition: background-color 0.3s;
 }
 
 .login-btn:hover{
