@@ -42,7 +42,9 @@ function Player() {
 
                 {/* Featured Player Section */}
                 <section className="featured-player">
-                    <div className="placeholder">PLAYER PHOTO</div>
+                    <div className="player-image">
+                        <div className="placeholder">PLAYER PHOTO</div>
+                    </div>
 
                     <div className="player-details">
                         <h2>Jude Bellingham</h2>
