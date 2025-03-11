@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const API_KEY = import.meta.env.VITE_API_FOOTBALL_KEY;
-const API_HOST = 'v3.football.api-sports.io';
+const API_HOST = import.meta.env.VITE_API_FOOTBALL_HOST;
 
 // Create reusable API instance
 const footballApi = axios.create({

@@ -50,7 +50,8 @@ const SearchBar = () => {
                     <div className="search-results">
                         <ul>
                             {results.map((item) => (
-                                <li key={item.player.photo}>{item.player.name}</li>
+                                <li key={item.player.id}>{item.player.name}
+                                    <img src={item.player.photo} /></li>
                             ))}
                         </ul>
                     </div>

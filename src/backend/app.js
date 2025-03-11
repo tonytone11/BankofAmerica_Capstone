@@ -1,7 +1,7 @@
 // Import required modules
 const express = require('express');
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3001; // Backend should run on a different port than React
 const dotenv = require('dotenv');
 const bodyParser = require('body-parser');
 const bcrypt = require('bcryptjs');
@@ -14,19 +14,23 @@ const path = require('path');
 dotenv.config();
 
 // Middleware setup
-app.use(cors()); // Allows frontend to communicate with backend
+app.use(cors({
+    origin: 'http://localhost:3001', // React's development server URL
+    methods: 'GET,POST',
+    allowedHeaders: 'Content-Type, Authorization', // Allow Authorization header for JWT
+}));
 app.use(express.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 // Serve static files from the React build folder
-app.use(express.static( 'pages'));
+app.use(express.static(path.join(__dirname, '../../pages/Home')));
 
 // **Database Connection**
 const connection = mysql.createConnection({
     host: process.env.DB_HOST,
     user: process.env.DB_USER,
     password: process.env.DB_PASSWORD,
-    database : process.env.DB_NAME
+    database: process.env.DB_NAME,
 });
 
 // Connect to MySQL database
@@ -39,29 +43,22 @@ connection.connect((err) => {
 });
 
 // **Register Route**
-app.post('/register', async (req, res) => {
+app.post('/signup', async (req, res) => {
     try {
         const { firstName, lastName, userName, email, password } = req.body;
-
-        // Hash the password
         const hashedPassword = await bcrypt.hash(password, 10);
 
-        // Insert user into the database
         const [results] = await connection.promise().query(
             'INSERT INTO userInfo (firstName, lastName, userName, email, password) VALUES (?, ?, ?, ?, ?)',
             [firstName, lastName, userName, email, hashedPassword]
         );
 
-        res.status(201).json({ message: 'Registration successful!', redirectUrl: '/login'});
+        res.status(201).json({ message: 'Registration successful!', redirectUrl: '/login' });
     } catch (error) {
-        console.log(error);
-
-        // Check for duplicate email
         if (error.code === 'ER_DUP_ENTRY') {
-            return res.status(400).json({ error: 'Email already exists.' });
+            return res.status(400).json({ error: 'Email or Username already exists.' });
         }
-
-        res.status(500).json({ error: 'Internal server error' });
+        res.status(500).json({ error: 'Internal server error, please try again later.' });
     }
 });
 
@@ -69,8 +66,6 @@ app.post('/register', async (req, res) => {
 app.post('/login', async (req, res) => {
     try {
         const { userName, password } = req.body;
-
-        // Fetch user from DB
         const [results] = await connection.promise().query(
             'SELECT * FROM userInfo WHERE userName = ?',
             [userName]
@@ -81,14 +76,11 @@ app.post('/login', async (req, res) => {
         }
 
         const user = results[0];
-
-        // Compare password with hashed password
         const isMatch = await bcrypt.compare(password, user.password);
         if (!isMatch) {
             return res.status(400).json({ error: 'Invalid username or password' });
         }
 
-        // Generate JWT Token
         const token = jwt.sign({ id: user.id, userName: user.userName }, process.env.JWT_SECRET || 'your_secret_key', { expiresIn: '1h' });
 
         res.json({ message: `Welcome ${user.firstName}`, token });
@@ -98,9 +90,9 @@ app.post('/login', async (req, res) => {
     }
 });
 
-// **Serve React Frontend**
+// **Serve React Frontend (For any routes not matched)**
 app.get('*', (req, res) => {
-    res.sendFile(path.join('pages', 'Home.jsx'));
+    res.sendFile(path.join(__dirname, '../../pages/Home'));
 });
 
 // **Start Server**
