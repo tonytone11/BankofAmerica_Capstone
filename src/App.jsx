@@ -5,6 +5,7 @@ import About from './pages/About';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import './App.css';
+import YouTubeSearch from './pages/Training';
 
 const PlaceholderPage = ({ title }) => {
   return (
@@ -24,7 +25,7 @@ const App = () => {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/profile" element={<PlaceholderPage title="Profile" />} />
-        <Route path="/training" element={<PlaceholderPage title="Training" />} />
+        <Route path="/training" element={<YouTubeSearch />} />
         <Route path="/players" element={<PlaceholderPage title="Players" />} />
         <Route path="/about" element={<About />} />
         <Route path="/contact" element={<PlaceholderPage title="Contact" />} />
