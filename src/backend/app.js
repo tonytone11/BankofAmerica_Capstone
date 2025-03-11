@@ -12,7 +12,8 @@ const path = require('path');
 
 // Load environment variables from .env file
 dotenv.config();
-
+// const playerRoutes = require('./quote.js');
+// app.use(playerRoutes);
 // Middleware setup
 app.use(cors()); // Allows frontend to communicate with backend
 app.use(express.urlencoded({ extended: false }));
@@ -39,7 +40,7 @@ connection.connect((err) => {
 });
 
 // **Register Route**
-app.post('/register', async (req, res) => {
+app.post('/signup', async (req, res) => {
     try {
         const { firstName, lastName, userName, email, password } = req.body;
 
@@ -96,8 +97,19 @@ app.post('/login', async (req, res) => {
         console.log(error);
         res.status(500).json({ error: 'Internal server error' });
     }
+});  // Route to fetch quotes
+app.get('/quotes', async (req, res) => {
+    try {
+        const quoteData = await quotes(); // Get quote from database
+        if (!quoteData) {
+            return res.status(404).json({ error: 'No quotes found' });
+        }
+        res.json(quoteData);
+    } catch (error) {
+        console.error('Error fetching quotes:', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
 });
-
 // **Serve React Frontend**
 app.get('*', (req, res) => {
     res.sendFile(path.join('pages', 'Home.jsx'));

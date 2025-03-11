@@ -1,4 +1,6 @@
+import { quotes } from '../backend/quote'
 import '../styles/Signup.css'
+import Quotes from './components/Quotes'
 import { useState } from "react"
 const Signup = () => {
   const [formData, setFormData] = useState({
@@ -57,6 +59,7 @@ const Signup = () => {
         
         <button type="submit">Sign Up</button>
       </form>
+      {/* <Quotes/> */}
       </div>
     </div>
     </div>
