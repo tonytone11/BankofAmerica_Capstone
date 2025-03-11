@@ -1,6 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Home from './pages/Home';
+import Contact from './pages/Contact';
 import About from './pages/About';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
@@ -29,7 +30,7 @@ const App = () => {
         <Route path="/training" element={<PlaceholderPage title="Training" />} />
         <Route path="/players" element={<Player />} />
         <Route path="/about" element={<About />} />
-        <Route path="/contact" element={<PlaceholderPage title="Contact" />} />
+        <Route path="/contact" element={<Contact />} />
         <Route path="/login" element={<PlaceholderPage title="Login" />} />
         <Route path="/signup" element={<PlaceholderPage title="Sign Up" />} />
         <Route path="*" element={<PlaceholderPage title="404 - Not Found" />} />
