@@ -1,0 +1,27 @@
+/* * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Arial', sans-serif;
+} */
+
+.page-container {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+
+    
+}
+
+.home-container {
+    width: 100%;
+    max-width: 1350px;
+    /* margin: 0 auto; */
+    padding: 0 20px;
+    margin-top: 130px;
+    flex: 1;
+}
+
+.main{
+    margin-top:140px;
+}
