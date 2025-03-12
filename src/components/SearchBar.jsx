@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { searchPlayers } from '../services/FootballAPI'; // Assuming `searchPlayers` is your API function
+import { searchPlayers } from '../services/FootballAPI'; // Adjust the import path as needed
 
-const SearchBar = () => {
+const SearchBar = ({ onSelectPlayer }) => {
     const [query, setQuery] = useState('');
     const [results, setResults] = useState([]);
     const [loading, setLoading] = useState(false);
@@ -15,8 +15,6 @@ const SearchBar = () => {
             console.log('API Response:', players);
 
             setResults(players); // Update results state with fetched data
-            console.log('Results:', results);
-
         } catch (error) {
             console.error('Error fetching players:', error);
         } finally {
@@ -28,6 +26,17 @@ const SearchBar = () => {
         console.log('Results Updated:', results);
     }, [results]); // This will log whenever `results` changes
 
+    // Handle player selection
+    const handlePlayerClick = (player) => {
+        // Check if onSelectPlayer exists before calling it
+        if (typeof onSelectPlayer === 'function') {
+            onSelectPlayer(player);
+        } else {
+            console.log('Player selected but no handler provided:', player);
+            // You could implement fallback behavior here if needed
+        }
+        console.log('Player selected:', player);
+    };
 
     return (
         <section className="search-container">
@@ -50,8 +59,15 @@ const SearchBar = () => {
                     <div className="search-results">
                         <ul>
                             {results.map((item) => (
-                                <li className='player-info' key={item.player.id}>{item.player.name}
-                                    <img className='player-img1' src={item.player.photo} /></li>
+                                <li
+                                    className='player-info'
+                                    key={item.player.id}
+                                    onClick={() => handlePlayerClick(item)} // Add click handler
+                                    style={{ cursor: 'pointer' }} // Make it look clickable
+                                >
+                                    {item.player.name}
+                                    <img className='player-img1' src={item.player.photo} alt={item.player.name} />
+                                </li>
                             ))}
                         </ul>
                     </div>
