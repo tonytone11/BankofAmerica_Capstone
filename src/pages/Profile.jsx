@@ -2,12 +2,29 @@ import React, { useState } from 'react';
 import '../styles/Profile.css';
 import { Bar } from 'react-chartjs-2';
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js';
+import Practicelog from '../components/Practicelog'
+import Goals from '../components/Goals'
 
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
 export default function Profile() {
     const [activeTab, setActiveTab] = useState('progress');
+    const [userName, setUserName] = useState (' John Doe');
+    const [isEditing, setIsEditing] = useState(false);
+    const [newName, setNewName] = useState('');
+
+    const handleUpdateProfile = () => {
+        if (isEditing) {
+            if(newName.trim()!== ''){
+                setUserName(newName);
+            }
+            setIsEditing(false);
+        } else {
+            setNewName(userName);
+            setIsEditing(true);
+        }
+    }
 
     const labels = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
     const data = {
@@ -55,21 +72,9 @@ export default function Profile() {
                     </div>
                 );
             case 'practiceLog':
-                return (
-                    <div>
-                        <h2>Practice Log</h2>
-                        <p>Your practice log will appear here.</p>
-                        {/* Add practice log components here */}
-                    </div>
-                );
+                return <Practicelog />;
             case 'goals':
-                return (
-                    <div>
-                        <h2>Goals</h2>
-                        <p>Your goals will appear here.</p>
-                        {/* Add goals components here */}
-                    </div>
-                );
+                return <Goals />;
             case 'roleModels':
                 return (
                     <div>
@@ -87,7 +92,35 @@ export default function Profile() {
         <div className="page-container">
             <main className="profile-container">
                 <h1 className="profile_title_hero">MY PROFILE</h1>
-                
+                <div className="user-profile-container">
+                    {isEditing ? (
+                        <div className="edit-profile">
+                            <input 
+                                type="text" 
+                                value={newName}
+                                onChange={(e) => setNewName(e.target.value)}
+                                className="name-input"
+                                placeholder="Enter your name"
+                            />
+                            <button 
+                                onClick={handleUpdateProfile}
+                                className="update-button"
+                            >
+                                Save
+                            </button>
+                        </div>
+                    ) : (
+                        <div className="profile-info">
+                            <h2 className="user-name">{userName}</h2>
+                            <button 
+                                onClick={handleUpdateProfile}
+                                className="update-button"
+                            >
+                                Update Profile
+                            </button>
+                        </div>
+                    )}
+                </div>
                 {/* Navigation Tabs */}
                 <div className="profile-tabs">
                     <button 
