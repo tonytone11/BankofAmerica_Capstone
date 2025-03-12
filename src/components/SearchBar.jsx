@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import '../styles/SearchBar.css';
 import { searchPlayers } from '../services/FootballAPI'; // Adjust the import path as needed
 
 const SearchBar = ({ onSelectPlayer }) => {
