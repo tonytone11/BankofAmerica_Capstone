@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import '../styles/FeaturedPlayer.css';
 import { getPlayerStatistics } from '../services/FootballAPI';
 
 const FeaturedPlayer = ({ selectedPlayer }) => {
@@ -60,17 +61,17 @@ const FeaturedPlayer = ({ selectedPlayer }) => {
             </div>
 
             <div className="player-details">
-                <h2>{player.name}</h2>
+                <h2>{player.firstname} {player.lastname}</h2>
                 <div className="player-tag">
                     {stats?.team?.name || 'Team N/A'} • {player.nationality || 'Nationality N/A'}
                 </div>
 
                 <div className="player-stats">
-                    <p>Position: {stats?.games?.position || player.position || 'N/A'}</p>
-                    <p>Age: {player.age || 'N/A'}</p>
-                    <p>Goals: {stats?.goals?.total || 'N/A'}</p>
-                    <p>Assists: {stats?.goals?.assists || 'N/A'}</p>
-                    <p>Appearances: {stats?.games?.appearences || 'N/A'}</p>
+                    <p> <strong> Position: </strong> {stats?.games?.position || player.position || 'N/A'}</p>
+                    <p> <strong> Age: </strong> {player.age || 'N/A'}</p>
+                    <p> <strong> Goals: </strong>  {stats?.goals?.total || 'N/A'}</p>
+                    <p> <strong> Assists: </strong> {stats?.goals?.assists || 'N/A'}</p>
+                    <p> <strong> Appearances: </strong>  {stats?.games?.appearences || 'N/A'}</p>
                 </div>
             </div>
 
