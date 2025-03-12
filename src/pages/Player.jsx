@@ -120,8 +120,8 @@ function Player() {
                     </div>
 
                     <div className="pagination">
-                        <span>1</span>
-                        <span className="active">2</span>
+                        <span className="active">1</span>
+                        <span >2</span>
                         <span>3</span>
                     </div>
                 </section>
