@@ -91,7 +91,7 @@ const SearchBar = ({ onSelectPlayer }) => {
                         </ul>
 
                         {results.length > itemsPerPage && (
-                            <div className="pagination">
+                            <div className="search-pagination">
                                 <div className="page-numbers">
                                     {(() => {
                                         // Determine which page numbers to show
