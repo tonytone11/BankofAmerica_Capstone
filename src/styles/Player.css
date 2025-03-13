@@ -1,32 +1,26 @@
 /* General Styles */
   .player-container {
     width: 100%;
-    max-width: 800px;
+    max-width: 1000px;
     margin: 0 auto;
     background-color: #f8fafc;
   }
-
-  /* Main Content Styles */
-  main {
-    margin-top: 40px;
-    padding: 20px 40px;
-  }
   
-  .page-title h1 {
+  .player-page-title h1 {
     font-size: 32px;
     color: #1e3a8a;
     font-weight: bold;
-    margin-top: 30px;
+    margin-top: 120px;
   }
   
-  .page-title p {
+  .player-page-title p {
     font-size: 16px;
     color: #64748b;
     margin-top: 5px;
   }
   
   /* Search and Filter Styles */
-  .search-filter {
+  .player-search-filter {
     display: flex;
     justify-content: space-between;
     margin-top: 30px;

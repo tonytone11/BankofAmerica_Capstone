@@ -17,13 +17,13 @@ function Player() {
         <div className="player-container">
             <main>
                 {/* Page Title */}
-                <section className="page-title">
+                <section className="player-page-title">
                     <h1>Players</h1>
                     <p>Get inspired by your favorite players</p>
                 </section>
 
                 {/* Search and Filter Bar */}
-                <section className="search-filter">
+                <section className="player-search-filter">
                     {/* Pass the handler to SearchBar */}
                     <SearchBar onSelectPlayer={handlePlayerSelect} />
                     <div className="filters">
