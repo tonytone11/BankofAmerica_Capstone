@@ -6,10 +6,14 @@ const SearchBar = ({ onSelectPlayer }) => {
     const [query, setQuery] = useState('');
     const [results, setResults] = useState([]);
     const [loading, setLoading] = useState(false);
+    // Pagination states
+    const [currentPage, setCurrentPage] = useState(1);
+    const [itemsPerPage] = useState(5);
 
     const handleSearch = async (e) => {
         e.preventDefault(); // Prevent form submission from reloading the page
         setLoading(true); // Show loading indicator
+        setCurrentPage(1); // Reset to first page on new search
 
         try {
             const players = await searchPlayers(query); // Call your API function
@@ -37,7 +41,21 @@ const SearchBar = ({ onSelectPlayer }) => {
             // You could implement fallback behavior here if needed
         }
         console.log('Player selected:', player);
+
+        // Clear the results after a player is selected
+        setResults([]);
+        // Also clear the search query
+        setQuery('');
     };
+
+    // Pagination logic
+    const indexOfLastItem = currentPage * itemsPerPage;
+    const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+    const currentItems = results.slice(indexOfFirstItem, indexOfLastItem);
+    const totalPages = Math.ceil(results.length / itemsPerPage);
+
+    // Change page
+    const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
     return (
         <section className="search-container">
@@ -59,7 +77,7 @@ const SearchBar = ({ onSelectPlayer }) => {
                 results.length > 0 && (
                     <div className="search-results">
                         <ul>
-                            {results.map((item) => (
+                            {currentItems.map((item) => (
                                 <li
                                     className='player-info'
                                     key={item.player.id}
@@ -71,6 +89,42 @@ const SearchBar = ({ onSelectPlayer }) => {
                                 </li>
                             ))}
                         </ul>
+
+                        {results.length > itemsPerPage && (
+                            <div className="pagination">
+                                <div className="page-numbers">
+                                    {(() => {
+                                        // Determine which page numbers to show
+                                        let pageNumbers = [];
+
+                                        if (totalPages <= 3) {
+                                            // If there are 3 or fewer pages, show all of them
+                                            pageNumbers = Array.from({ length: totalPages }, (_, i) => i + 1);
+                                        } else if (currentPage === 1) {
+                                            // If on first page, show pages 1, 2, 3
+                                            pageNumbers = [1, 2, 3];
+                                        } else if (currentPage === totalPages) {
+                                            // If on last page, show last 3 pages
+                                            pageNumbers = [totalPages - 2, totalPages - 1, totalPages];
+                                        } else {
+                                            // Otherwise show previous, current, next
+                                            pageNumbers = [currentPage - 1, currentPage, currentPage + 1];
+                                        }
+
+                                        // Render the buttons
+                                        return pageNumbers.map(number => (
+                                            <button
+                                                key={number}
+                                                onClick={() => paginate(number)}
+                                                className={`page-number ${currentPage === number ? 'active' : ''}`}
+                                            >
+                                                {number}
+                                            </button>
+                                        ));
+                                    })()}
+                                </div>
+                            </div>
+                        )}
                     </div>
                 )
             )}
