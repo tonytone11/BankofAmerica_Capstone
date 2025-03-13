@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import data from './quotes.json' with { type: 'json' };
 
-export default function RandomPlayer() {
+export default function Quotes() {
   const [player, setPlayer] = useState(null);
   const [error, setError] = useState(null);
 
@@ -25,19 +25,24 @@ export default function RandomPlayer() {
   if (!player) return <p className="loading">Loading...</p>;
 
   return (
-    <div className="player-card">
-      <img src={player.image_url} alt={player.name} className="player-image" />
-      <h2>{player.name} ({player.country})</h2>
-      <p><strong>Club:</strong> {player.club}</p>
-      <p>{player.career_summary}</p>
-      <h3>Quotes:</h3>
-      <ul>
-        {player.quotes.map((q, index) => (
-          <li key={index}>
-            "{q.quote}" <br /> <i>- {q.context}</i>
-          </li>
-        ))}
-      </ul>
+    <div className="card-content">
+      <div className="-image">
+        <img src={player.image_url} alt={player.name} className="player-images"/>
+      </div>
+      <div className="player-info">
+        <h3>{player.name}</h3>
+        <p className="player-team">{player.country}</p>
+        <div className="player-quotes">
+          {player.quotes.map((quoteItem, index) => (
+            <div key={index} className="quote-item">
+              <p className="player-quote">"{quoteItem.quote}"</p>
+            </div>
+          ))}
+        </div>
+        <p className="player-story">{player.career_summary}</p>
+      </div>
     </div>
   );
 }
+
+
