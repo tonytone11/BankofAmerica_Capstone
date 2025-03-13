@@ -8,9 +8,10 @@ const Training = () => {
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
   const [activeCategory, setActiveCategory] = useState("All");
+  const [error, setError] = useState(null);
 
   // Get YouTube API key from environment variable
-  const API_KEY = import.meta.env.VITE_YOUTUBE_API_KEY;
+  const API_KEY = import.meta.env.YOUTUBE_API_KEY;
 
   // Default search query for soccer training videos
   const defaultQuery = "soccer training techniques";
@@ -31,51 +32,33 @@ const Training = () => {
   // Function to fetch videos from YouTube API
   const fetchVideos = async (query) => {
     setLoading(true);
+    setError(null);
     try {
-      const response = await axios.get(
-        "https://www.googleapis.com/youtube/v3/search",
-        {
-          params: {
-            part: "snippet",
-            maxResults: 10,
-            q: query,
-            type: "video",
-            key: API_KEY,
-            videoEmbeddable: true,
-            safeSearch: "strict",
-          },
-        }
-      );
+      const response = await axios.get("http://localhost:5000/api/youtube/search", {
+        params: {
+          q: query,
+          safeSearch: "strict",
+        },
+      });
 
       // Get video details for duration and view count
-      const videoIds = response.data.items
-        .map((item) => item.id.videoId)
-        .join(",");
-      const videoDetailsResponse = await axios.get(
-        "https://www.googleapis.com/youtube/v3/videos",
-        {
-          params: {
-            part: "contentDetails,statistics,snippet",
-            id: videoIds,
-            key: API_KEY,
-          },
-        }
-      );
+      const videoIds = response.data.items.map((item) => item.id.videoId).join(",");
+      const videoDetailsResponse = await axios.get("http://localhost:5000/api/youtube/videos", {
+        params: {
+          id: videoIds,
+          key: API_KEY,
+        },
+      });
 
       // Process the responses
       const videos = videoDetailsResponse.data.items.map((item) => {
         const duration = item.contentDetails.duration;
-        const durationMatch = duration.match(
-          /PT(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?/
-        );
+        const durationMatch = duration.match(/PT(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?/);
         const hours = durationMatch[1] ? durationMatch[1] + ":" : "";
         const minutes = durationMatch[2] ? durationMatch[2] : "0";
-        const seconds = durationMatch[3]
-          ? durationMatch[3].padStart(2, "0")
-          : "00";
+        const seconds = durationMatch[3] ? durationMatch[3].padStart(2, "0") : "00";
         const formattedDuration = `${hours}${minutes}:${seconds}`;
 
-        // Format view count
         const viewCount = parseInt(item.statistics.viewCount);
         const formattedViewCount =
           viewCount > 1000000
@@ -101,6 +84,7 @@ const Training = () => {
       }
     } catch (error) {
       console.error("Error fetching videos:", error);
+      setError("Failed to fetch videos. Please try again later.");
     } finally {
       setLoading(false);
     }
@@ -111,6 +95,7 @@ const Training = () => {
     e.preventDefault();
     if (searchTerm.trim()) {
       fetchVideos(searchTerm);
+      setSearchTerm("");
     }
   };
 
@@ -132,16 +117,13 @@ const Training = () => {
   return (
     <div className="page-container">
       <main className="training-container">
-        {/* Page Title */}
         <div className="page-title">
           <h1>Training Videos</h1>
           <p className="subtitle">
-            Develop your skills with expert guidance from top-quality training
-            resources
+            Develop your skills with expert guidance from top-quality training resources
           </p>
         </div>
 
-        {/* Search Bar */}
         <form className="search-container" onSubmit={handleSearch}>
           <div className="search-bar">
             <span className="search-icon">
@@ -152,21 +134,8 @@ const Training = () => {
                 fill="none"
                 xmlns="http://www.w3.org/2000/svg"
               >
-                <circle
-                  cx="11"
-                  cy="11"
-                  r="8"
-                  stroke="#94a3b8"
-                  strokeWidth="2"
-                />
-                <line
-                  x1="16"
-                  y1="16"
-                  x2="20"
-                  y2="20"
-                  stroke="#94a3b8"
-                  strokeWidth="2"
-                />
+                <circle cx="11" cy="11" r="8" stroke="#94a3b8" strokeWidth="2" />
+                <line x1="16" y1="16" x2="20" y2="20" stroke="#94a3b8" strokeWidth="2" />
               </svg>
             </span>
             <input
@@ -178,14 +147,11 @@ const Training = () => {
           </div>
         </form>
 
-        {/* Category Navigation */}
         <div className="category-nav">
           {categories.map((category) => (
             <button
               key={category}
-              className={`category-pill ${
-                activeCategory === category ? "active" : ""
-              }`}
+              className={`category-pill ${activeCategory === category ? "active" : ""}`}
               onClick={() => handleCategoryClick(category)}
             >
               {category}
@@ -195,13 +161,13 @@ const Training = () => {
 
         {loading ? (
           <div className="loading">Loading videos...</div>
+        ) : error ? (
+          <div className="error">{error}</div>
         ) : (
           <>
-            {/* Featured Training Section */}
             {featuredVideo && (
               <section className="featured-section">
                 <h2>Featured Training</h2>
-
                 <div
                   className="featured-video"
                   onClick={() => playVideo(featuredVideo.id)}
@@ -216,21 +182,16 @@ const Training = () => {
                     <span>PLAY</span>
                   </div>
                 </div>
-
                 <h3 className="featured-title">{featuredVideo.title}</h3>
                 <p className="video-meta">
-                  {featuredVideo.channelTitle} • {featuredVideo.duration} •{" "}
-                  {featuredVideo.views} views
+                  {featuredVideo.channelTitle} • {featuredVideo.duration} • {featuredVideo.views} views
                 </p>
-
                 <button className="save-button">+ Save Video</button>
               </section>
             )}
 
-            {/* Popular Videos Section */}
             <section className="popular-section">
               <h2>Popular Videos</h2>
-
               <div className="video-grid">
                 {popularVideos.map((video) => (
                   <div className="video-card" key={video.id}>
@@ -249,23 +210,14 @@ const Training = () => {
                     </div>
                     <div className="video-info">
                       <h4>{video.title}</h4>
-                      <p>
-                        {video.channelTitle} • {video.duration}
-                      </p>
+                      <p>{video.channelTitle} • {video.duration}</p>
                     </div>
                   </div>
                 ))}
               </div>
-
               <button
                 className="view-more-button"
-                onClick={() =>
-                  fetchVideos(
-                    `${
-                      activeCategory === "All" ? "" : activeCategory + " "
-                    }soccer training more`
-                  )
-                }
+                onClick={() => fetchVideos(`${activeCategory === "All" ? "" : activeCategory + " "}soccer training more`)}
               >
                 View More
               </button>
@@ -278,3 +230,6 @@ const Training = () => {
 };
 
 export default Training;
+
+
+

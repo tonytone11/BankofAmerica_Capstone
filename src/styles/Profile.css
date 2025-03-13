@@ -1,0 +1,87 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Arial', sans-serif;
+}
+
+.page-container {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.profile-container {
+    width: 100%;
+    max-width: 1350px;
+    margin: 0 auto;
+    padding: 0 20px;
+    flex: 1;
+}
+
+.profile_title_hero{
+    margin-top: 120px;
+    color: #1e3a8a;
+}
+
+.profile-tabs {
+    display: flex;
+    justify-content: space-between;
+    margin: 20px 0;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    border: 2px solid #e5e7eb;
+    overflow: hidden;
+}
+
+.tab-button {
+    flex: 1;
+    background: none;
+    border: none;
+    padding: 15px 0;
+    font-size: 16px;
+    font-weight: bold;
+    color: #64748b;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-align: center;
+}
+
+.tab-button:hover {
+    color: #1e3a8a;
+    background-color: #f8fafc;
+}
+
+.tab-button.active {
+    background-color: #1e3a8a;
+    color: white;
+}
+
+/* Tab Content Styles */
+.tab-content {
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 25px;
+    margin: 20px 0;
+    border: 2px solid #e5e7eb;
+}
+
+.tab-content h2 {
+    color: #1e3a8a;
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+@media (max-width: 768px) {
+    .profile-tabs {
+        flex-direction: column;
+    }
+    
+    .tab-button {
+        padding: 12px 0;
+    }
+}
