@@ -29,7 +29,7 @@ export default function Quotes() {
       <div className="-image">
         <img src={player.image_url} alt={player.name} className="player-images"/>
       </div>
-      <div className="player-info">
+      <div className="player-information">
         <h3>{player.name}</h3>
         <p className="player-team">{player.country}</p>
         <div className="player-quotes">
