@@ -56,27 +56,26 @@ const About = () => {
                 <h1>About FutureStars</h1>
                 <p className="page-subtitle">Empowering young football talent through accessible technology and training</p>
             </div>
-            
-            {/* Hero Image Section */}
-            <div className="hero-imge">
+             {/* Hero Image Section */}
+             <div className="hero-image">
             {/* <div className="image-placeholder">INSPIRING IMAGE OF YOUTH FOOTBALL</div> */}
             </div>
-            
-            {/* Mission Section */}
+            {/* Safety Section */}
             <section className="info-card">
-            <h2>Our Mission</h2>
-            <div className="underline"></div>
+                <h2>Youth Protection & Data Safety</h2>
+                <div className="underline"></div>
                 <p>
-                    FutureStars is dedicated to making quality football training and development accessible to all young players, 
-                    regardless of their background or resources. We believe that every child with passion and dedication deserves 
-                    the chance to reach their potential in the beautiful game.
+                    FutureStars prioritizes the safety and security of all young players using our platform. We implement 
+                    data protection protocols and security measures to ensure that all personal information 
+                    remains confidential and is never shared with unauthorized third parties.
                 </p>
                 <p>
-                    Through our platform, we connect aspiring footballers with professional resources, structured training, and 
-                    inspirational role models to guide their development journey.
+                    Our commitment to data safety means parents can trust that their child's information is handled with 
+                    the utmost care and in compliance with relevant data protection regulations. We believe that creating 
+                    a secure digital environment is essential for allowing young footballers to focus entirely on developing 
+                    their skills and reaching their potential.
                 </p>
             </section>
-            
             {/* Vision Section */}
             <section className="info-card vision-section">
             <h2>Our Vision</h2>
@@ -88,6 +87,20 @@ const About = () => {
                 <p>
                     By leveraging technology to bridge the gap between professional training methods and grassroots development, 
                     we aim to nurture the next generation of football stars from all walks of life.
+                </p>
+            </section>
+            {/* Mission Section */}
+            <section className="info-card">
+            <h2>We Stand For</h2>
+            <div className="underline"></div>
+                <p>
+                    FutureStars is dedicated to making quality football training and development accessible to all young players, 
+                    regardless of their background or resources. We believe that every child with passion and dedication deserves 
+                    the chance to reach their potential in the beautiful game.
+                </p>
+                <p>
+                    Through our platform, we connect aspiring footballers with professional resources, structured training, and 
+                    inspirational role models to guide their development journey.
                 </p>
             </section>
             
@@ -108,6 +121,7 @@ const About = () => {
                 ))}
             </div>
             </section>
+            
         </main>
         </div>
     );
