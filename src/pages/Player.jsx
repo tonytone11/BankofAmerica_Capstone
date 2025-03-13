@@ -19,7 +19,7 @@ function Player() {
                 {/* Page Title */}
                 <section className="page-title">
                     <h1>Players</h1>
-                    <p>Find and learn from professional players who inspire you</p>
+                    <p>Get inspired by your favorite players</p>
                 </section>
 
                 {/* Search and Filter Bar */}
@@ -49,16 +49,7 @@ function Player() {
 
                 {/* Player Catalog Section */}
                 <section className="player-catalog">
-                    <h2>Player Catalog</h2>
-
-                    <div className="category-tabs">
-                        <button className="tab active">Popular</button>
-                        <button className="tab">Attackers</button>
-                        <button className="tab">Midfielders</button>
-                        <button className="tab">Defenders</button>
-                        <button className="tab">Goalkeepers</button>
-                        <button className="tab">Rising Stars</button>
-                    </div>
+                    <h2>Popular Player</h2>
 
                     <div className="player-grid">
                         {/* Row 1 */}
@@ -83,14 +74,14 @@ function Player() {
                         {/* Row 2 */}
                         <div className="player-card">
                             <div className="player-avatar"></div>
-                            <h3>Kevin De Bruyne</h3>
-                            <p>Midfielder • Man City</p>
+                            <h3>Jude Bellingham</h3>
+                            <p>Midfielder • Real Madrid</p>
                         </div>
 
                         <div className="player-card">
                             <div className="player-avatar"></div>
-                            <h3>Rodri</h3>
-                            <p>Midfielder • Man City</p>
+                            <h3>Mohamed Salah</h3>
+                            <p>Attacker • Liverpool</p>
                         </div>
 
                         <div className="player-card">
