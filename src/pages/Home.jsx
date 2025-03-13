@@ -1,6 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import '../styles/Home.css';
+import Quotes from '../components/Quotes';
+import News from '../components/FootballNews'
 
 
 const Home = () => {
@@ -18,22 +20,27 @@ const Home = () => {
                     </div>
                 </div>
             </section>
-
-            {/* Stats Counter */}
-            {/* <section className="stats-section">
-            <div className="stat-card">
-                <h3>10,000+</h3>
-                <p>Young Players</p>
-            </div>
-            <div className="stat-card">
-                <h3>500+</h3>
-                <p>Training Videos</p>
-            </div>
-            <div className="stat-card">
-                <h3>50+</h3>
-                <p>Pro Profiles</p>
-            </div>
-            </section> */}
+               {/* Quick Access Feature Cards with hover descriptions */}
+               <section className="feature-cards">
+                <Link to="/profile" className="feature track-progress">
+                    <div className="feature-content">
+                        <h3>TRACK PROGRESS</h3>
+                        <p className="feature-description">Record your training stats, track improvements, and set goals for your football journey.</p>
+                    </div>
+                </Link>
+                <Link to="/training" className="feature watch-training">
+                    <div className="feature-content">
+                        <h3>WATCH TRAINING</h3>
+                        <p className="feature-description">Access professional training videos, drills, and techniques to improve your skills.</p>
+                    </div>
+                </Link>
+                <Link to="/players" className="feature explore-players">
+                    <div className="feature-content">
+                        <h3>EXPLORE PLAYERS</h3>
+                        <p className="feature-description">Discover players, view their stats, and find potential role models.</p>
+                    </div>
+                </Link>
+            </section>
 
             {/* Mission Statement */}
             <section className="mission-section">
@@ -49,48 +56,12 @@ const Home = () => {
             {/* Daily Inspiration Card */}
             <div className="card inspiration-card">
                 <div className="card-header">DAILY INSPIRATION</div>
-                <div className="card-content">
-                <div className="player-image">
-                    {/* <img src={playerImageUrl} alt="Player" /> */}
-                </div>
-                <div className="player-info">
-                        <h3>Lionel Messi</h3>
-                        <p className="player-team">Argentina</p>
-                        <p className="player-quote">"Hard work beats talent when talent doesn't work hard."</p>
-                        <p className="player-story">
-                        From academy player to Manchester United star and community leader
-                        </p>
-                </div>
-                </div>
+                <h4 className='quote-subtitle'>Football player quote of the day:</h4>
+                <Quotes />
             </div>
 
             {/* News Feed Card */}
-            <div className="card news-card">
-                <div className="card-header">FOOTBALL NEWS</div>
-                <div className="card-content">
-                <div className="news-item">
-                    <h4>UEFA launches new youth development program</h4>
-                    <p className="news-meta">2 hours ago • UEFA.com</p>
-                </div>
-                <div className="news-item">
-                    <h4>Top academy graduates making an impact this season</h4>
-                    <p className="news-meta">Yesterday • FutureStars Blog</p>
-                </div>
-                </div>
-            </div>
-            </section>
-
-            {/* Quick Access Feature Cards */}
-            <section className="feature-cards">
-                <Link to="/profile" className="feature track-progress">
-                    <h3>TRACK PROGRESS</h3>
-                </Link>
-                <Link to="/training" className="feature watch-training">
-                    <h3>WATCH TRAINING</h3>
-                </Link>
-                <Link to="/players" className="feature explore-players">
-                    <h3>EXPLORE PLAYERS</h3>
-                </Link>
+                <News />
             </section>
             </main>
         </div>
