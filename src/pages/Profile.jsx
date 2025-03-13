@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import '../styles/Profile.css';
 import { Bar } from 'react-chartjs-2';
