@@ -1,11 +1,18 @@
-import React from 'react';
-// import SearchBar from '../components/SearchBar';
-// import FilterBar from '../components/FilterBar';
-// import FeaturedPlayer from '../components/FeaturedPlayer';
-// import PlayerCatalog from '../components/PlayerCatalog';
+import React, { useState } from 'react';
+import SearchBar from '../components/SearchBar'; // Adjust import paths as needed
+import FeaturedPlayer from '../components/FeaturedPlayer'; // Adjust import paths as needed`
 import '../styles/Player.css';
 
 function Player() {
+    // Add state to store the selected player
+    const [selectedPlayer, setSelectedPlayer] = useState(null);
+
+    // Function to handle player selection from SearchBar
+    const handlePlayerSelect = (player) => {
+        console.log('Player.jsx received player:', player);
+        setSelectedPlayer(player);
+    };
+
     return (
         <div className="player-container">
             <main>
@@ -17,11 +24,8 @@ function Player() {
 
                 {/* Search and Filter Bar */}
                 <section className="search-filter">
-                    <div className="search-bar">
-                        <div className="search-icon"></div>
-                        <input type="text" placeholder="Search for players by name..." />
-                    </div>
-
+                    {/* Pass the handler to SearchBar */}
+                    <SearchBar onSelectPlayer={handlePlayerSelect} />
                     <div className="filters">
                         <div className="filter-dropdown">
                             <span>Position</span>
@@ -40,37 +44,8 @@ function Player() {
                     </div>
                 </section>
 
-                {/* Featured Player Section */}
-                <section className="featured-player">
-                    <div className="player-image">
-                        <div className="placeholder">PLAYER PHOTO</div>
-                    </div>
-
-                    <div className="player-details">
-                        <h2>Jude Bellingham</h2>
-                        <div className="player-tag">Real Madrid • England</div>
-
-                        <div className="player-stats">
-                            <p>Position: Central Midfielder</p>
-                            <p>Age: 21</p>
-                            <p>Goals: 24</p>
-                            <p>Assists: 12</p>
-                            <p>Appearances: 58</p>
-                        </div>
-                    </div>
-
-                    <div className="player-strengths">
-                        <h3>Key Strengths:</h3>
-                        <div className="strengths-tags">
-                            <span className="strength-tag">Passing</span>
-                            <span className="strength-tag">Vision</span>
-                            <span className="strength-tag">Finishing</span>
-                            <span className="strength-tag">Leadership</span>
-                        </div>
-
-                        <button className="bookmark-button">+ Bookmark Player</button>
-                    </div>
-                </section>
+                {/* Featured Player Section - Pass selected player */}
+                <FeaturedPlayer selectedPlayer={selectedPlayer} />
 
                 {/* Player Catalog Section */}
                 <section className="player-catalog">
@@ -126,8 +101,8 @@ function Player() {
                     </div>
 
                     <div className="pagination">
-                        <span>1</span>
-                        <span className="active">2</span>
+                        <span className="active">1</span>
+                        <span>2</span>
                         <span>3</span>
                     </div>
                 </section>

@@ -1,27 +1,95 @@
-/* * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: 'Arial', sans-serif;
-} */
-
-.page-container {
-    min-height: 100vh;
+/* :root {
+    --primary-blue: #1e3a8a;
+    --light-blue: #3b82f6;
+    --primary-green: #4ade80;
+    --dark-green: #10b981;
+    --purple: #8b5cf6;
+    --light-gray: #f8fafc;
+    --border-gray: #e5e7eb;
+    --text-dark: #111827;
+    --text-body: #374151;
+    --text-light: #64748b;
+  }
+  
+  .page-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    background-color: var(--light-gray);
+  }
+  
+  .home-container {
+    background: white;
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    border: 1px solid var(--border-gray);
+  }
+  
+  .main {
+    text-align: center;
+  }
+  
+  h2 {
+    color: var(--text-dark);
+    font-size: 1.75rem;
+    margin-bottom: 1rem;
+  }
+  
+  form {
     display: flex;
     flex-direction: column;
-
-    
-}
-
-.home-container {
+    gap: 1rem;
+  }
+  
+  input {
     width: 100%;
-    max-width: 1350px;
-    /* margin: 0 auto; */
-    padding: 0 20px;
-    margin-top: 130px;
-    flex: 1;
-}
-
-.main{
-    margin-top:140px;
-}
+    padding: 0.75rem;
+    border: 1px solid var(--border-gray);
+    border-radius: 8px;
+    font-size: 1rem;
+    color: var(--text-body);
+    background: var(--light-gray);
+    transition: border 0.3s ease;
+  }
+  
+  input:focus {
+    border-color: var(--primary-blue);
+    outline: none;
+    box-shadow: 0 0 5px var(--light-blue);
+  }
+  
+  button {
+    width: 100%;
+    padding: 0.75rem;
+    background-color: var(--primary-blue);
+    color: white;
+    font-size: 1rem;
+    font-weight: bold;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+  }
+  
+  button:hover {
+    background-color: var(--light-blue);
+  }
+  
+  p {
+    color: var(--text-light);
+    font-size: 0.9rem;
+  }
+  
+  a {
+    color: var(--primary-green);
+    text-decoration: none;
+    font-weight: bold;
+  }
+  
+  a:hover {
+    color: var(--dark-green);
+    text-decoration: underline;
+  }
+   */

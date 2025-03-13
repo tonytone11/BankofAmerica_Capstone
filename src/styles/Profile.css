@@ -75,6 +75,52 @@
     margin-bottom: 20px;
     text-align: center;
 }
+.user-profile-container {
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .profile-info {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  
+  .user-name {
+    margin: 0;
+    font-size: 1.5rem;
+  }
+  
+  .update-button {
+    background-color: #4a90e2;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 8px 16px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: background-color 0.3s;
+  }
+  
+  .update-button:hover {
+    background-color: #3a7bc8;
+  }
+  
+  .edit-profile {
+    display: flex;
+    gap: 10px;
+  }
+  
+  .name-input {
+    flex-grow: 1;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 1rem;
+  }
 
 @media (max-width: 768px) {
     .profile-tabs {
