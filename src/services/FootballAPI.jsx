@@ -28,6 +28,24 @@ export const searchPlayers = async (query) => {
     }
 };
 
+// Get player statistics by ID 
+export const getPlayerStatistics = async (playerId, season = 2023) => {
+    try {
+        const response = await footballApi.get('/players', {
+            params: {
+                id: playerId,
+                season: season,  // Default to 2023 season
+            }
+        });
+        console.log('Player Statistics Response:', response.data);
+        return response.data.response || null;
+    } catch (error) {
+        console.error('Error fetching player statistics:', error);
+        return null;
+    }
+};
+
+
 // Fetch players by category (Popular, position type, etc.)
 export const getPlayersByCategory = async (category, page = 1) => {
     let params = new URLSearchParams({
