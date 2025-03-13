@@ -22,10 +22,13 @@
     color: #64748b;
 }
 
+
+
 .hero-image {
     width: 100%;
     height: 300px;
-    background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+    /* background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%); */
+    background-image: url('https://i.pinimg.com/736x/e9/ae/1a/e9ae1a7821f4a4e27c44a6a5c9ba78eb.jpg');
     background-size: cover;
     background-position: center;
     border-radius: 10px;
