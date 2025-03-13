@@ -188,8 +188,7 @@
     gap: 20px;
 }
 
-.player-image {
-   
+.player-images {
     width: 130px;
     height: 150px;
     border-radius: 15%;
@@ -228,6 +227,15 @@
     color: #4b5563;
 }
 
+.quote-subtitle{
+    margin-top: 15px;
+    margin-left: 25px;
+    display: flex;
+    flex-direction: column;
+    font-size: 15px;
+    color: #4b5563;
+}
+
 /* News Card Specific Styles */
 .news-item {
     padding: 15px;
@@ -257,7 +265,7 @@
 
 .feature {
     flex: 1;
-    height: 80px;
+    height: 90px;
     border-radius: 10px;
     display: flex;
     align-items: center;
@@ -266,78 +274,129 @@
     font-weight: bold;
     box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
     cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    transition: height 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.feature-content {
+    width: 100%;
+    padding: 10px;
+    text-align: center;
+    transition: transform 0.3s ease;
+}
+
+.feature-description {
+    opacity: 0;
+    max-height: 0;
+    transition: opacity 0.3s ease, max-height 0.3s ease;
+    margin: 0;
+    font-size: 14px;
+    font-weight: normal;
+}
+
+/* Hover effects for desktop */
+@media (min-width: 769px) {
+    .feature:hover {
+        height: 140px;
+        transform: translateY(-5px);
+        box-shadow: 0px 6px 10px rgba(0, 0, 0, 0.2);
+    }
+
+    .feature:hover .feature-description {
+        opacity: 1;
+        max-height: 100px;
+        margin-top: 8px;
+    }
+}
+
+/* Touch/click effects for mobile devices */
+@media (max-width: 768px) {
+    .feature {
+        height: auto;
+        min-height: 90px;
+        padding: 15px;
+    }
+    
+    .feature-cards {
+        flex-direction: column;
+        gap: 15px;
+        height: auto;
+    }
+    
+    /* Always show descriptions on mobile for better UX */
+    .feature-description {
+        opacity: 1;
+        max-height: 100px;
+        margin-top: 8px;
+        display: block;
+    }
+    
+    /* Active state for touch */
+    .feature:active {
+        transform: translateY(-2px);
+        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.15);
+    }
 }
 
 .track-progress {
     background-color: #10b981;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    transition: transform 0.3s ease, box-shadow 0.3s ease, height 0.3s ease;
 }
 
 .watch-training {
     background-color: #3b82f6;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    transition: transform 0.3s ease, box-shadow 0.3s ease, height 0.3s ease;
 }
 
 .explore-players {
     background-color: #8b5cf6;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    transition: transform 0.3s ease, box-shadow 0.3s ease, height 0.3s ease;
 }
 
-.track-progress:hover,
-.watch-training:hover,
-.explore-players:hover,
-.primary-btn:hover{
+.primary-btn:hover {
     transform: translateY(-5px);
     box-shadow: 0px 6px 10px rgba(0, 0, 0, 0.1);
-}
-
-.primary-btn:hover{
     background-color: #10b981;
 }
 
-/* Responsive Styles */
+/* Rest of your responsive styles */
 @media (max-width: 768px) {
-.inspiration-card .card-content {
-    display: flex;
-    align-items: center;
-    flex-direction: row;
-}
-.player-image{
-    width: 140px;
-}
-.content-cards {
-    flex-direction: column;
-}
+    .inspiration-card .card-content {
+        display: flex;
+        align-items: center;
+        flex-direction: row;
+    }
+    .player-image{
+        width: 140px;
+    }
+    .content-cards {
+        flex-direction: column;
+    }
 
-.stats-section {
-    flex-direction: column;
-    gap: 20px;
-}
+    .stats-section {
+        flex-direction: column;
+        gap: 20px;
+    }
 
-.feature-cards {
-    flex-direction: column;
-    gap: 10px;
-    height: 200px;
-}
+    .hero-content h1 {
+        font-size: 32px;
+    }
 
-.hero-content h1 {
-    font-size: 32px;
-}
+    .hero-content h2 {
+        font-size: 18px;
+    }
 
-.hero-content h2 {
-    font-size: 18px;
-}
+    .cta-buttons {
+        flex-direction: column;
+        align-items: center;
+    }
 
-.cta-buttons {
-    flex-direction: column;
-    align-items: center;
-}
+    .header {
+        padding: 10px 20px;
+    }
 
-.header {
-    padding: 10px 20px;
-}
-
-.main-nav {
+    .main-nav {
         display: none;
     }
 }
