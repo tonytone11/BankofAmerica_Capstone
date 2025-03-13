@@ -1,8 +1,5 @@
-
-import '../styles/Signup.css'
-// import Quotes from './components/Quotes'
-import { useState } from "react"
-// import Quotes from './components/Quotes.jsx';
+import '../styles/Signup.css';
+import { useState } from "react";
 import Quotes from '../components/Quotes';
 
 const Signup = () => {
@@ -11,11 +8,12 @@ const Signup = () => {
     lastName: "",
     userName: "",
     email: "",
-  
     password: "",
+    DOB: "", // Added DOB
+    position: "", // Added position
   });
 
-  const [errorMessage, setErrorMessage] = useState(""); // Store errors
+  const [errorMessage, setErrorMessage] = useState("");
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -24,7 +22,7 @@ const Signup = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch("http://localhost:3000/register", {
+      const response = await fetch("http://localhost:3001/signup", { // Changed to match your backend
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -38,33 +36,42 @@ const Signup = () => {
         throw new Error(data.error || "Registration failed");
       }
 
-      //redirects to login page after sucessful registration
       window.location.href = '/login';
-      setErrorMessage(""); // Clear any previous errors
+      setErrorMessage("");
     } catch (error) {
-      setErrorMessage(error.message); // Store error as a string
+      setErrorMessage(error.message);
     }
   };
 
   return (
     <div className='page-container'>
-    <div className="home-container">
+      <div className="home-container">
         <div className='main'>
-      <h2>Signup</h2>
-      {errorMessage && <p style={{ color: "red" }}>{errorMessage}</p>}
-      <form onSubmit={handleSubmit}>
-        <input type="text" name="firstName" placeholder="First Name" onChange={handleChange} required />
-        <input type="text" name="lastName" placeholder="Last Name" onChange={handleChange} required />
-        <input type="text" name="userName" placeholder="Username" onChange={handleChange} required />
-        <input type="email" name="email" placeholder="Email" onChange={handleChange} required />
+          <h2>Create Account</h2>
+          <p className='signuptitle'>Join the FutureStars community</p>
+          {errorMessage && <p style={{ color: "red" }}>{errorMessage}</p>}
+          <form onSubmit={handleSubmit}>
+            <input type="text" name="firstName" placeholder="First Name" onChange={handleChange} required />
+            <input type="text" name="lastName" placeholder="Last Name" onChange={handleChange} required />
+            <input type="text" name="userName" placeholder="Username" onChange={handleChange} required />
+            <input type="email" name="email" placeholder="Email" onChange={handleChange} required />
+            <input type="password" name="password" placeholder="Password" onChange={handleChange} required />
+            
+
+            <p>Preferred position (optional)</p>
+            <select name="position" value={formData.position} onChange={handleChange}> {/* Added position select */}
+              <option value="">Select your position</option>
+              <option value="Forward">Forward</option>
+              <option value="Midfielder">Midfielder</option>
+              <option value="Defender">Defender</option>
+              <option value="Goalkeeper">Goalkeeper</option>
+            </select>
+
+            <button type="submit">Sign Up</button>
+          </form>
        
-        <input type="password" name="password" placeholder="Password" onChange={handleChange} required />
-        
-        <button type="submit">Sign Up</button>
-      </form>
-      <Quotes/>
+        </div>
       </div>
-    </div>
     </div>
   );
 };
