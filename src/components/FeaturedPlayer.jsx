@@ -25,13 +25,9 @@ const FeaturedPlayer = ({ selectedPlayer }) => {
         fetchPlayerStats();
     }, [selectedPlayer]);
 
-    // If no player is selected, show a placeholder
+    // If no player is selected, don't render the component at all
     if (!selectedPlayer) {
-        return (
-            <section className="featured-player">
-                <div className="placeholder">Search for a player above to view details</div>
-            </section>
-        );
+        return null; // Return null instead of a placeholder
     }
 
     // Destructure player data for easier access
