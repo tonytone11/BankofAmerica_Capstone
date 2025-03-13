@@ -72,3 +72,38 @@
     object-fit: cover;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   }
+
+  .search-pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 20px 0;
+  }
+  
+  .page-numbers {
+    display: flex;
+    background-color: #f2f5f7;
+    border-radius: 30px;
+    padding: 8px 16px;
+  }
+  
+  .page-number {
+    background: none;
+    border: none;
+    color: #666;
+    font-size: 16px;
+    font-weight: 500;
+    padding: 8px 16px;
+    cursor: pointer;
+    transition: color 0.2s;
+  }
+  
+  .page-number.active {
+    color: #1a4ca1;
+    font-weight: 700;
+  }
+  
+  /* Hide the Previous/Next buttons as they're not in the image */
+  .pagination-button {
+    display: none;
+  }
