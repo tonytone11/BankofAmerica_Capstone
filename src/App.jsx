@@ -10,7 +10,11 @@ import Login from './pages/Login';
 import Signup from './pages/Signup';
 import Footer from './components/Footer';
 import Training from './pages/Training';
+
+import Welcome from './pages/Welcome';
+
 import Admin from './pages/Admin'
+
 import './App.css';
 
 
@@ -37,6 +41,8 @@ const App = () => {
         <Route path="/about" element={<About />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/welcome" element={<Welcome />} />
+
         <Route path="/signup" element={<Signup />} />
         <Route path="/admin" element={<Admin />} />
         <Route path="*" element={<Error />} />
