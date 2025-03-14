@@ -31,12 +31,13 @@
     text-align: center;
   }
   
-  h2 {
+  .loginh2 {
+    color: var(--text-dark);
     font-size: 1.75rem;
     margin-bottom: 1rem;
   }
   
-  form {
+  .loginform {
     display: flex;
     flex-direction: column;
     gap: 1rem;
@@ -59,7 +60,7 @@
     box-shadow: 0 0 5px var(--light-blue);
   }
   
-  button {
+  .signupButton {
     width: 100%;
     padding: 0.75rem;
     background-color: var(--primary-blue);
@@ -72,23 +73,22 @@
     transition: background 0.3s ease;
   }
   
-  button:hover {
-    background-color: var(--light-blue);
-  }
+
   
-  p {
+  .loginp {
     color: var(--text-light);
     font-size: 0.9rem;
   }
   
-  a {
+  .loginlinks a {
     color: var(--primary-green);
     text-decoration: none;
     font-weight: bold;
   }
   
-  a:hover {
+  .loginlinks a:hover {
     color: var(--dark-green);
     text-decoration: underline;
   }
   
+ 

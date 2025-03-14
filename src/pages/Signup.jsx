@@ -38,7 +38,9 @@ const Signup = () => {
 
       window.location.href = '/login';
       setErrorMessage("");
+      setErrorMessage("");
     } catch (error) {
+      setErrorMessage(error.message);
       setErrorMessage(error.message);
     }
   };
@@ -47,8 +49,8 @@ const Signup = () => {
     <div className='page-container'>
       <div className="home-container">
         <div className='main'>
-          <h2>Create Account</h2>
-          <p className='signuptitle'>Join the FutureStars community</p>
+          <h2 className='loginh2'>Create Account</h2>
+          <p className='loginp'>Join the FutureStars community</p>
           {errorMessage && <p style={{ color: "red" }}>{errorMessage}</p>}
           <form onSubmit={handleSubmit}>
             <input type="text" name="firstName" placeholder="First Name" onChange={handleChange} required />
@@ -58,8 +60,8 @@ const Signup = () => {
             <input type="password" name="password" placeholder="Password" onChange={handleChange} required />
             
 
-            <p>Preferred position (optional)</p>
-            <select name="position" value={formData.position} onChange={handleChange}> {/* Added position select */}
+            <p className='loginp'>Preferred position (optional)</p>
+            <select className="signupSelect" name="position" value={formData.position} onChange={handleChange}> {/* Added position select */}
               <option value="">Select your position</option>
               <option value="Forward">Forward</option>
               <option value="Midfielder">Midfielder</option>
@@ -67,7 +69,7 @@ const Signup = () => {
               <option value="Goalkeeper">Goalkeeper</option>
             </select>
 
-            <button type="submit">Sign Up</button>
+            <button className="signupButton" type="submit">Sign Up</button>
           </form>
        
         </div>
