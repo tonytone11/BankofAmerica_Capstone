@@ -38,7 +38,9 @@ const Signup = () => {
 
       window.location.href = '/login';
       setErrorMessage("");
+      setErrorMessage("");
     } catch (error) {
+      setErrorMessage(error.message);
       setErrorMessage(error.message);
     }
   };
