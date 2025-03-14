@@ -35,6 +35,24 @@
     color: #64748b;
 }
 
+.page-note-1 {
+    font-size: 15px;
+    color: #64748b;
+    margin-bottom: 5px;
+}
+
+.page-note-2 {
+    font-size: 15px;
+    color: #64748b;
+}
+.note-background{
+    padding: 10px;
+    background-color: #ececec4f;
+}
+
+.full-name-form{
+    margin-top: 20px;
+}
 /* Contact Form Section */
 .contact-form-section {
     background-color: white;
@@ -62,7 +80,7 @@
 }
 
 .image-placeholder {
-    background-image: url(' https://i.pinimg.com/736x/c4/3e/b8/c43eb832ba26c7254dfd365f16436d1c.jpg');
+    background-image: url('https://i.pinimg.com/736x/32/b0/df/32b0df9284240b12a3ddaef590b13b41.jpg');
     background-size: cover;
     color: white;
     padding: 200px;

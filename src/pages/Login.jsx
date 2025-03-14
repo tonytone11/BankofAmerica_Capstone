@@ -16,7 +16,7 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch("http://localhost:3000/login", {
+      const response = await fetch("http://localhost:3001/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -31,7 +31,7 @@ const Login = () => {
       }
 
       alert(`Login successful! Welcome, ${data.message}`);
-      window.location.href = '/profile';
+      window.location.href = '/welcome';
       setErrorMessage(""); // Clear previous errors
     } catch (error) {
       setErrorMessage(error.message); // Store error as a string

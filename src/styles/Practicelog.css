@@ -1,6 +1,7 @@
 /* Practice Log Calendar Styles */
 .practice-log {
     padding: 20px;
+    margin-top:110px;
   }
   
   .calendar-container {
@@ -106,7 +107,7 @@
     box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
     border: 2px solid #e5e7eb;
     padding: 20px;
-    margin-bottom: 30px;
+    margin-bottom: 190px;
   }
   
   .hours-input h4 {
@@ -126,6 +127,8 @@
     border: 1px solid #e5e7eb;
     border-radius: 5px;
     font-size: 16px;
+    width:50vw ;
+  
   }
   
   .save-button {

@@ -46,7 +46,8 @@ const Training = () => {
       const videoDetailsResponse = await axios.get("http://localhost:5000/api/youtube/videos", {
         params: {
           id: videoIds,
-          key: API_KEY,
+          // key: API_KEY,
+          // safeSearch: safeSearch || "strict",
         },
       });
 
@@ -94,7 +95,9 @@ const Training = () => {
   const handleSearch = (e) => {
     e.preventDefault();
     if (searchTerm.trim()) {
-      fetchVideos(searchTerm);
+      // fetchVideos(searchTerm);
+      // setSearchTerm("");
+      fetchVideos(`soccer ${searchTerm} youth`);
       setSearchTerm("");
     }
   };
@@ -104,8 +107,10 @@ const Training = () => {
     setActiveCategory(category);
     const query =
       category === "All"
-        ? defaultQuery
-        : `soccer ${category.toLowerCase()} training`;
+        // ? defaultQuery
+        // : `soccer ${category.toLowerCase()} training`;
+        ? "professional soccer training techniques tutorial"
+      : `professional soccer ${category.toLowerCase()} training tutorial`;
     fetchVideos(query);
   };
 

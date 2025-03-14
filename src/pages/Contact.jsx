@@ -5,14 +5,15 @@ import '../styles/Contact.css';
 const Contact = () => {
 // Form state
 const [formData, setFormData] = useState({
-    name: '',
+    AdultName: '',
+    MinorName: '',
     email: '',
     subject: '',
     message: ''
 });
 
 // Active FAQ state
-const [activeFaq, setActiveFaq] = useState(3); // Index 3 is open by default based on wireframe
+const [activeFaq, setActiveFaq] = useState();
 
 // FAQ data
 const faqItems = [
@@ -51,7 +52,8 @@ console.log('Form submitted:', formData);
 alert('Thank you for your message! We will get back to you soon.');
 // Reset form
 setFormData({
-        name: '',
+        AdultName: '',
+        MinorName: '',
         email: '',
         subject: '',
         message: ''
@@ -82,20 +84,32 @@ return (
         <div className="form-container">
         <div className="form-content">
                 <h2>Send Us a Message</h2>
-                
+                <div className='note-background'>
+                    <p className="page-note-1"> <strong>For young players:</strong> Please ask your parent or guardian to help you contact us. We love hearing from our future stars, but we need to make sure you have adult supervision when reaching out.</p>
+                    <p className="page-note-2"><strong>Parents:</strong> Feel free to contact us with any questions about your child's experience or about our organization. We're committed to providing assistance and addressing all your concerns.</p>
+                </div>
                 <form onSubmit={handleSubmit}>
                 <div className="form-group">
-                        <label htmlFor="name">Full Name</label>
-                        <input
-                        type="text"
-                        id="name"
-                        name="name"
-                        value={formData.name}
-                        onChange={handleInputChange}
-                        required
-                        />
+                    <label className='full-name-form' htmlFor="AdultName">Adult Name</label>
+                    <input
+                    type="text"
+                    id="AdultName"
+                    name="AdultName"
+                    value={formData.AdultName}
+                    onChange={handleInputChange}
+                    required
+                    />
                 </div>
-            
+                <div className='form-group'>
+                    <label htmlFor="MinorName">Child's Name (if applicable)</label>
+                    <input
+                    type="text"
+                    id="MinorName"
+                    name="MinorName"
+                    value={formData.MinorName}
+                    onChange={handleInputChange}
+                    />
+                </div>
                 <div className="form-group">
                         <label htmlFor="email">Email Address</label>
                         <input
