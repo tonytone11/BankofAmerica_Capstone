@@ -40,13 +40,13 @@ const pool = mysql.createPool({ // Create connection pool
 app.post('/signup', async (req, res) => {
     let connection; // Declare connection variable
     try {
-        const { firstName, lastName, userName, email, password, DOB, position } = req.body;
+        const { firstName, lastName, userName, email, password,  position } = req.body;
         const hashedPassword = await bcrypt.hash(password, 10);
 
         connection = await pool.getConnection(); // Get connection from pool
         const [results] = await connection.query(
-            'INSERT INTO userInfo (firstName, lastName, userName, email, password, DOB, position) VALUES (?, ?, ?, ?, ?, ?, ?)',
-            [firstName, lastName, userName, email, hashedPassword, DOB, position]
+            'INSERT INTO userInfo (firstName, lastName, userName, email, password, position) VALUES (?, ?, ?, ?, ?, ?)',
+            [firstName, lastName, userName, email, hashedPassword, position]
         );
 
         res.status(201).json({ message: 'Registration successful!', redirectUrl: '/login' });
