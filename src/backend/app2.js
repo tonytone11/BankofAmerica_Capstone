@@ -25,7 +25,7 @@ app.use(bodyParser.json());
 // Serve static files from the React build folder
 app.use(express.static(path.join(__dirname, '../../pages/Home')));
 
-// **Database Connection Pool**
+// Database Connection Pool
 const pool = mysql.createPool({ // Create connection pool
     host: process.env.DB_HOST,
     user: process.env.DB_USER,
@@ -36,17 +36,17 @@ const pool = mysql.createPool({ // Create connection pool
     queueLimit: 0,
 });
 
-// **Register Route**
+// Register Route
 app.post('/signup', async (req, res) => {
     let connection; // Declare connection variable
     try {
-        const { firstName, lastName, userName, email, password,  position } = req.body;
+        const { firstName, lastName, userName, email, password, DOB, position } = req.body;
         const hashedPassword = await bcrypt.hash(password, 10);
 
         connection = await pool.getConnection(); // Get connection from pool
         const [results] = await connection.query(
-            'INSERT INTO userInfo (firstName, lastName, userName, email, password, position) VALUES (?, ?, ?, ?, ?, ?)',
-            [firstName, lastName, userName, email, hashedPassword, position]
+            'INSERT INTO userInfo (firstName, lastName, userName, email, password, DOB, position) VALUES (?, ?, ?, ?, ?, ?, ?)',
+            [firstName, lastName, userName, email, hashedPassword, DOB, position]
         );
 
         res.status(201).json({ message: 'Registration successful!', redirectUrl: '/login' });
@@ -57,12 +57,13 @@ app.post('/signup', async (req, res) => {
         res.status(500).json({ error: 'Internal server error, please try again later.' });
     } finally {
         if (connection) connection.release(); // Release connection back to pool
+        
     }
 });
 
 
 
-// **Login Route**
+// Login Route
 app.post('/login', async (req, res) => {
     let connection;
     try {
@@ -103,10 +104,9 @@ app.post('/login', async (req, res) => {
     }
 });
 
-// ... (rest of your code) ...
      
 
-// **Serve React Frontend (For any routes not matched)**
+// **Serve React Frontend 
 app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname, '../../pages/Home'));
 });

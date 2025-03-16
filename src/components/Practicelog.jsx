@@ -134,6 +134,25 @@ const PracticeLog = () => {
       }
     });
     
+    // fetch hours from db so that users can always see them on calender
+const fetchHours = async ()=>{
+  const token  = localStorage.getItem('token');
+  try{
+    const response  = await fetch('/profile/practice-log',{
+      headers:{
+        'Authorization':`Bearer${token}`
+      }
+    });
+    const data = await response.json();
+
+  } catch(error){
+    console.error(error);
+  };
+
+};
+
+
+
     return (
       
       <div className="calendar-container">
@@ -208,3 +227,9 @@ const PracticeLog = () => {
 };
 
 export default PracticeLog;
+
+
+
+
+
+
