@@ -37,6 +37,8 @@ const App = () => {
       <Navbar />
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="/profile" element={<Profile />} />
+
         <Route path="/profile/*" element={<Profile />} />
         <Route path="/training" element={<Training />} />
         <Route path="/players" element={<Player />} />
