@@ -13,10 +13,11 @@ const Login = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
+  
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch("http://localhost:3001/login", {
+      const response = await fetch("http://localhost:3000/api/auth/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -30,13 +31,34 @@ const Login = () => {
         throw new Error(data.error || "Login failed");
       }
 
+      if(data.token){
+        localStorage.setItem('token', data.token);
+        console.log("Token stored:");
+      } else{
+        console.warn("No token received from server");
+      }
+
       alert(`Login successful! Welcome, ${data.message}`);
-      window.location.href = '/welcome';
-      setErrorMessage(""); // Clear previous errors
-    } catch (error) {
-      setErrorMessage(error.message); // Store error as a string
+      window.location.href= '/profile';
+      setErrorMessage("");
+    } catch (error){
+      setErrorMessage(error.message);
     }
   };
+
+      // localStorage.setItem('user', JSON.stringify({
+      //   firstName: data.firstName,
+      //   lastName: data.lastName,
+      //   email: data.email
+      // }));
+
+  //     alert(`Login successful! Welcome, ${data.message}`);
+  //     window.location.href = '/profile';
+  //     setErrorMessage(""); // Clear previous errors
+  //   } catch (error) {
+  //     setErrorMessage(error.message); // Store error as a string
+  //   }
+  // };
 
   return (
     
