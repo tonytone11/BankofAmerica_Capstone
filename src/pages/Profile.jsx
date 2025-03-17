@@ -1,12 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import '../styles/Profile.css';
-import { Bar } from 'react-chartjs-2';
-import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js';
 import Practicelog from '../components/Practicelog';
 import Goals from '../components/Goals';
-
-ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
+import ProgressChart from '../components/ProgressChart'; // Import the new component
 
 export default function Profile() {
     const navigate = useNavigate();
@@ -31,49 +28,13 @@ export default function Profile() {
         navigate(`/profile/${tabName}`); // Update URL without reloading
     };
 
-    const labels = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
-    const data = {
-        labels: labels,
-        datasets: [{
-            label: 'Weekly Training Hours',
-            data: [65, 59, 80, 81, 56, 55, 40],
-            backgroundColor: [
-                'rgba(255, 99, 132, 0.2)',
-                'rgba(255, 159, 64, 0.2)',
-                'rgba(255, 205, 86, 0.2)',
-                'rgba(75, 192, 192, 0.2)',
-                'rgba(54, 162, 235, 0.2)',
-                'rgba(153, 102, 255, 0.2)',
-                'rgba(201, 203, 207, 0.2)'
-            ],
-            borderColor: [
-                'rgb(255, 99, 132)',
-                'rgb(255, 159, 64)',
-                'rgb(255, 205, 86)',
-                'rgb(75, 192, 192)',
-                'rgb(54, 162, 235)',
-                'rgb(153, 102, 255)',
-                'rgb(201, 203, 207)'
-            ],
-            borderWidth: 1
-        }]
-    };
-
-    const options = {
-        scales: {
-            y: {
-                beginAtZero: true
-            }
-        }
-    };
-
     const renderTabContent = () => {
         switch(activeTab) {
             case 'progress':
                 return (
                     <div style={{ width: '80%', margin: '0 auto' }}>
                         <h2>My Progress</h2>
-                        <Bar data={data} options={options} />
+                        <ProgressChart />
                     </div>
                 );
             case 'practice-log':
@@ -133,3 +94,11 @@ export default function Profile() {
         </div>
     );
 }
+
+
+
+
+
+
+
+

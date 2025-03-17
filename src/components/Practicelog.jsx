@@ -66,17 +66,46 @@ const PracticeLog = () => {
   };
 
   // Save training hours for selected date
-  const saveHours = () => {
+  const saveHours = async () => {
     if (selectedDate && hours) {
       const dateKey = formatDateKey(selectedDate);
-      setTrainingData(prevData => ({
-        ...prevData,
-        [dateKey]: parseFloat(hours)
-      }));
+      const token = localStorage.getItem('token');
       
-      // Reset input after saving
-      setHours('');
-      setSelectedDate(null);
+      try {
+        // First update local state for immediate UI feedback
+        setTrainingData(prevData => ({
+          ...prevData,
+          [dateKey]: parseFloat(hours)
+        }));
+        
+        // Then send to server
+        const response = await fetch('http://localhost:3003/profile/practice-log', {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            date: dateKey,
+            hours: parseFloat(hours)
+          })
+        });
+        
+        if (!response.ok) {
+          const errorText = await response.text();
+          throw new Error(`Failed to save hours: ${errorText}`);
+        }
+        
+        console.log('Hours saved successfully');
+        
+        // Reset input after saving
+        setHours('');
+        setSelectedDate(null);
+        
+      } catch (error) {
+        console.error('Error saving hours:', error);
+        // Consider adding error state and displaying to user
+      }
     }
   };
 
@@ -133,39 +162,8 @@ const PracticeLog = () => {
         rows.push(cells);
       }
     });
-    
-    // fetch hours from db so that users can always see them on calender
-    const fetchHours = async () => {
-      const token = localStorage.getItem('token');
-  
-      try {
-          const response = await fetch('/profile/practice-log', {
-              headers: {
-                  'Authorization': `Bearer  ${token}`,
-                'Content-type':'application/json'
-              }
-          });
-  
-          if (!response.ok) throw new Error('Failed to fetch hours');
-  
-          const data = await response.json();
-          setTrainingData(data);  // ✅ Update state with fetched data
-  
-      } catch (error) {
-          console.error(error);
-      }
-  };
-  
-  // Call fetchHours when the component mounts
-  useEffect(() => {
-      fetchHours();
-  }, []);
-  
-
-
 
     return (
-      
       <div className="calendar-container">
         <div className="calendar-header">
           <button onClick={prevMonth} className="month-nav">&lt;</button>
@@ -194,6 +192,42 @@ const PracticeLog = () => {
     );
   };
 
+  // fetch hours from db so that users can always see them on calender
+  const fetchHours = async () => {
+    const token = localStorage.getItem('token');
+    
+    if (!token) {
+      console.error("No authentication token found");
+      return;
+    }
+
+    try {
+      const response = await fetch('http://localhost:3003/profile/practice-log', {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        }
+      });
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(`Server error: ${response.status} - ${errorText}`);
+      }
+
+      const data = await response.json();
+      console.log("Hours data received:", data);
+      setTrainingData(data);
+
+    } catch (error) {
+      console.error("Error fetching hours:", error);
+    }
+  };
+  
+  // Call fetchHours when the component mounts
+  useEffect(() => {
+    fetchHours();
+  }, []);
+
   return (
     <div className="practice-log">
       <h2>Practice Log</h2>
@@ -205,7 +239,7 @@ const PracticeLog = () => {
           <h4>Add Training Hours for {selectedDate.toLocaleDateString()}</h4>
           <div className="input-group">
             <input 
-            className='calInput'
+              className='calInput'
               type="number"
               min="0"
               step="0.5"
