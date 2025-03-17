@@ -134,6 +134,36 @@ const PracticeLog = () => {
       }
     });
     
+    // fetch hours from db so that users can always see them on calender
+    const fetchHours = async () => {
+      const token = localStorage.getItem('token');
+  
+      try {
+          const response = await fetch('/profile/practice-log', {
+              headers: {
+                  'Authorization': `Bearer  ${token}`,
+                'Content-type':'application/json'
+              }
+          });
+  
+          if (!response.ok) throw new Error('Failed to fetch hours');
+  
+          const data = await response.json();
+          setTrainingData(data);  // ✅ Update state with fetched data
+  
+      } catch (error) {
+          console.error(error);
+      }
+  };
+  
+  // Call fetchHours when the component mounts
+  useEffect(() => {
+      fetchHours();
+  }, []);
+  
+
+
+
     return (
       
       <div className="calendar-container">
@@ -208,3 +238,9 @@ const PracticeLog = () => {
 };
 
 export default PracticeLog;
+
+
+
+
+
+
