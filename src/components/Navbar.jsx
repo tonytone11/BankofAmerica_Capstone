@@ -4,6 +4,7 @@ import '../styles/Navbar.css';
 import { isAuthenticated } from '../utils/authUtils';
 import { useNavigate } from 'react-router-dom';
 import {logout} from '../utils/authUtils';
+import Star from './StarIcon'
 
 
 const Navbar = () => {
@@ -31,7 +32,7 @@ const Navbar = () => {
       <div className="navbar-container">
         <div className="logo-container">
           <Link to="/" className="logo">FutureStars</Link>
-          <div className="soccer-ball-icon"></div>
+          <Star />
         </div>
         
         {/* Mobile Menu Toggle */}
