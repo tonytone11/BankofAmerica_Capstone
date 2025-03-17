@@ -27,21 +27,17 @@ function Player() {
                 <section className="player-search-filter">
                     {/* Pass the handler to SearchBar */}
                     <SearchBar onSelectPlayer={handlePlayerSelect} />
-                    <div className="filters">
-                        <div className="filter-dropdown">
+                    <div className="player-filters">
+                        <div className="player-filter-dropdown">
                             <span>Position</span>
                             <div className="dropdown-arrow"></div>
                         </div>
 
-                        <div className="filter-dropdown">
-                            <span>Team</span>
-                            <div className="dropdown-arrow"></div>
-                        </div>
 
-                        <div className="filter-dropdown">
-                            <span>Country</span>
-                            <div className="dropdown-arrow"></div>
-                        </div>
+                    </div>
+                    <div className="player-filter-dropdown">
+                        <span>Nationality</span>
+                        <div className="dropdown-arrow"></div>
                     </div>
                 </section>
 
