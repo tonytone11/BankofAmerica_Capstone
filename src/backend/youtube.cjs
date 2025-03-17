@@ -25,7 +25,7 @@ const YOUTUBE_API_URL = "https://www.googleapis.com/youtube/v3/search";
 
 // Route to search for YouTube videos
 app.get("/api/youtube/search", async (req, res) => {
-  const { q } = req.query;
+  const { q, safeSearch } = req.query;
 
   if (!q) {
     return res.status(400).json({ success: false, message: "Query parameter is required" });
@@ -38,6 +38,7 @@ app.get("/api/youtube/search", async (req, res) => {
         maxResults: 10,
         q: q,
         type: "video",
+        safeSearch: safeSearch || "strict", 
         key: process.env.YOUTUBE_API_KEY,
       },
     });
@@ -58,7 +59,7 @@ app.get("/api/youtube/search", async (req, res) => {
 
 // Route to fetch video details
 app.get("/api/youtube/videos", async (req, res) => {
-  const { id } = req.query;
+  const { id, safeSearch } = req.query;
 
   if (!id) {
     return res.status(400).json({ success: false, message: "ID parameter is required" });
@@ -69,6 +70,7 @@ app.get("/api/youtube/videos", async (req, res) => {
       params: {
         part: "contentDetails,statistics,snippet",
         id: id,
+        safeSearch: safeSearch || "strict",
         key: process.env.YOUTUBE_API_KEY,
       },
     });

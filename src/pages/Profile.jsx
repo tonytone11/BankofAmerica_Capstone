@@ -1,31 +1,80 @@
-
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import '../styles/Profile.css';
 import { Bar } from 'react-chartjs-2';
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js';
-import Practicelog from '../components/Practicelog'
-import Goals from '../components/Goals'
-
+import Practicelog from '../components/Practicelog';
+import Goals from '../components/Goals';
+import { getAuthHeader } from '../utils/authUtils';
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
 export default function Profile() {
     const [activeTab, setActiveTab] = useState('progress');
-    const [userName, setUserName] = useState (' John Doe');
+    const [userName, setUserName] = useState('John Doe');
     const [isEditing, setIsEditing] = useState(false);
     const [newName, setNewName] = useState('');
+    const [userData, setUserData] = useState(null);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
 
-    const handleUpdateProfile = () => {
+    // Fetch user profile data when component mounts
+    useEffect(() => {
+        async function fetchUserProfile() {
+            try {
+                const response = await fetch("http://localhost:3000/api/user/profile", {
+                    method: "GET",
+                    headers: {
+                        "Content-Type": "application/json",
+                        ...getAuthHeader()
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error('Failed to fetch profile data');
+                }
+
+                const data = await response.json();
+                setUserData(data);
+                setUserName(data.name || 'John Doe');
+                setLoading(false);
+            } catch (err) {
+                setError(err.message);
+                setLoading(false);
+            }
+        }
+
+        fetchUserProfile();
+    }, []);
+
+    const handleUpdateProfile = async () => {
         if (isEditing) {
-            if(newName.trim()!== ''){
-                setUserName(newName);
+            if (newName.trim() !== '') {
+                try {
+                    const response = await fetch("http://localhost:3000/api/user/update-profile", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                            ...getAuthHeader()
+                        },
+                        body: JSON.stringify({ name: newName })
+                    });
+
+                    if (!response.ok) {
+                        throw new Error('Failed to update profile');
+                    }
+
+                    setUserName(newName);
+                    // You could also refetch the user data here if needed
+                } catch (err) {
+                    setError(err.message);
+                }
             }
             setIsEditing(false);
         } else {
             setNewName(userName);
             setIsEditing(true);
         }
-    }
+    };
 
     const labels = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
     const data = {
@@ -88,6 +137,14 @@ export default function Profile() {
                 return <div>Select a tab</div>;
         }
     };
+
+    if (loading) {
+        return <div className="loading">Loading profile...</div>;
+    }
+
+    if (error) {
+        return <div className="error">Error: {error}</div>;
+    }
 
     return (
         <div className="page-container">
