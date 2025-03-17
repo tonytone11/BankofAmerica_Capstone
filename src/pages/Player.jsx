@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import SearchBar from '../components/SearchBar'; // Adjust import paths as needed
 import FeaturedPlayer from '../components/FeaturedPlayer'; // Adjust import paths as needed`
+import PlayerCatalog from '../components/PlayerCatalog';
 import '../styles/Player.css';
 
 function Player() {
@@ -17,13 +18,13 @@ function Player() {
         <div className="player-container">
             <main>
                 {/* Page Title */}
-                <section className="page-title">
+                <section className="player-page-title">
                     <h1>Players</h1>
                     <p>Get inspired by your favorite players</p>
                 </section>
 
                 {/* Search and Filter Bar */}
-                <section className="search-filter">
+                <section className="player-search-filter">
                     {/* Pass the handler to SearchBar */}
                     <SearchBar onSelectPlayer={handlePlayerSelect} />
                     <div className="filters">
@@ -48,55 +49,17 @@ function Player() {
                 <FeaturedPlayer selectedPlayer={selectedPlayer} />
 
                 {/* Player Catalog Section */}
-                <section className="player-catalog">
+                {/* <section className="player-catalog">
                     <h2>Popular Player</h2>
-
-                    <div className="player-grid">
-                        {/* Row 1 */}
-                        <div className="player-card">
-                            <div className="player-avatar"></div>
-                            <h3>Kylian Mbappé</h3>
-                            <p>Forward • Real Madrid</p>
-                        </div>
-
-                        <div className="player-card">
-                            <div className="player-avatar"></div>
-                            <h3>Erling Haaland</h3>
-                            <p>Forward • Man City</p>
-                        </div>
-
-                        <div className="player-card">
-                            <div className="player-avatar"></div>
-                            <h3>Vini Jr.</h3>
-                            <p>Forward • Real Madrid</p>
-                        </div>
-
-                        {/* Row 2 */}
-                        <div className="player-card">
-                            <div className="player-avatar"></div>
-                            <h3>Jude Bellingham</h3>
-                            <p>Midfielder • Real Madrid</p>
-                        </div>
-
-                        <div className="player-card">
-                            <div className="player-avatar"></div>
-                            <h3>Mohamed Salah</h3>
-                            <p>Attacker • Liverpool</p>
-                        </div>
-
-                        <div className="player-card">
-                            <div className="player-avatar"></div>
-                            <h3>Lamine Yamal</h3>
-                            <p>Forward • Barcelona</p>
-                        </div>
+                    <div className='player-grid'>
+                        <PlayerCatalog playerId="278" />
+                        <PlayerCatalog playerId="1100" />
+                        <PlayerCatalog playerId="762" />
+                        <PlayerCatalog playerId="129718" /> 
+                        <PlayerCatalog playerId="306" /> 
+                        <PlayerCatalog playerId="386828" /> 
                     </div>
-
-                    <div className="pagination">
-                        <span className="active">1</span>
-                        <span>2</span>
-                        <span>3</span>
-                    </div>
-                </section>
+                </section> */}
             </main>
         </div>
     );

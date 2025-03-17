@@ -1,10 +1,14 @@
 /* Goals Component Styles */
 .goals-container {
+ 
     width: 80%;
+
     margin: 0 auto;
   }
   
   .goal-form {
+  /* margin: 150px auto; */
+    margin-top: 150px;
     display: flex;
     margin-bottom: 20px;
     gap: 10px;
