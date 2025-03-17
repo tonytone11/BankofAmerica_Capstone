@@ -141,20 +141,27 @@ const PracticeLog = () => {
       try {
           const response = await fetch('/profile/practice-log', {
               headers: {
-                  'Authorization': `Bearer  ${token}`,
-                'Content-type':'application/json'
+                  'Authorization': `Bearer ${token}`, // ✅ Space after Bearer
+                  'Content-Type': 'application/json'
               }
           });
   
-          if (!response.ok) throw new Error('Failed to fetch hours');
+          const responseText = await response.text(); // Read response as text
+          console.log("Raw response:", responseText); // Debugging
   
-          const data = await response.json();
-          setTrainingData(data);  // ✅ Update state with fetched data
+          if (!response.ok) {
+              throw new Error(`Server error: ${response.status} - ${responseText}`);
+          }
+  
+          const data = JSON.parse(responseText); // Manually parse JSON
+          console.log("Parsed JSON:", data); // Debugging
+          setTrainingData(data);
   
       } catch (error) {
-          console.error(error);
+          console.error("Error fetching hours:", error);
       }
   };
+  
   
   // Call fetchHours when the component mounts
   useEffect(() => {

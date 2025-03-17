@@ -16,24 +16,40 @@ const pool = mysql.createPool({
 // Middleware to verify JWT token
 const verifyToken = (req, res, next) => {
     const authHeader = req.headers['authorization'];
-    if (!authHeader) return res.sendStatus(401); //unauthorized
+    console.log(" Authorization Header:", authHeader); // Debugging
 
-    const token = authHeader.split(' ')[1];
-    if (!token) return res.sendStatus(401);
+    if (!authHeader) {
+        console.error(" Missing Authorization Header");
+        return res.status(401).json({ error: "Unauthorized - Missing token" });
+    }
+
+    const token = authHeader.split(' ')[1]; // Extract token after "Bearer "
+    console.log(" Extracted Token:", token); // Debugging
+
+    if (!token) {
+        console.error(" Missing Token in Header");
+        return res.status(401).json({ error: "Unauthorized - No token provided" });
+    }
 
     jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
-        if (err) return res.sendStatus(403);
-        req.user = user; // Attach decoded token payload to request
+        if (err) {
+            console.error(" JWT Verification Failed:", err);
+            return res.status(403).json({ error: "Unauthorized - Invalid token" });
+        }
+
+        console.log(" Token Verified. Extracted id:", user.id);  //  Use "id" instead of "user_id"
+        req.user = user; // Attach user data to request
         next();
     });
 };
+
 
 // Route to log training hours
 app.post('/profile/practice-log', verifyToken, async (req, res) => {
     let connection;
     try {
         const { date, hours } = req.body;
-        const userId = req.user.user_id; // Extract user ID from token
+        const userId = req.user.id;  //  Use "id" instead of "user_id"
 
         connection = await pool.getConnection();
 
@@ -72,7 +88,7 @@ app.post('/profile/practice-log', verifyToken, async (req, res) => {
 app.get('/profile/practice-log', verifyToken, async (req, res) => {
     let connection;
     try {
-        const userId = req.user.user_id; // Extract user ID from token
+        const userId = req.user.id;  //  Use "id" instead of "user_id"
 
         connection = await pool.getConnection();
         const [hoursData] = await connection.query(
@@ -95,5 +111,6 @@ app.get('/profile/practice-log', verifyToken, async (req, res) => {
         if (connection) connection.release();
     }
 });
+
 
 app.listen(3002, () => console.log('Server running on port 3002'));
