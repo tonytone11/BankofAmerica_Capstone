@@ -1,0 +1,98 @@
+.admin-section {
+    margin-bottom: 30px;
+}
+
+.admin-section h1 {
+    font-size: 24px;
+    color: var(--text-dark);
+    margin-bottom: 20px;
+}
+
+  /* Data Controls */
+.data-controls {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.search-bar {
+    display: flex;
+    align-items: center;
+    background-color: white;
+    border-radius: 5px;
+    overflow: hidden;
+    border: 1px solid var(--border-gray);
+}
+
+.search-bar input {
+    border: none;
+    padding: 10px 15px;
+    width: 250px;
+    font-size: 14px;
+}
+
+.search-bar input:focus {
+    outline: none;
+}
+
+.search-bar button {
+    background: none;
+    border: none;
+    padding: 10px 15px;
+    cursor: pointer;
+    color: var(--text-light);
+}
+
+.filters {
+    display: flex;
+    gap: 10px;
+}
+
+.filters select {
+    padding: 10px 15px;
+    border: 1px solid var(--border-gray);
+    border-radius: 5px;
+    color: var(--text-body);
+    background-color: white;
+}
+
+  /* Messages List */
+.messages-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.no-results {
+    background-color: white;
+    border-radius: 10px;
+    padding: 30px;
+    text-align: center;
+    color: var(--text-light);
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+  /* Responsive styles */
+@media (max-width: 768px) {
+    .data-controls {
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .search-bar {
+        width: 100%;
+    }
+    
+    .search-bar input {
+        width: 100%;
+    }
+    
+    .filters {
+        width: 100%;
+    }
+    
+    .filters select {
+        width: 100%;
+    }
+}
