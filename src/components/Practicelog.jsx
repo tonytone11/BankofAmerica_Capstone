@@ -134,7 +134,38 @@ const PracticeLog = () => {
       }
     });
     
+    // fetch hours from db so that users can always see them on calender
+    const fetchHours = async () => {
+      const token = localStorage.getItem('token');
+  
+      try {
+          const response = await fetch('/profile/practice-log', {
+              headers: {
+                  'Authorization': `Bearer  ${token}`,
+                'Content-type':'application/json'
+              }
+          });
+  
+          if (!response.ok) throw new Error('Failed to fetch hours');
+  
+          const data = await response.json();
+          setTrainingData(data);  // ✅ Update state with fetched data
+  
+      } catch (error) {
+          console.error(error);
+      }
+  };
+  
+  // Call fetchHours when the component mounts
+  useEffect(() => {
+      fetchHours();
+  }, []);
+  
+
+
+
     return (
+      
       <div className="calendar-container">
         <div className="calendar-header">
           <button onClick={prevMonth} className="month-nav">&lt;</button>
@@ -174,6 +205,7 @@ const PracticeLog = () => {
           <h4>Add Training Hours for {selectedDate.toLocaleDateString()}</h4>
           <div className="input-group">
             <input 
+            className='calInput'
               type="number"
               min="0"
               step="0.5"
@@ -206,3 +238,9 @@ const PracticeLog = () => {
 };
 
 export default PracticeLog;
+
+
+
+
+
+

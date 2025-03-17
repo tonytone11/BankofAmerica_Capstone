@@ -1,10 +1,21 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import '../styles/Navbar.css';
+import { isAuthenticated } from '../utils/authUtils';
+import { useNavigate } from 'react-router-dom';
+import {logout} from '../utils/authUtils';
+import Star from './StarIcon'
+
 
 const Navbar = () => {
   const location = useLocation();
+  const navigate = useNavigate();
   const [showMobileMenu, setShowMobileMenu] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  useEffect(()=> {
+    setIsLoggedIn(isAuthenticated());
+  }, [location]);
 
   // Check if the path matches to set active class
   const isActive = (path) => {
@@ -15,12 +26,13 @@ const Navbar = () => {
     setShowMobileMenu(!showMobileMenu);
   };
 
+
   return (
     <nav className="navbar">
       <div className="navbar-container">
         <div className="logo-container">
           <Link to="/" className="logo">FutureStars</Link>
-          <div className="soccer-ball-icon"></div>
+          <Star />
         </div>
         
         {/* Mobile Menu Toggle */}
@@ -50,15 +62,34 @@ const Navbar = () => {
             </li>
             {/* Login button for mobile view */}
             <li className="mobile-login-item">
-              <Link to="/login" className="mobile-login-btn" onClick={() => setShowMobileMenu(false)}>
-                Login
+              <Link to={localStorage.getItem('token') ? "#" : "/login"} 
+              className="mobile-login-btn" onClick={(e) => {
+                if(localStorage.getItem('token')){
+                e.preventDefault();
+                logout();
+              }
+                setShowMobileMenu(false);
+            }}
+            >
+              {localStorage.getItem('token') ? 'Logout' : "Login"}
               </Link>
             </li>
           </ul>
         </div>
         
         {/* Desktop Login Button */}
-        <Link to="/login" className="login-btn desktop-only">Login</Link>
+        <Link 
+  to={localStorage.getItem('token') ? "#" : "/login"} 
+  className="login-btn desktop-only"
+  onClick={(e) => {
+    if (localStorage.getItem('token')) {
+      e.preventDefault(); // Prevent navigation
+      logout(); // Call your logout function  
+    }
+  }}
+>
+  {localStorage.getItem('token') ? 'Logout' : 'Login'}
+</Link>
       </div>
     </nav>
   );

@@ -5,6 +5,7 @@ import Quotes from '../components/Quotes';
 import News from '../components/FootballNews'
 
 
+
 const Home = () => {
     return (
         <div className="page-container">
