@@ -1,0 +1,62 @@
+.admin-section {
+    margin-bottom: 30px;
+}
+
+.admin-section h1 {
+    font-size: 24px;
+    color: var(--text-dark);
+    margin-bottom: 20px;
+}
+
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.data-table {
+    background-color: white;
+    border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: 20px;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+thead {
+    background-color: #f8fafc;
+}
+
+th {
+    padding: 12px 20px;
+    text-align: left;
+    font-weight: bold;
+    color: var(--text-body);
+    border-bottom: 1px solid var(--border-gray);
+}
+
+td {
+    padding: 12px 20px;
+    color: var(--text-body);
+    border-bottom: 1px solid var(--border-gray);
+}
+
+tr:last-child td {
+    border-bottom: none;
+}
+
+  /* Responsive styles */
+@media (max-width: 768px) {
+    .data-table {
+        overflow-x: auto;
+    }
+    
+    table {
+        min-width: 800px;
+    }
+}

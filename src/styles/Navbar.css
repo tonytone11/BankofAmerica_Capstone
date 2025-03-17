@@ -44,17 +44,6 @@
     position: relative;
 }
 
-.soccer-ball-icon:before {
-    content: "";
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 15px;
-    height: 15px;
-    background-color: #1e3a8a;
-    clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
-}
 
 .nav-menu {
     display: flex;

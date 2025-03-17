@@ -15,4 +15,13 @@ router.get('/profile', verifyToken, async (req, res) => {
     }
 });
 
+
+
+router.get('')
+
+
+
+
+
+
 module.exports = router;
