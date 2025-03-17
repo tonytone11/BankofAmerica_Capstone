@@ -58,9 +58,9 @@ const SearchBar = ({ onSelectPlayer }) => {
     const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
     return (
-        <section className="search-container">
+        <section className="player-search-container">
             <form onSubmit={handleSearch}>
-                <div className="search-bar">
+                <div className="player-search-bar">
                     <div className="search-icon"></div>
                     <input
                         type="text"
@@ -75,7 +75,7 @@ const SearchBar = ({ onSelectPlayer }) => {
                 <p>Loading results...</p>
             ) : (
                 results.length > 0 && (
-                    <div className="search-results">
+                    <div className="player-search-results">
                         <ul>
                             {currentItems.map((item) => (
                                 <li
