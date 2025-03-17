@@ -26,7 +26,7 @@ const Welcome= () => {
     <div className="welcome-page">
       <div className="left">
         <h1>
-          <div className="welcomeMessage">Welcome, {userName}!</div>
+          <div className="welcomeMessage">Welcome, ${user.firstName}!</div>
         </h1>
         <p>Your journey of support and connection begins here. Together, we make a difference.</p>
 
