@@ -2,8 +2,8 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import '@testing-library/jest-dom';
-import SearchBar from '../src/components/SearchBar'; // Adjust path as needed
-import { searchPlayers } from '../src/services/FootballAPI'; // Import the API service
+import SearchBar from '../../src/components/SearchBar'; // Adjust path as needed
+import { searchPlayers } from '../../src/services/FootballAPI'; // Import the API service
 
 // Create a manual mock for searchPlayers
 const mockSearchPlayers = vi.fn();
