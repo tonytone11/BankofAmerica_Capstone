@@ -61,7 +61,6 @@ const SearchBar = ({ onSelectPlayer }) => {
         <section className="player-search-container">
             <form onSubmit={handleSearch}>
                 <div className="player-search-bar">
-                    <div className="search-icon"></div>
                     <input
                         type="text"
                         value={query}
