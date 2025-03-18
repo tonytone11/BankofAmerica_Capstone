@@ -39,18 +39,18 @@ function Player() {
                 {/* Featured Player Section - Pass selected player */}
                 <FeaturedPlayer selectedPlayer={selectedPlayer} />
 
-                {/* Player Catalog Section */}
-                <section className="player-catalog">
+                {/* Popular Player Section */}
+                {/* <section className="player-catalog">
                     <h2>Popular Player</h2>
                     <div className='player-grid'>
-                        <PlayerCatalog playerId="278" />
-                        {/* <PlayerCatalog playerId="1100" />
-                        <PlayerCatalog playerId="762" />
-                        <PlayerCatalog playerId="129718" />
-                        <PlayerCatalog playerId="306" />
-                        <PlayerCatalog playerId="386828" /> */}
+                        <PlayerCatalog playerId="278" onSelectPlayer={handlePlayerSelect} />
+                        <PlayerCatalog playerId="1100" onSelectPlayer={handlePlayerSelect} />
+                        <PlayerCatalog playerId="762" onSelectPlayer={handlePlayerSelect} />
+                        <PlayerCatalog playerId="129718" onSelectPlayer={handlePlayerSelect} />
+                        <PlayerCatalog playerId="306" onSelectPlayer={handlePlayerSelect} />
+                        <PlayerCatalog playerId="386828" onSelectPlayer={handlePlayerSelect} />
                     </div>
-                </section>
+                </section> */}
             </main>
         </div>
     );
