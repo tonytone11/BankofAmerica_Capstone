@@ -211,9 +211,9 @@ app.post('/contact', async (req, res) => {
     
     try {
         // Extract form data from request body
-        const { adultName, childname, email, subject, message } = req.body;
+        const { adultName, childName, email, subject, message } = req.body;
         
-        console.log('Extracted fields:', { adultName, childname, email, subject, message });
+        console.log('Extracted fields:', { adultName, childName, email, subject, message });
         
         // Validate required fields
         if (!adultName || !email || !message) {
@@ -233,15 +233,15 @@ app.post('/contact', async (req, res) => {
             // Insert form data into contactForms table
             const query = `
                 INSERT INTO contactForms 
-                (adultName, childname, email, subject, message) 
+                (adultName, childName, email, subject, message) 
                 VALUES 
                 (?, ?, ?, ?, ?)
             `;
             
             console.log('Executing query:', query);
-            console.log('With values:', [adultName, childname, email, subject, message]);
+            console.log('With values:', [adultName, childName, email, subject, message]);
             
-            const [result] = await connection.query(query, [adultName, childname, email, subject, message]);
+            const [result] = await connection.query(query, [adultName, childName, email, subject, message]);
             
             console.log('Query result:', result);
             
@@ -283,17 +283,41 @@ app.post('/contact', async (req, res) => {
 });
 
 // get req displaying contact messages 
+app.put('/admin/messages/:id/read', async (req, res) => {
+    try {
+        const messageId = req.params.id;
+        
+        const query = `
+            UPDATE contactForms 
+            SET readStatus = TRUE
+            WHERE id = ?
+        `;
+        
+        const [result] = await pool.query(query, [messageId]);
+        
+        if (result.affectedRows === 0) {
+            return res.status(404).json({ success: false, message: 'Message not found' });
+        }
+        
+        res.json({ success: true, message: 'Message marked as read' });
+    } catch (error) {
+        console.error('Error marking message as read:', error);
+        res.status(500).json({ success: false, message: 'Failed to update message' });
+    }
+});
 app.get('/admin/users/messages', async (req, res) => {
     try {
         // SQL query to fetch all contact form submissions with full message
         const query = `
-            SELECT id, adultName, childname, email, subject, message 
+            SELECT id, adultName, childName, email, subject, message, 
+                   IFNULL(readStatus, FALSE) as readMessages,
+                   DATE_FORMAT(created_at, '%Y-%m-%d') as date
             FROM contactForms 
             ORDER BY id DESC
         `;
-        
+
         const [messages] = await pool.query(query);
-        
+
         // For an API response
         res.json({ success: true, messages });
     } catch (error) {
@@ -301,6 +325,10 @@ app.get('/admin/users/messages', async (req, res) => {
         res.status(500).json({ success: false, message: 'Failed to fetch messages' });
     }
 });
+
+
+
+
 
 // displaying user info on admin page
 app.get('/admin/users', async (req, res) => {
@@ -312,11 +340,179 @@ app.get('/admin/users', async (req, res) => {
         res.status(500).send('Server error');
     }
 });
+// Routes for goals
+app.post('/profile/goals', verifyToken, async (req, res) => {
+    let connection;
+    try {
+      const { goal } = req.body;
+      const userId = req.user.id;
+  
+      if (!goal) {
+        return res.status(400).json({
+          success: false,
+          message: 'Goal text is required'
+        });
+      }
+  
+      connection = await pool.getConnection();
+      const [result] = await connection.query(
+        'INSERT INTO goals (user_id, goal) VALUES (?, ?)',
+        [userId, goal]
+      );
+  
+      res.status(201).json({
+        success: true,
+        message: 'Goal added successfully',
+        id: result.insertId
+      });
+    } catch (error) {
+      console.error('Error adding goal:', error);
+      res.status(500).json({
+        success: false,
+        error: 'Internal server error',
+        message: error.message
+      });
+    } finally {
+      if (connection) connection.release();
+    }
+  });
+  
+  app.get('/profile/goals', verifyToken, async (req, res) => {
+    let connection;
+    try {
+      const userId = req.user.id;
+  
+      connection = await pool.getConnection();
+      const [goals] = await connection.query(
+        'SELECT id, goal, completed FROM goals WHERE user_id = ?',
+        [userId]
+      );
+  
+      res.status(200).json(goals);
+    } catch (error) {
+      console.error('Error fetching goals:', error);
+      res.status(500).json({
+        success: false,
+        error: 'Internal server error',
+        message: error.message
+      });
+    } finally {
+      if (connection) connection.release();
+    }
+  });
+  
+  app.put('/profile/goals/:id', verifyToken, async (req, res) => {
+    let connection;
+    try {
+        const goalId = req.params.id;
+        const userId = req.user.id;
+        const { completed } = req.body;
 
-// Add a test endpoint 
-app.get('/test', (req, res) => {
-    res.json({ message: 'Test endpoint working' });
-});
+        console.log(`Updating goal ID: ${goalId} for user ID: ${userId}, New completed status: ${completed}`);
+
+        if (completed === undefined) {
+            return res.status(400).json({
+                success: false,
+                message: "Missing 'completed' field in request body"
+            });
+        }
+
+        connection = await pool.getConnection();
+        
+        // First verify the goal belongs to the user
+        const [goalCheck] = await connection.query(
+            'SELECT id FROM goals WHERE id = ? AND user_id = ?',
+            [goalId, userId]
+        );
+        
+        if (goalCheck.length === 0) {
+            return res.status(404).json({
+                success: false,
+                message: "Goal not found or unauthorized"
+            });
+        }
+
+        // Ensure completed is stored as 0 or 1 in the database
+        const completedStatus = completed ? 1 : 0;
+
+        // Update the goal completion status
+        const [result] = await connection.query(
+            'UPDATE goals SET completed = ? WHERE id = ? AND user_id = ?',
+            [completedStatus, goalId, userId]
+        );
+
+        console.log("Update result:", result);
+
+        if (result.affectedRows === 0) {
+            return res.status(404).json({
+                success: false,
+                message: "Goal not updated. It may not exist."
+            });
+        }
+
+        res.status(200).json({
+            success: true,
+            message: "Goal updated successfully",
+            completed: completedStatus
+        });
+
+    } catch (error) {
+        console.error("Error updating goal:", error);
+        res.status(500).json({
+            success: false,
+            error: "Internal server error",
+            message: error.message
+        });
+
+    } finally {
+        if (connection) {
+            console.log("Releasing database connection");
+            connection.release();
+        }
+    }
+  });
+  
+  app.delete('/profile/goals/:id', verifyToken, async (req, res) => {
+    let connection;
+    try {
+      const goalId = req.params.id;
+      const userId = req.user.id;
+  
+      connection = await pool.getConnection();
+      
+      // First verify the goal belongs to this user
+      const [goal] = await connection.query(
+        'SELECT * FROM goals WHERE id = ? AND user_id = ?',
+        [goalId, userId]
+      );
+  
+      if (goal.length === 0) {
+        return res.status(404).json({
+          success: false,
+          message: 'Goal not found or unauthorized'
+        });
+      }
+  
+      await connection.query(
+        'DELETE FROM goals WHERE id = ?',
+        [goalId]
+      );
+  
+      res.status(200).json({
+        success: true,
+        message: 'Goal deleted successfully'
+      });
+    } catch (error) {
+      console.error('Error deleting goal:', error);
+      res.status(500).json({
+        success: false,
+        error: 'Internal server error',
+        message: error.message
+      });
+    } finally {
+      if (connection) connection.release();
+    }
+  });
 
 // Catch-all route should be LAST
 app.get('*', (req, res) => {
