@@ -13,13 +13,9 @@ import Training from './pages/Training';
 import Practicelog  from './components/Practicelog';
 import Goals from './components/Goals';
 import Welcome from './pages/Welcome';
-
 import Admin from './pages/Admin'
-
 import './App.css';
 import PracticeLog from './components/Practicelog';
-
-
 const PlaceholderPage = ({ title }) => {
   return (
     <div className="placeholder-page">
@@ -30,7 +26,6 @@ const PlaceholderPage = ({ title }) => {
     </div>
   );
 };
-
 const App = () => {
   return (
     <>
@@ -38,7 +33,6 @@ const App = () => {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/profile" element={<Profile />} />
-
         <Route path="/profile/*" element={<Profile />} />
         <Route path="/training" element={<Training />} />
         <Route path="/players" element={<Player />} />
@@ -46,28 +40,12 @@ const App = () => {
         <Route path="/contact" element={<Contact />} />
         <Route path="/login" element={<Login />} />
         <Route path="/welcome" element={<Welcome />} />
-      
         <Route path="/signup" element={<Signup />} />
-        
-
-        <Route path="/admin/*" element={<Admin />} /> {/* Admin login route */}
-        <Route path="/admin/login" element={<AdminLogin />} />
-        
-        {/* Protected admin routes */}
-        <Route element={<AdminProtectedRoute />}>
-          <Route path="/admin/dashboard" element={<AdminDashboard />} />
-          <Route path="/admin/users" element={<AdminUsers />} />
-          <Route path="/admin/messages" element={<AdminMessages />} />
-          {/* Add more admin routes as needed */}
-        </Route>
-        
-
-       
+        <Route path="/admin/*" element={<Admin />} />
         <Route path="*" element={<Error />} />
       </Routes>
       <Footer />
     </>
   );
 };
-
 export default App;
