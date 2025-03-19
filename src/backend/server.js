@@ -420,3 +420,24 @@ app.get('*', (req, res) => {
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
 });
+
+// Add this to your server.js or app.js
+app.get('/api/test-db', async (req, res) => {
+    try {
+      const connection = await pool.getConnection();
+      const [result] = await connection.query('SELECT 1 as test');
+      connection.release();
+      res.json({ 
+        success: true, 
+        message: 'Database connection successful',
+        result 
+      });
+    } catch (error) {
+      console.error('Database test error:', error);
+      res.status(500).json({ 
+        success: false, 
+        error: error.message,
+        code: error.code
+      });
+    }
+  });
