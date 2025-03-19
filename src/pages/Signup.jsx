@@ -47,7 +47,7 @@ const Signup = () => {
   };
 
   return (
-    <div className='login-page-container'>
+    <div className='page-container'>
     <div className="login-container">
         <div className='main'>
       <h2 className='signuph2'>Create account</h2>
@@ -63,6 +63,7 @@ const Signup = () => {
         <input type="password" name="password" placeholder="Password" onChange={handleChange} required />
         
         <button className="signupButton" type="submit">Sign Up</button>
+        <p className="loginp">Already registered? <a className="loginlinks" href="/login"> <u>Login here</u> </a></p>
       </form>
    
       </div>

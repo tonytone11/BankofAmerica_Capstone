@@ -40,7 +40,7 @@ function Player() {
                 <FeaturedPlayer selectedPlayer={selectedPlayer} />
 
                 {/* Popular Player Section */}
-                {/* <section className="player-catalog">
+                <section className="player-catalog">
                     <h2>Popular Player</h2>
                     <div className='player-grid'>
                         <PlayerCatalog playerId="278" onSelectPlayer={handlePlayerSelect} />
@@ -50,7 +50,7 @@ function Player() {
                         <PlayerCatalog playerId="306" onSelectPlayer={handlePlayerSelect} />
                         <PlayerCatalog playerId="386828" onSelectPlayer={handlePlayerSelect} />
                     </div>
-                </section> */}
+                </section>
             </main>
         </div>
     );

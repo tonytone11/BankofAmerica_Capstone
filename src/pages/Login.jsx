@@ -81,7 +81,7 @@ const Login = () => {
 
   return (
     
-    <div className="login-page-container">
+    <div className="page-container">
 
     <div className="login-container">
         <div className="main">
@@ -92,7 +92,7 @@ const Login = () => {
         <input type="text" name="userName" placeholder="Username" onChange={handleChange} required />
         <input type="password" name="password" placeholder="Password" onChange={handleChange} required />
         <button className="signupButton" type="submit">Login</button>
-        <p className="loginp">Dont have an account? <a className="loginlinks" href="/signup">sign up here</a></p>
+        <p className="loginp">Dont have an account? <a className="loginlinks" href="/signup"> <u>sign up here</u> </a></p>
       </form>
       </div>
     </div>
