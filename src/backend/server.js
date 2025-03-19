@@ -8,7 +8,8 @@ const mysql = require('mysql2/promise');
 
 // Load environment variables
 dotenv.config();
-
+// Importing the admin middleware
+const { verifyAdmin } = require('./middleware/admin.middleware');
 // Import routes
 const authRoutes = require('./routes/auth.routes');
 const userRoutes = require('./routes/user.routes');
@@ -282,7 +283,7 @@ app.post('/contact', async (req, res) => {
 });
 
 // get req displaying contact messages 
-app.get('/admin/users/messages', async (req, res) => {
+app.get('/admin/users/messages', verifyAdmin, async (req, res) => {
     try {
         // SQL query to fetch all contact form submissions with full message
         const query = `
@@ -303,7 +304,7 @@ app.get('/admin/users/messages', async (req, res) => {
     }
 });
 
-app.put('/admin/users/messages/:id/read', async (req, res) => {
+app.put('/admin/users/messages/:id/read', verifyAdmin, async (req, res) => {
     try {
         const messageId = req.params.id;
         console.log('Marking message as read, ID:', messageId);
@@ -353,7 +354,7 @@ app.put('/admin/users/messages/:id/read', async (req, res) => {
 
 
 // displaying user info on admin page
-app.get('/admin/users', async (req, res) => {
+app.get('/admin/users', verifyAdmin, async (req, res) => {
     try {
         console.log('Fetching users with firstName and lastName combination...');
         

@@ -8,8 +8,6 @@ const pool = require('../config/db.config');
 router.post('/signup', async (req, res) => {
     let connection;
     try {
-        console.log('Request body received:', req.body);
-        
         // Extract user data from request body
         const { firstName, lastName, userName, email, password } = req.body;
         
@@ -53,19 +51,11 @@ router.post('/signup', async (req, res) => {
         const saltRounds = 10;
         const hashedPassword = await bcrypt.hash(password, saltRounds);
         
-        // Important: Use parameterized query with correct parameter order
-        const insertQuery = 'INSERT INTO userInfo (firstName, lastName, username, email, password) VALUES (?, ?, ?, ?, ?)';
-        const params = [firstName, lastName, userName, email, hashedPassword];
-        
-        console.log('Executing query with params:', {
-            firstName,
-            lastName,
-            userName,
-            email,
-            hashedPasswordLength: hashedPassword.length
-        });
-        
-        const [result] = await connection.query(insertQuery, params);
+        // Store user in database - using the correct column names for your table
+        const [result] = await connection.query(
+            'INSERT INTO userInfo (firstName, lastName, username, email, password) VALUES (?, ?, ?, ?, ?)',
+            [firstName, lastName, userName, email, hashedPassword]
+        );
         
         res.status(201).json({ 
             success: true, 
@@ -90,21 +80,21 @@ router.post('/signup', async (req, res) => {
 router.post('/login', async (req, res) => {
     let connection;
     try {
-        const { email, password } = req.body;
+        const { username, password } = req.body;
         
-        if (!email || !password) {
+        if (!username || !password) {
             return res.status(400).json({ 
                 success: false, 
-                error: 'Email and password are required' 
+                error: 'Username and password are required' 
             });
-        }
+         }
         
         connection = await pool.getConnection();
         
         // Find user by email
         const [users] = await connection.query(
-            'SELECT id, firstName, lastName, username, email, password FROM userInfo WHERE email = ?',
-            [email]
+            'SELECT id, firstName, lastName, username, email, password, isAdmin FROM userInfo WHERE username = ?',
+            [username]
         );
         
         if (users.length === 0) {
@@ -160,8 +150,6 @@ router.post('/login', async (req, res) => {
 });
 
 module.exports = router;
-
-
 
 
 
