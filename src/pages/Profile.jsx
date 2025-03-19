@@ -41,13 +41,6 @@ export default function Profile() {
                 return <Practicelog />;
             case 'goals':
                 return <Goals />;
-            case 'roleModels':
-                return (
-                    <div>
-                        <h2>Role Models</h2>
-                        <p>Your role models will appear here.</p>
-                    </div>
-                );
             default:
                 return <div>Select a tab</div>;
         }
@@ -56,7 +49,7 @@ export default function Profile() {
     return (
         <div className="page-container">
             <main className="profile-container">
-                <h1 className="profile_title_hero">MY PROFILE</h1>
+            <h1 className="profile_title_hero">Welcome Future Star! Track your progress here!</h1>
 
                 {/* Navigation Tabs */}
                 <div className="profile-tabs">
@@ -78,12 +71,6 @@ export default function Profile() {
                     >
                         Goals
                     </button>
-                    <button 
-                        className={`tab-button ${activeTab === 'roleModels' ? 'active' : ''}`}
-                        onClick={() => changeTab('roleModels')}
-                    >
-                        Role Models
-                    </button>
                 </div>
 
                 {/* Tab Content */}
@@ -94,6 +81,12 @@ export default function Profile() {
         </div>
     );
 }
+
+
+
+
+
+
 
 
 

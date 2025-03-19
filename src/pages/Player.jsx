@@ -27,20 +27,13 @@ function Player() {
                 <section className="player-search-filter">
                     {/* Pass the handler to SearchBar */}
                     <SearchBar onSelectPlayer={handlePlayerSelect} />
-
-                    <div className="player-filters">
-                        <div className="player-filter-dropdown">
-                            <span>Position</span>
-                            <div className="dropdown-arrow"></div>
-                        </div>
-                    </div>
                 </section>
 
                 {/* Featured Player Section - Pass selected player */}
                 <FeaturedPlayer selectedPlayer={selectedPlayer} />
 
                 {/* Popular Player Section */}
-                {/* <section className="player-catalog">
+                <section className="player-catalog">
                     <h2>Popular Player</h2>
                     <div className='player-grid'>
                         <PlayerCatalog playerId="278" onSelectPlayer={handlePlayerSelect} />
@@ -50,7 +43,7 @@ function Player() {
                         <PlayerCatalog playerId="306" onSelectPlayer={handlePlayerSelect} />
                         <PlayerCatalog playerId="386828" onSelectPlayer={handlePlayerSelect} />
                     </div>
-                </section> */}
+                </section>
             </main>
         </div>
     );
