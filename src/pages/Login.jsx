@@ -62,11 +62,12 @@ const Login = () => {
 
   return (
     
-    <div className="page-container">
+    <div className="login-page-container">
 
-    <div className="home-container">
+    <div className="login-container">
         <div className="main">
-      <h2>Login</h2>
+      <h2 className="loginh2">Login</h2>
+      <div className="green-line"></div>
       {errorMessage && <p style={{ color: "red" }}>{errorMessage}</p>}
       <form onSubmit={handleSubmit}>
         <input type="text" name="userName" placeholder="Username" onChange={handleChange} required />
