@@ -49,17 +49,12 @@ const App = () => {
       
         <Route path="/signup" element={<Signup />} />
         
-
-        <Route path="/admin/*" element={<Admin />} /> {/* Admin login route */}
-        <Route path="/admin/login" element={<AdminLogin />} />
+        <Route path="/admin/*" element={<Admin />} />
         
-        {/* Protected admin routes */}
-        <Route element={<AdminProtectedRoute />}>
-          <Route path="/admin/dashboard" element={<AdminDashboard />} />
-          <Route path="/admin/users" element={<AdminUsers />} />
-          <Route path="/admin/messages" element={<AdminMessages />} />
-          {/* Add more admin routes as needed */}
-        </Route>
+
+       
+     
+        
         
 
        
