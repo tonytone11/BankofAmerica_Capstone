@@ -17,6 +17,8 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      console.log("Sending login request with:", formData);
+      
       const response = await fetch("http://localhost:3003/api/auth/login", {
         method: "POST",
         headers: {
@@ -24,41 +26,58 @@ const Login = () => {
         },
         body: JSON.stringify(formData),
       });
-
+  
       const data = await response.json();
-
+      console.log("Login response data:", data);
+      
       if (!response.ok) {
         throw new Error(data.error || "Login failed");
       }
-
+  
       if(data.token){
         localStorage.setItem('token', data.token);
-        console.log("Token stored:");
+        
+        // Store user information, including admin status
+        const userData = {
+          id: data.user.id,
+          firstName: data.user.firstName,
+          lastName: data.user.lastName,
+          username: data.user.username,
+          email: data.user.email,
+          isAdmin: data.user.isAdmin // Store the admin status
+        };
+        
+        console.log("Storing user data:", userData);
+        localStorage.setItem('user', JSON.stringify(userData));
+        
+        // Check what's stored in localStorage
+        const storedUser = JSON.parse(localStorage.getItem('user'));
+        console.log("Retrieved user from localStorage:", storedUser);
+        console.log("Admin status in localStorage:", storedUser.isAdmin);
       } else{
         console.warn("No token received from server");
       }
-
+  
       alert(`Login successful! Welcome, ${data.message}`);
-      window.location.href= '/profile';
+      
+      // Debug admin status before redirection
+      console.log("Is admin?", data.user.isAdmin);
+      
+      // Redirect based on admin status
+      if (data.user.isAdmin) {
+        console.log("Redirecting to admin page");
+        window.location.href = '/admin'; // Redirect admins to admin page
+      } else {
+        console.log("Redirecting to profile page");
+        window.location.href = '/profile'; // Redirect regular users to profile
+      }
+      
       setErrorMessage("");
     } catch (error){
+      console.error("Login error:", error);
       setErrorMessage(error.message);
     }
   };
-
-      // localStorage.setItem('user', JSON.stringify({
-      //   firstName: data.firstName,
-      //   lastName: data.lastName,
-      //   email: data.email
-      // }));
-
-  //     alert(`Login successful! Welcome, ${data.message}`);
-  //     window.location.href = '/profile';
-  //     setErrorMessage(""); // Clear previous errors
-  //   } catch (error) {
-  //     setErrorMessage(error.message); // Store error as a string
-  //   }
-  // };
 
   return (
     
