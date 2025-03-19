@@ -1,26 +1,33 @@
-//auth.middleware.js
+// middleware/auth.middleware.js - Refactored to use the jwt config consistently
 const jwt = require('jsonwebtoken');
 const jwtConfig = require('../config/jwt.config');
 
 const verifyToken = (req, res, next) => {
     // Get the token from the Authorization header
     const authHeader = req.headers['authorization'];
-    const token = authHeader && authHeader.split(' ')[1]; // Bearer TOKEN format
     
-    if (!token) {
-        return res.status(403).json({ error: 'No token provided' });
+    if (!authHeader) {
+        console.error("Missing Authorization Header");
+        return res.status(401).json({ error: "Unauthorized - Missing token" });
     }
     
-    // Verify the token
+    const token = authHeader.split(' ')[1]; // Bearer TOKEN format
+    
+    if (!token) {
+        console.error("Missing Token in Header");
+        return res.status(401).json({ error: "Unauthorized - No token provided" });
+    }
+    
+    // Use the jwt config secret consistently
     jwt.verify(token, jwtConfig.secret, (err, decoded) => {
         if (err) {
-            return res.status(401).json({ error: 'Unauthorized' });
+            console.error("JWT Verification Failed:", err);
+            return res.status(401).json({ error: "Unauthorized - Invalid token" });
         }
         
         // Save user data to request for use in other routes
-        req.userId = decoded.id;
-        req.userName = decoded.userName;
-        
+        req.user = decoded;
+        console.log("Token Verified. User data:", req.user);
         next();
     });
 };

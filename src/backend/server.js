@@ -1,14 +1,15 @@
-//server.js
+// server.js - Refactored to use auth middleware consistently and fix duplicate routes
 const express = require('express');
 const dotenv = require('dotenv');
-const bodyParser = require('body-parser');
 const cors = require('cors');
 const path = require('path');
-const jwt = require('jsonwebtoken');
 const mysql = require('mysql2/promise');
 
 // Load environment variables
 dotenv.config();
+
+// Import middleware
+const { verifyToken } = require('./middleware/auth.middleware');
 
 // Import routes
 const authRoutes = require('./routes/auth.routes');
@@ -16,8 +17,7 @@ const userRoutes = require('./routes/user.routes');
 
 // Initialize Express app
 const app = express();
-const PORT = process.env.PORT || 3003; // Changed to 3003 to match your frontend expectations
-app.use(express.static(path.join(__dirname, '../dist')));
+const PORT = process.env.PORT || 3003;
 
 // Import database pool from config
 const pool = require('./config/db.config');
@@ -31,44 +31,13 @@ app.use(cors({
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Serve static files from the React build folder
-app.use(express.static(path.join(__dirname, '../pages/Home')));
-
-// Middleware to verify JWT token
-const verifyToken = (req, res, next) => {
-    const authHeader = req.headers['authorization'];
-    console.log("Authorization Header:", authHeader);
-
-    if (!authHeader) {
-        console.error("Missing Authorization Header");
-        return res.status(401).json({ error: "Unauthorized - Missing token" });
-    }
-
-    const token = authHeader.split(' ')[1]; // Extract token after "Bearer "
-    console.log("Extracted Token:", token);
-
-    if (!token) {
-        console.error("Missing Token in Header");
-        return res.status(401).json({ error: "Unauthorized - No token provided" });
-    }
-
-    jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
-        if (err) {
-            console.error("JWT Verification Failed:", err);
-            return res.status(403).json({ error: "Unauthorized - Invalid token" });
-        }
-
-        console.log("Token Verified. Extracted id:", user.id);
-        req.user = user; // Attach user data to request
-        next();
-    });
-};
+// Serve static files
+app.use(express.static(path.join(__dirname, '../dist')));
 
 // Register auth and user routes
 app.use('/api/auth', authRoutes);
 app.use('/api/user', userRoutes);
 
-// Route to log training hours
 // Route to log training hours
 app.post('/profile/practice-log', verifyToken, async (req, res) => {
     let connection;
@@ -135,7 +104,7 @@ app.post('/profile/practice-log', verifyToken, async (req, res) => {
     }
 });
 
-// Route to fetch user-specific training hours
+// Route to fetch user-specific training hours (removed duplicate)
 app.get('/profile/practice-log', verifyToken, async (req, res) => {
     let connection;
     try {
@@ -177,36 +146,6 @@ app.get('/profile/practice-log', verifyToken, async (req, res) => {
     }
 });
 
-
-
-// Route to fetch user-specific training hours
-app.get('/profile/practice-log', verifyToken, async (req, res) => {
-    let connection;
-    try {
-        const userId = req.user.id;
-
-        connection = await pool.getConnection();
-        const [hoursData] = await connection.query(
-            'SELECT date, hours FROM hoursLogged WHERE user_id = ?',
-            [userId]
-        );
-
-        const formattedData = {};
-        hoursData.forEach(row => {
-            formattedData[row.date] = row.hours;
-        });
-
-        res.status(200).json(formattedData);
-
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ error: 'Internal server error' });
-
-    } finally {
-        if (connection) connection.release();
-    }
-});
-
 // POST route for contact form submissions
 app.post('/contact', async (req, res) => {
     console.log('Received contact form submission:', req.body);
@@ -217,7 +156,6 @@ app.post('/contact', async (req, res) => {
         
         console.log('Extracted fields:', { adultName, childName, email, subject, message });
 
-        
         // Validate required fields
         if (!adultName || !email || !message) {
             console.log('Validation failed - missing required fields');
@@ -236,31 +174,23 @@ app.post('/contact', async (req, res) => {
             // Insert form data into contactForms table
             const query = `
                 INSERT INTO contactForms 
-
                 (adultName, childName, email, subject, message) 
-
-                VALUES 
-                (?, ?, ?, ?, ?)
+                VALUES (?, ?, ?, ?, ?)
             `;
 
             console.log('Executing query:', query);
-
             console.log('With values:', [adultName, childName, email, subject, message]);
             
             const [result] = await connection.query(query, [adultName, childName, email, subject, message]);
-
             
             console.log('Query result:', result);
 
             // Check if insertion was successful
             if (result.affectedRows === 1) {
                 // Successful submission
-
-                ;
                 res.status(201).json({ 
                     success: true, 
                     message: 'Your message has been submitted successfully'
-
                 });
             } else {
                 console.log('Insert operation did not affect any rows');
@@ -277,7 +207,6 @@ app.post('/contact', async (req, res) => {
         }
     } catch (error) {
         console.error('Error details:', error);
-        // Log the full error details for debugging
         console.error('Error name:', error.name);
         console.error('Error message:', error.message);
         console.error('Error stack:', error.stack);
@@ -295,7 +224,6 @@ app.get('/admin/users/messages', async (req, res) => {
     try {
         // SQL query to fetch all contact form submissions with full message
         const query = `
-
             SELECT id, adultName, childName, email, subject, message, 
                    IFNULL(readStatus, FALSE) as readMessages,
                    DATE_FORMAT(created_at, '%Y-%m-%d') as date
@@ -356,12 +284,6 @@ app.put('/admin/users/messages/:id/read', async (req, res) => {
     }
 });
 
-
-
-
-
-
-
 // displaying user info on admin page
 app.get('/admin/users', async (req, res) => {
     try {
@@ -390,6 +312,7 @@ app.get('/admin/users', async (req, res) => {
         });
     }
 });
+
 // Routes for goals
 app.post('/profile/goals', verifyToken, async (req, res) => {
     let connection;
@@ -565,12 +488,8 @@ app.post('/profile/goals', verifyToken, async (req, res) => {
   });
 
 // Catch-all route should be LAST
-
-
-// And later update the catch-all route
-
 app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, '../../dist/index.html'));
+    res.sendFile(path.join(__dirname, '../dist/index.html'));
 });
 
 // Start server
