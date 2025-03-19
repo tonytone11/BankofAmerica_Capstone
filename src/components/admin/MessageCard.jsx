@@ -2,13 +2,17 @@ import React from 'react';
 import './MessageCard.css';
 
 const MessageCard = ({ message, markAsRead }) => {
+  // Check for either readMessages or read property
+  const isRead = message.readMessages || message.read;
+  
   return (
-    <div className={`message-card ${message.readMessages ? 'read' : 'unread'}`}>
+    <div className={`message-card ${isRead ? 'read' : 'unread'}`}>
       <div className="message-header">
-        <h3>{message.subject}</h3>
+        <h3>{message.subject || 'No Subject'}</h3>
         <div className="message-meta">
-          <span className="message-date">{message.date}</span>
-          {!message.readMessages && <span className="unread-badge">New</span>}
+          <span className="message-date">{message.date || 'No date'}</span>
+          {!isRead && <span className="unread-badge">New</span>}
+
         </div>
       </div>
       <div className="sender-info">
@@ -21,16 +25,19 @@ const MessageCard = ({ message, markAsRead }) => {
         </div>
       </div>
       <p className="message-preview">
-        {message.message.substring(0, 100)}...
+        {message.message ? `${message.message}` : 'No message content'}
       </p>
       <div className="message-actions">
-        {!message.readMessages && (
+        {!isRead && (
+
           <button className="mark-read-btn" onClick={() => markAsRead(message.id)}>
             Mark as Read
           </button>
         )}
         <a 
-          href={`mailto:${message.email}?subject=Re: ${message.subject}`}
+
+          href={`mailto:${message.email}?subject=Re: ${message.subject || 'Your message'}`}
+
           className="reply-btn"
         >
           Reply

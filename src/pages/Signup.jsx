@@ -62,7 +62,7 @@ const Signup = () => {
         
         <button type="submit">Sign Up</button>
       </form>
-      <Quotes/>
+   
       </div>
     </div>
     </div>

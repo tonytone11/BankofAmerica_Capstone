@@ -1,5 +1,6 @@
 
 
+
 <img width="340" height="170" alt="Screenshot 2025-03-17 at 10 00 56 PM" src="https://github.com/user-attachments/assets/1a7e1d13-b0a7-4d40-a7af-039f9b0f481a" />
 
 FutureStars is a website designed to give quality football training and development resources for underprivileged youth. By leveraging technology to deliver professional-grade training content, skill tracking, and inspirational role models, we're creating a platform that eliminates economic barriers to athletic development.
