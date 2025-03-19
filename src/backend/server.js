@@ -72,14 +72,14 @@ app.post('/profile/practice-log', verifyToken, async (req, res) => {
     let connection;
     try {
         const { date, hours } = req.body;
-        
+
         if (!date || hours === undefined) {
-            return res.status(400).json({ 
-                success: false, 
-                message: 'Date and hours are required' 
+            return res.status(400).json({
+                success: false,
+                message: 'Date and hours are required'
             });
         }
-        
+
         const userId = req.user.id;
         console.log('Logging hours for user:', userId, 'Date:', date, 'Hours:', hours);
 
@@ -99,7 +99,7 @@ app.post('/profile/practice-log', verifyToken, async (req, res) => {
                 'UPDATE hoursLogged SET hours = ? WHERE user_id = ? AND date = ?',
                 [hours, userId, date]
             );
-            
+
             console.log('Update result:', result);
         } else {
             // Insert new entry
@@ -108,19 +108,19 @@ app.post('/profile/practice-log', verifyToken, async (req, res) => {
                 'INSERT INTO hoursLogged (user_id, date, hours) VALUES (?, ?, ?)',
                 [userId, date, hours]
             );
-            
+
             console.log('Insert result:', result);
         }
 
-        res.status(200).json({ 
+        res.status(200).json({
             success: true,
-            message: 'Hours logged successfully' 
+            message: 'Hours logged successfully'
         });
 
     } catch (error) {
         console.error('Error logging hours:', error);
-        res.status(500).json({ 
-            success: false, 
+        res.status(500).json({
+            success: false,
             error: 'Internal server error',
             message: error.message
         });
@@ -161,10 +161,10 @@ app.get('/profile/practice-log', verifyToken, async (req, res) => {
 
     } catch (error) {
         console.error('Error fetching hours:', error);
-        res.status(500).json({ 
-            success: false, 
+        res.status(500).json({
+            success: false,
             error: 'Internal server error',
-            message: error.message 
+            message: error.message
         });
 
     } finally {
@@ -175,7 +175,7 @@ app.get('/profile/practice-log', verifyToken, async (req, res) => {
     }
 });
 
-        
+
 
 // Route to fetch user-specific training hours
 app.get('/profile/practice-log', verifyToken, async (req, res) => {
@@ -208,51 +208,51 @@ app.get('/profile/practice-log', verifyToken, async (req, res) => {
 // POST route for contact form submissions
 app.post('/contact', async (req, res) => {
     console.log('Received contact form submission:', req.body);
-    
+
     try {
         // Extract form data from request body
-        const { adultName, childname, email, subject, message } = req.body;
-        
-        console.log('Extracted fields:', { adultName, childname, email, subject, message });
-        
+        const { adultName, childName, email, subject, message } = req.body;
+
+        console.log('Extracted fields:', { adultName, childName, email, subject, message });
+
         // Validate required fields
         if (!adultName || !email || !message) {
             console.log('Validation failed - missing required fields');
-            return res.status(400).json({ 
-                success: false, 
-                message: 'Please provide all required fields' 
+            return res.status(400).json({
+                success: false,
+                message: 'Please provide all required fields'
             });
         }
-        
+
         // Get a connection from the pool
         let connection;
         try {
             connection = await pool.getConnection();
             console.log('Database connection established');
-            
+
             // Insert form data into contactForms table
             const query = `
                 INSERT INTO contactForms 
-                (adultName, childname, email, subject, message) 
+                (adultName, childName, email, subject, message) 
                 VALUES 
                 (?, ?, ?, ?, ?)
             `;
-            
+
             console.log('Executing query:', query);
-            console.log('With values:', [adultName, childname, email, subject, message]);
-            
-            const [result] = await connection.query(query, [adultName, childname, email, subject, message]);
-            
+            console.log('With values:', [adultName, childName, email, subject, message]);
+
+            const [result] = await connection.query(query, [adultName, childName, email, subject, message]);
+
             console.log('Query result:', result);
-            
+
             // Check if insertion was successful
             if (result.affectedRows === 1) {
                 // Successful submission
                 console.log('Message inserted successfully with ID:', result.insertId);
-                res.status(201).json({ 
-                    success: true, 
-                    message: 'Your message has been submitted successfully', 
-                    id: result.insertId 
+                res.status(201).json({
+                    success: true,
+                    message: 'Your message has been submitted successfully',
+                    id: result.insertId
                 });
             } else {
                 console.log('Insert operation did not affect any rows');
@@ -273,9 +273,9 @@ app.post('/contact', async (req, res) => {
         console.error('Error name:', error.name);
         console.error('Error message:', error.message);
         console.error('Error stack:', error.stack);
-        
-        res.status(500).json({ 
-            success: false, 
+
+        res.status(500).json({
+            success: false,
             message: 'An error occurred while submitting your message. Please try again.',
             debug: process.env.NODE_ENV === 'development' ? error.message : undefined
         });
@@ -287,13 +287,13 @@ app.get('/admin/users/messages', async (req, res) => {
     try {
         // SQL query to fetch all contact form submissions with full message
         const query = `
-            SELECT id, adultName, childname, email, subject, message 
+            SELECT id, adultName, childName, email, subject, message 
             FROM contactForms 
             ORDER BY id DESC
         `;
-        
+
         const [messages] = await pool.query(query);
-        
+
         // For an API response
         res.json({ success: true, messages });
     } catch (error) {
