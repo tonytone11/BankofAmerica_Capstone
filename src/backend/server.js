@@ -17,6 +17,7 @@ const userRoutes = require('./routes/user.routes');
 const app = express();
 const PORT = process.env.PORT || 3003; // Changed to 3003 to match your frontend expectations
 app.use(express.static(path.join(__dirname, '../dist')));
+
 // Import database pool from config
 const pool = require('./config/db.config');
 
@@ -214,6 +215,7 @@ app.post('/contact', async (req, res) => {
         const { adultName, childName, email, subject, message } = req.body;
         
         console.log('Extracted fields:', { adultName, childName, email, subject, message });
+
         
         // Validate required fields
         if (!adultName || !email || !message) {
@@ -233,25 +235,31 @@ app.post('/contact', async (req, res) => {
             // Insert form data into contactForms table
             const query = `
                 INSERT INTO contactForms 
+
                 (adultName, childName, email, subject, message) 
+
                 VALUES 
                 (?, ?, ?, ?, ?)
             `;
             
             console.log('Executing query:', query);
+
             console.log('With values:', [adultName, childName, email, subject, message]);
             
             const [result] = await connection.query(query, [adultName, childName, email, subject, message]);
+
             
             console.log('Query result:', result);
             
             // Check if insertion was successful
             if (result.affectedRows === 1) {
                 // Successful submission
+
                 ;
                 res.status(201).json({ 
                     success: true, 
                     message: 'Your message has been submitted successfully'
+
                 });
             } else {
                 console.log('Insert operation did not affect any rows');
@@ -286,6 +294,7 @@ app.get('/admin/users/messages', async (req, res) => {
     try {
         // SQL query to fetch all contact form submissions with full message
         const query = `
+
             SELECT id, adultName, childName, email, subject, message, 
                    IFNULL(readStatus, FALSE) as readMessages,
                    DATE_FORMAT(created_at, '%Y-%m-%d') as date
@@ -294,6 +303,7 @@ app.get('/admin/users/messages', async (req, res) => {
         `;
 
         const [messages] = await pool.query(query);
+
 
         // For an API response
         res.json({ success: true, messages });
@@ -558,6 +568,7 @@ app.post('/profile/goals', verifyToken, async (req, res) => {
 
 
 // And later update the catch-all route
+
 app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname, '../../dist/index.html'));
 });

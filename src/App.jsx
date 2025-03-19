@@ -49,6 +49,7 @@ const App = () => {
       
         <Route path="/signup" element={<Signup />} />
         
+
         <Route path="/admin/*" element={<Admin />} /> {/* Admin login route */}
         <Route path="/admin/login" element={<AdminLogin />} />
         
@@ -60,6 +61,8 @@ const App = () => {
           {/* Add more admin routes as needed */}
         </Route>
         
+
+       
         <Route path="*" element={<Error />} />
       </Routes>
       <Footer />

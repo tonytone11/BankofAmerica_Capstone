@@ -12,6 +12,7 @@ const MessageCard = ({ message, markAsRead }) => {
         <div className="message-meta">
           <span className="message-date">{message.date || 'No date'}</span>
           {!isRead && <span className="unread-badge">New</span>}
+
         </div>
       </div>
       <div className="sender-info">
@@ -28,12 +29,15 @@ const MessageCard = ({ message, markAsRead }) => {
       </p>
       <div className="message-actions">
         {!isRead && (
+
           <button className="mark-read-btn" onClick={() => markAsRead(message.id)}>
             Mark as Read
           </button>
         )}
         <a 
+
           href={`mailto:${message.email}?subject=Re: ${message.subject || 'Your message'}`}
+
           className="reply-btn"
         >
           Reply
