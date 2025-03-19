@@ -58,7 +58,7 @@ const Login = () => {
         console.warn("No token received from server");
       }
   
-      alert(`Login successful! Welcome, ${data.message}`);
+     
       
       // Debug admin status before redirection
       console.log("Is admin?", data.user.isAdmin);
