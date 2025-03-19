@@ -58,7 +58,7 @@ const Login = () => {
         console.warn("No token received from server");
       }
   
-      alert(`Login successful! Welcome, ${data.message}`);
+     
       
       // Debug admin status before redirection
       console.log("Is admin?", data.user.isAdmin);
@@ -81,18 +81,18 @@ const Login = () => {
 
   return (
     
-    <div className="login-page-container">
+    <div className="page-container">
 
     <div className="login-container">
         <div className="main">
       <h2 className="loginh2">Login</h2>
       <div className="green-line"></div>
       {errorMessage && <p style={{ color: "red" }}>{errorMessage}</p>}
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} className="loginform">
         <input type="text" name="userName" placeholder="Username" onChange={handleChange} required />
         <input type="password" name="password" placeholder="Password" onChange={handleChange} required />
-        <button type="submit">Login</button>
-        <p>Dont have an account? <a href="/signup">sign up here</a></p>
+        <button className="signupButton" type="submit">Login</button>
+        <p className="loginp">Dont have an account? <a className="loginlinks" href="/signup"> <u>sign up here</u> </a></p>
       </form>
       </div>
     </div>
