@@ -108,7 +108,7 @@ router.post('/login', async (req, res) => {
         connection = await pool.getConnection();
         
         // Find user by email or username
-        let query = 'SELECT id, firstName, lastName, username, email, password FROM userInfo WHERE ';
+        let query = 'SELECT id, firstName, lastName, username, email, password, isAdmin FROM userInfo WHERE ';
         let params = [];
         
         if (email) {
@@ -132,6 +132,11 @@ router.post('/login', async (req, res) => {
         
         const user = users[0];
         
+        // Add debug logging
+        console.log('User from database:', user);
+        console.log('Admin field from DB:', user.isAdmin);
+        console.log('Admin field type:', typeof user.isAdmin);
+        
         // Compare password
         const passwordMatch = await bcrypt.compare(password, user.password);
         
@@ -144,9 +149,18 @@ router.post('/login', async (req, res) => {
         
         console.log('User authenticated successfully. Generating token...');
         
-        // Generate JWT token using the consistent JWT secret
+        // Convert admin field to boolean
+        const isAdmin = user.isAdmin === 1 || user.isAdmin === true;
+        console.log('Converted admin value:', isAdmin);
+        
+        // Generate JWT token with admin status included
         const token = jwt.sign(
-            { id: user.id, email: user.email, userName: user.username },
+            { 
+                id: user.id, 
+                email: user.email, 
+                userName: user.username,
+                isAdmin: user.isAdmin // Include converted admin status
+            },
             jwtConfig.secret,
             { expiresIn: jwtConfig.expiresIn }
         );
@@ -160,7 +174,8 @@ router.post('/login', async (req, res) => {
                 firstName: user.firstName,
                 lastName: user.lastName,
                 username: user.username,
-                email: user.email
+                email: user.email,
+                isAdmin: isAdmin // Include converted admin status
             }
         });
         

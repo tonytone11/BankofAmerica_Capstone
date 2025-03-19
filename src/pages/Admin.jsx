@@ -6,12 +6,15 @@ import AdminHeader from '../components/admin/AdminHeader';
 import AdminSidebar from '../components/admin/AdminSidebar';
 import UsersSection from '../components/admin/UsersSection';
 import MessagesSection from '../components/admin/MessagesSection';
+// Import auth utilities
+import { getAuthHeader, isAdmin } from '../utils/authUtils';
+import { Navigate } from 'react-router-dom';
 
 const Admin = () => {
   // State for active section
   const [activeSection, setActiveSection] = useState('users');
 
-  // State for user management - now empty array as we'll fetch from API
+  // State for user management
   const [users, setUsers] = useState([]);
   const [usersLoading, setUsersLoading] = useState(true);
   const [usersError, setUsersError] = useState(null);
@@ -21,12 +24,14 @@ const Admin = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // Fetch users from the backend
+  // Fetch users from the backend - updated to use new API endpoint
   useEffect(() => {
     const fetchUsers = async () => {
       try {
         setUsersLoading(true);
-        const response = await fetch('http://localhost:3003/admin/users');
+        const response = await fetch('http://localhost:3003/api/admin/users', {
+          headers: getAuthHeader() // Use auth header from authUtils
+        });
         
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);
@@ -34,8 +39,8 @@ const Admin = () => {
         
         const data = await response.json();
         
-        if (Array.isArray(data)) {
-          setUsers(data);
+        if (data.success && Array.isArray(data.users)) {
+          setUsers(data.users);
         } else {
           throw new Error('Invalid data structure received from server');
         }
@@ -52,12 +57,14 @@ const Admin = () => {
     }
   }, [activeSection]);
 
-  // Fetch messages from the backend
+  // Fetch messages from the backend - updated to use new API endpoint
   useEffect(() => {
     const fetchMessages = async () => {
       try {
         setIsLoading(true);
-        const response = await fetch('http://localhost:3003/admin/users/messages');
+        const response = await fetch('http://localhost:3003/api/admin/messages', {
+          headers: getAuthHeader() // Use auth header from authUtils
+        });
         
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);
@@ -66,7 +73,6 @@ const Admin = () => {
         const data = await response.json();
         
         if (data.success && Array.isArray(data.messages)) {
-          // Transform the data to match your component's expected structure
           const formattedMessages = data.messages.map(msg => ({
             id: msg.id,
             adultName: msg.adultName,
@@ -74,9 +80,8 @@ const Admin = () => {
             email: msg.email,
             subject: msg.subject || 'No Subject',
             message: msg.message,
-            // Adding a date property since your MessageCard expects it
-            date: msg.date || new Date().toISOString().split('T')[0], // Use date from server or current date as fallback
-            readMessages: msg.readMessages || false // Default to unread since your backend might not have this field yet
+            date: msg.date || new Date().toISOString().split('T')[0],
+            readMessages: msg.readMessages || false
           }));
           
           setMessages(formattedMessages);
@@ -128,7 +133,7 @@ const Admin = () => {
     return matchesSearch && matchesStatus;
   });
 
-  // Mark message as read - updated to call API
+  // Mark message as read - updated to use new API endpoint
   const markAsRead = async (id) => {
     try {
       console.log(`Marking message ${id} as read...`);
@@ -138,11 +143,12 @@ const Admin = () => {
         msg.id === id ? { ...msg, readMessages: true } : msg
       ));
       
-      // Then make the API call
-      const response = await fetch(`http://localhost:3003/admin/users/messages/${id}/read`, {
+      // Then make the API call with auth header
+      const response = await fetch(`http://localhost:3003/api/admin/messages/${id}/read`, {
         method: 'PUT',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          ...getAuthHeader() // Include auth header
         }
       });
       
@@ -157,10 +163,13 @@ const Admin = () => {
       
     } catch (error) {
       console.error('Error marking message as read:', error);
-      // Even if the API call fails, we keep the UI updated
-      // You could add UI feedback here for error handling
     }
   };
+
+  // Check if user is admin - if not, redirect to login
+  if (!isAdmin()) {
+    return <Navigate to="/login" />;
+  }
 
   return (
     <div className="admin-container">
