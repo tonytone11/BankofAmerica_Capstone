@@ -6,12 +6,15 @@ const path = require('path');
 const mysql = require('mysql2/promise');
 const adminRoutes = require('./routes/admin.routes');
 
+const axios = require('axios');
+
+
 // Load environment variables
 dotenv.config();
 
 // Import middleware
 const { verifyToken } = require('./middleware/auth.middleware');
-
+const createYoutubeMiddleware = require('./middleware/youtube.middleware');
 // Import routes
 const authRoutes = require('./routes/auth.routes');
 const userRoutes = require('./routes/user.routes');
@@ -22,7 +25,7 @@ const PORT = process.env.PORT || 3003;
 
 // Import database pool from config
 const pool = require('./config/db.config');
-
+const youtubeMiddleware = createYoutubeMiddleware(process.env.YOUTUBE_API_KEY);
 // Middleware setup
 app.use(cors({
     origin: 'http://localhost:5173',
@@ -39,6 +42,10 @@ app.use(express.static(path.join(__dirname, '../dist')));
 app.use('/api/auth', authRoutes);
 app.use('/api/user', userRoutes);
 app.use('/api/admin', adminRoutes);
+
+
+app.get('/api/youtube/search', youtubeMiddleware.searchVideos);
+app.get('/api/youtube/videos', youtubeMiddleware.getVideoDetails);
 
 
 // Route to log training hours
