@@ -13,15 +13,23 @@
     
 }
 
-.home-container {
+
+.login-container {
+    
     width: 100%;
-    max-width: 1350px;
-    /* margin: 0 auto; */
+    max-width: 1050px;
+    margin: 0 auto;
     padding: 0 20px;
-    margin-top: 130px;
     flex: 1;
-}
+  
+  }
+
 
 .main{
     margin-top:140px;
+}
+
+.signuph2{
+    margin-top: 150px;
+    margin-bottom: 10px;
 }

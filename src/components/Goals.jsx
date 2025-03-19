@@ -163,6 +163,7 @@ const Goals = () => {
 
   return (
     <div className="goals-container">
+       <div> <p>Keep track of your Goals</p></div>
       <h2>My Goals</h2>
       
       {error && <p className="error-message">{error}</p>}

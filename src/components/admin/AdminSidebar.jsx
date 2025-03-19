@@ -95,11 +95,11 @@ const AdminSidebar = ({ activeSection, setActiveSection }) => {
             </nav>
             
             {/* Logout link - uses the logout function from authUtils */}
-            <div className="admin-logout">
+            {/* <div className="admin-logout">
                 <a href="#" onClick={handleLogout} className="logout-btn">
                     <span className="icon"></span> Logout
                 </a>
-            </div>
+            </div> */}
         </aside>
     );
 };
