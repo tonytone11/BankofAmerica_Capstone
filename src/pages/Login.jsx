@@ -88,11 +88,11 @@ const Login = () => {
       <h2 className="loginh2">Login</h2>
       <div className="green-line"></div>
       {errorMessage && <p style={{ color: "red" }}>{errorMessage}</p>}
-      <form onSubmit={handleSubmit} className="loginform">
+      <form onSubmit={handleSubmit}>
         <input type="text" name="userName" placeholder="Username" onChange={handleChange} required />
         <input type="password" name="password" placeholder="Password" onChange={handleChange} required />
-        <button className="signupButton" type="submit">Login</button>
-        <p className="loginp">Dont have an account? <a className="loginlinks" href="/signup">sign up here</a></p>
+        <button type="submit">Login</button>
+        <p>Dont have an account? <a href="/signup">sign up here</a></p>
       </form>
       </div>
     </div>
