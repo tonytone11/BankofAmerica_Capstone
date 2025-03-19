@@ -11,15 +11,9 @@
     --text-light: #64748b;
   }
   
-  .page-container {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 100vh;
-    background-color: var(--light-gray);
-  }
+ 
   
-  .home-container {
+  .login-container {
     background: white;
     padding: 2rem;
     border-radius: 12px;
@@ -92,6 +86,12 @@
   }
   
  
-.signuph3{
-  border-bottom: #10b981 solid 4px;
+
+.green-line {
+  position: absolute;
+  bottom: -5px;
+  left: 0;
+  width: 40px;
+  height: 3px;
+  background-color: #4CAF50; /* Adjust the green color as needed */
 }

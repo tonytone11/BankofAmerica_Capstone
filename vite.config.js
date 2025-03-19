@@ -3,7 +3,8 @@ import react from '@vitejs/plugin-react'
 
 // https://vite.dev/config/
 export default defineConfig({
-  plugins: [react()], server: {
+  plugins: [react()],
+  server: {
     proxy: {
       '/football-api': {
         target: 'https://v3.football.api-sports.io',
@@ -22,5 +23,10 @@ export default defineConfig({
         }
       }
     }
+  },
+  test: {
+    globals: true,
+    environment: 'jsdom',
+    css: false
   }
 });
