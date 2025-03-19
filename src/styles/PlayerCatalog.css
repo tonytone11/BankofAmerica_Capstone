@@ -1,0 +1,78 @@
+/* PlayerCatalog.css */
+.player-catalog {
+    padding: 20px 0;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  
+  .player-catalog h2 {
+    color: #0a246a;
+    font-size: 32px;
+    margin-bottom: 24px;
+    font-weight: 700;
+  }
+  
+  .player-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(2, auto); /* Explicitly make it 2 rows */
+    gap: 20px;
+    margin-bottom: 30px;
+  }
+  
+  @media (max-width: 992px) {
+    .player-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  
+  @media (max-width: 576px) {
+    .player-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+  
+  .popular-player-card {
+    background-color: #fff;
+    border-radius: 8px;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  
+  .popular-player-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+  }
+  
+  .popular-player-avatar {
+    background-color: #e6e8ec;
+    border-radius: 50%;
+    margin-bottom: 24px;
+    overflow: hidden;
+  }
+  
+  .player-avatar img {
+    width: 100%;
+    height: 100%;
+    margin: 0 auto;
+    object-fit: cover;
+  }
+  
+  .player-card h3 {
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: #111;
+  }
+  
+  .player-card p {
+    font-size: 16px;
+    color: #555;
+    margin: 0;
+  }
