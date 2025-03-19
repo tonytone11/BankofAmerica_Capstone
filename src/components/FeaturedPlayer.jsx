@@ -69,10 +69,9 @@ const FeaturedPlayer = ({ selectedPlayer }) => {
                     <p> <strong> Assists: </strong> {stats?.goals?.assists || 'N/A'}</p>
                     <p> <strong> Appearances: </strong>  {stats?.games?.appearences || 'N/A'}</p>
                 </div>
-            </div>
-
-            <div className="player-save">
-                <button className="bookmark-button">+ Bookmark Player</button>
+                <div className='disclaimer-message'>
+                    <p> Disclaimer: Stats shown are from the 2023-2024 season </p>
+                </div>
             </div>
         </section>
     );

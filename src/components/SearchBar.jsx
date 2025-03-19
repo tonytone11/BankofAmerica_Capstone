@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import '../styles/SearchBar.css';
-import { searchPlayers } from '../services/FootballAPI'; // Adjust the import path as needed
+import { searchPlayers } from '../services/FootballAPI';
 
 const SearchBar = ({ onSelectPlayer }) => {
     const [query, setQuery] = useState('');
@@ -11,7 +11,7 @@ const SearchBar = ({ onSelectPlayer }) => {
     const [itemsPerPage] = useState(5);
 
     const handleSearch = async (e) => {
-        e.preventDefault(); // Prevent form submission from reloading the page
+        e.preventDefault();
         setLoading(true); // Show loading indicator
         setCurrentPage(1); // Reset to first page on new search
 
@@ -61,7 +61,6 @@ const SearchBar = ({ onSelectPlayer }) => {
         <section className="player-search-container">
             <form onSubmit={handleSearch}>
                 <div className="player-search-bar">
-                    <div className="search-icon"></div>
                     <input
                         type="text"
                         value={query}

@@ -50,6 +50,14 @@ const App = () => {
         <Route path="/signup" element={<Signup />} />
         
         <Route path="/admin/*" element={<Admin />} />
+        
+
+       
+     
+        
+        
+
+       
         <Route path="*" element={<Error />} />
       </Routes>
       <Footer />
