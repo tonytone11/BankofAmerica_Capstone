@@ -5,7 +5,9 @@ const Contact = () => {
   // Form state - updated to match backend field names
   const [formData, setFormData] = useState({
     adultName: '',
-    childname: '',  // Changed to match database field name
+
+    childName: '',  // Changed to match database field name
+
     email: '',
     subject: '',
     message: '',
@@ -65,14 +67,17 @@ const Contact = () => {
       if (data.success) {
         setSubmitStatus({
           message: 'Thank you for your message! We will get back to you soon.',
-          isError: false,
-          details: `Message ID: ${data.id || 'Unknown'}`
+
+          isError: false
+
         });
         
         // Reset form
         setFormData({
           adultName: '',
-          childname: '',  // Changed to match database field name
+
+          childName: '',  // Changed to match database field name
+
           email: '',
           subject: '',
           message: ''
@@ -140,12 +145,14 @@ const Contact = () => {
                   />
                 </div>
                 <div className='form-group'>
-                  <label htmlFor="childname">Child's Name (if applicable)</label>
+
+                  <label htmlFor="childName">Child's Name (if applicable)</label>
                   <input
                     type="text"
-                    id="childname"
-                    name="childname"  // Changed to match database field name
-                    value={formData.childname}
+                    id="childName"
+                    name="childName"  // Changed to match database field name
+                    value={formData.childName}
+
                     onChange={handleInputChange}
                   />
                 </div>
