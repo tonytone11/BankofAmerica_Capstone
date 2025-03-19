@@ -5,7 +5,9 @@ const cors = require('cors');
 const path = require('path');
 const mysql = require('mysql2/promise');
 const adminRoutes = require('./routes/admin.routes');
+
 const axios = require('axios');
+
 
 // Load environment variables
 dotenv.config();
@@ -41,8 +43,10 @@ app.use('/api/auth', authRoutes);
 app.use('/api/user', userRoutes);
 app.use('/api/admin', adminRoutes);
 
+
 app.get('/api/youtube/search', youtubeMiddleware.searchVideos);
 app.get('/api/youtube/videos', youtubeMiddleware.getVideoDetails);
+
 
 // Route to log training hours
 app.post('/profile/practice-log', verifyToken, async (req, res) => {
