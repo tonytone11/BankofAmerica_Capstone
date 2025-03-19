@@ -1,0 +1,76 @@
+/* General Styles */
+  .player-container {
+    width: 100%;
+    max-width: 1000px;
+    margin: 0 auto;
+    background-color: #f8fafc;
+  }
+  
+  .player-page-title h1 {
+    font-size: 32px;
+    color: #1e3a8a;
+    font-weight: bold;
+    margin-top: 120px;
+  }
+  
+  .player-page-title p {
+    font-size: 16px;
+    color: #64748b;
+    margin-top: 5px;
+  }
+  
+  /* Search and Filter Styles */
+  .player-search-filter {
+    display: flex;
+    margin-top: 30px;
+  }
+
+  .player-filters {
+    display: flex;
+    margin: 0 0.25rem;
+    gap: 10px;
+  }
+  
+  .player-filter-dropdown {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100px;
+    height: 50px;
+    border: 2px solid #e5e7eb;
+    border-radius: 25px;
+    background-color: white;
+    position: relative;
+    padding: 0 10px;
+  }
+  
+  .player-filter-dropdown span {
+    color: #64748b;
+    font-size: 16px;
+    text-align: center;
+  }
+  
+  .dropdown-arrow {
+    position: absolute;
+    right: 15px;
+    margin: 0 .05rem;
+  }
+  
+  .dropdown-arrow::before,
+  .dropdown-arrow::after {
+    content: "";
+    position: absolute;
+    background-color: #64748b;
+    width: 8px;
+    height: 2px;
+  }
+  
+  .dropdown-arrow::before {
+    transform: rotate(45deg);
+    left: -2px;
+  }
+  
+  .dropdown-arrow::after {
+    transform: rotate(-45deg);
+    left: 2px;
+  }

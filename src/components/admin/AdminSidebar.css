@@ -1,0 +1,109 @@
+/* src/components/admin/AdminSidebar.css */
+.admin-sidebar {
+    width: 230px;
+    background-color: white;
+    border-right: 1px solid var(--border-gray);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 20px 0;
+}
+
+.admin-sidebar nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.admin-sidebar nav li {
+    margin-bottom: 5px;
+}
+
+.admin-sidebar nav button {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    padding: 12px 20px;
+    border: none;
+    background: none;
+    color: var(--text-body);
+    font-size: 15px;
+    text-align: left;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.admin-sidebar nav button:hover {
+    background-color: #f1f5f9;
+    color: var(--primary-blue);
+}
+
+.admin-sidebar nav li.active button {
+    background-color: #eff6ff;
+    color: var(--primary-blue);
+    font-weight: bold;
+    border-left: 3px solid var(--primary-blue);
+}
+
+.icon {
+    margin-right: 10px;
+    font-size: 18px;
+}
+
+.admin-logout {
+    padding: 0 20px;
+}
+
+.logout-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    padding: 12px 20px;
+    background-color: #fee2e2;
+    color: var(--danger-red);
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    text-decoration: none;
+    text-align: center;
+    font-weight: bold;
+    transition: background-color 0.3s;
+}
+
+.logout-btn:hover {
+    background-color: #fecaca;
+}
+
+  /* Responsive styles for sidebar */
+@media (max-width: 768px) {
+    .admin-sidebar {
+        width: 100%;
+        position: static;
+        padding: 10px 0;
+    }
+    
+    .admin-sidebar nav ul {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 5px;
+    }
+    
+    .admin-sidebar nav li {
+        margin-bottom: 0;
+    }
+    
+    .admin-sidebar nav button {
+        padding: 8px 15px;
+        font-size: 14px;
+    }
+    
+    .logout-btn {
+        margin-top: 20px;
+        width: 28%;
+        padding: 5px 5px;
+    }
+    .admin-logout{
+        padding: 0px;
+    }
+}

@@ -1,0 +1,35 @@
+/* * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Arial', sans-serif;
+} */
+
+.page-container {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+
+    
+}
+
+
+.login-container {
+    
+    width: 100%;
+    max-width: 1050px;
+    margin: 0 auto;
+    padding: 0 20px;
+    flex: 1;
+  
+  }
+
+
+.main{
+    margin-top:140px;
+}
+
+.signuph2{
+    margin-top: 150px;
+    margin-bottom: 10px;
+}
