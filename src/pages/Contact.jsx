@@ -5,7 +5,9 @@ const Contact = () => {
   // Form state - updated to match backend field names
   const [formData, setFormData] = useState({
     adultName: '',
+
     childName: '',  // Changed to match database field name
+
     email: '',
     subject: '',
     message: '',
@@ -65,14 +67,17 @@ const Contact = () => {
       if (data.success) {
         setSubmitStatus({
           message: 'Thank you for your message! We will get back to you soon.',
-          isError: false,
-          details: `Message ID: ${data.id || 'Unknown'}`
+
+          isError: false
+
         });
         
         // Reset form
         setFormData({
           adultName: '',
+
           childName: '',  // Changed to match database field name
+
           email: '',
           subject: '',
           message: ''
@@ -145,7 +150,8 @@ const Contact = () => {
                     type="text"
                     id="childName"
                     name="childName"  // Changed to match database field name
-                    value={formData.childname}
+                    value={formData.childName}
+
                     onChange={handleInputChange}
                   />
                 </div>

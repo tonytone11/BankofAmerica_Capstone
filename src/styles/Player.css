@@ -22,17 +22,16 @@
   /* Search and Filter Styles */
   .player-search-filter {
     display: flex;
-    justify-content: space-between;
     margin-top: 30px;
   }
 
-  .filters {
+  .player-filters {
     display: flex;
     margin: 0 0.25rem;
     gap: 10px;
   }
   
-  .filter-dropdown {
+  .player-filter-dropdown {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -45,7 +44,7 @@
     padding: 0 10px;
   }
   
-  .filter-dropdown span {
+  .player-filter-dropdown span {
     color: #64748b;
     font-size: 16px;
     text-align: center;
