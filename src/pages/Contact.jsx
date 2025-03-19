@@ -65,8 +65,7 @@ const Contact = () => {
       if (data.success) {
         setSubmitStatus({
           message: 'Thank you for your message! We will get back to you soon.',
-          isError: false,
-          details: `Message ID: ${data.id || 'Unknown'}`
+          isError: false
         });
         
         // Reset form
@@ -207,12 +206,3 @@ const Contact = () => {
 };
 
 export default Contact;
-
-
-
-
-
-
-
-
-

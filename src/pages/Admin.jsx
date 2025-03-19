@@ -11,19 +11,46 @@ const Admin = () => {
   // State for active section
   const [activeSection, setActiveSection] = useState('users');
 
-  // State for user management
-  const [users, setUsers] = useState([
-    { id: 1, name: 'John Smith', username: 'johnsmith', email: 'john@example.com' },
-    { id: 2, name: 'Emily Johnson', username: 'emilyjohn', email: 'emily@example.com' },
-    { id: 3, name: 'Michael Williams', username: 'mikewill', email: 'michael@example.com' },
-    { id: 4, name: 'Sarah Davis', username: 'sarahdavis', email: 'sarah@example.com' },
-    { id: 5, name: 'David Miller', username: 'davemiller', email: 'david@example.com' }
-  ]);
+  // State for user management - now empty array as we'll fetch from API
+  const [users, setUsers] = useState([]);
+  const [usersLoading, setUsersLoading] = useState(true);
+  const [usersError, setUsersError] = useState(null);
 
-  // State for messages from contact form - now empty array as we'll fetch from API
+  // State for messages from contact form
   const [messages, setMessages] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
+
+  // Fetch users from the backend
+  useEffect(() => {
+    const fetchUsers = async () => {
+      try {
+        setUsersLoading(true);
+        const response = await fetch('http://localhost:3003/admin/users');
+        
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        
+        const data = await response.json();
+        
+        if (Array.isArray(data)) {
+          setUsers(data);
+        } else {
+          throw new Error('Invalid data structure received from server');
+        }
+      } catch (err) {
+        console.error('Error fetching users:', err);
+        setUsersError(err.message);
+      } finally {
+        setUsersLoading(false);
+      }
+    };
+
+    if (activeSection === 'users') {
+      fetchUsers();
+    }
+  }, [activeSection]);
 
   // Fetch messages from the backend
   useEffect(() => {
@@ -104,23 +131,33 @@ const Admin = () => {
   // Mark message as read - updated to call API
   const markAsRead = async (id) => {
     try {
-      const response = await fetch(`http://localhost:3003/admin/messages/${id}/read`, {
+      console.log(`Marking message ${id} as read...`);
+      
+      // First update the UI immediately for better user experience
+      setMessages(messages.map(msg =>
+        msg.id === id ? { ...msg, readMessages: true } : msg
+      ));
+      
+      // Then make the API call
+      const response = await fetch(`http://localhost:3003/admin/users/messages/${id}/read`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json'
         }
       });
       
+      console.log('Response status:', response.status);
+      
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
       
-      // Update local state to reflect the change
-      setMessages(messages.map(msg =>
-        msg.id === id ? { ...msg, readMessages: true } : msg
-      ));
+      const data = await response.json();
+      console.log('Response data:', data);
+      
     } catch (error) {
       console.error('Error marking message as read:', error);
+      // Even if the API call fails, we keep the UI updated
       // You could add UI feedback here for error handling
     }
   };
@@ -137,7 +174,11 @@ const Admin = () => {
 
         <main className="admin-main">
           {activeSection === 'users' && (
-            <UsersSection users={users} />
+            <UsersSection 
+              users={users} 
+              isLoading={usersLoading} 
+              error={usersError} 
+            />
           )}
 
           {activeSection === 'messages' && (

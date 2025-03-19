@@ -16,7 +16,7 @@ const userRoutes = require('./routes/user.routes');
 // Initialize Express app
 const app = express();
 const PORT = process.env.PORT || 3003; // Changed to 3003 to match your frontend expectations
-
+app.use(express.static(path.join(__dirname, '../dist')));
 // Import database pool from config
 const pool = require('./config/db.config');
 
@@ -248,11 +248,10 @@ app.post('/contact', async (req, res) => {
             // Check if insertion was successful
             if (result.affectedRows === 1) {
                 // Successful submission
-                console.log('Message inserted successfully with ID:', result.insertId);
+                ;
                 res.status(201).json({ 
                     success: true, 
-                    message: 'Your message has been submitted successfully', 
-                    id: result.insertId 
+                    message: 'Your message has been submitted successfully'
                 });
             } else {
                 console.log('Insert operation did not affect any rows');
@@ -283,28 +282,6 @@ app.post('/contact', async (req, res) => {
 });
 
 // get req displaying contact messages 
-app.put('/admin/messages/:id/read', async (req, res) => {
-    try {
-        const messageId = req.params.id;
-        
-        const query = `
-            UPDATE contactForms 
-            SET readStatus = TRUE
-            WHERE id = ?
-        `;
-        
-        const [result] = await pool.query(query, [messageId]);
-        
-        if (result.affectedRows === 0) {
-            return res.status(404).json({ success: false, message: 'Message not found' });
-        }
-        
-        res.json({ success: true, message: 'Message marked as read' });
-    } catch (error) {
-        console.error('Error marking message as read:', error);
-        res.status(500).json({ success: false, message: 'Failed to update message' });
-    }
-});
 app.get('/admin/users/messages', async (req, res) => {
     try {
         // SQL query to fetch all contact form submissions with full message
@@ -326,6 +303,51 @@ app.get('/admin/users/messages', async (req, res) => {
     }
 });
 
+app.put('/admin/users/messages/:id/read', async (req, res) => {
+    try {
+        const messageId = req.params.id;
+        console.log('Marking message as read, ID:', messageId);
+        
+        // Check if the message exists first
+        const [checkResult] = await pool.query(
+            'SELECT id FROM contactForms WHERE id = ?', 
+            [messageId]
+        );
+        
+        console.log('Check result:', checkResult);
+        
+        if (checkResult.length === 0) {
+            console.log('Message not found in database');
+            return res.status(404).json({ success: false, message: 'Message not found' });
+        }
+        
+        // Execute the update query
+        const query = `
+            UPDATE contactForms 
+            SET readStatus = TRUE
+            WHERE id = ?
+        `;
+        
+        console.log('Executing update query with ID:', messageId);
+        const [result] = await pool.query(query, [messageId]);
+        console.log('Update result:', result);
+        
+        if (result.affectedRows === 0) {
+            console.log('No rows affected by update');
+            return res.status(404).json({ success: false, message: 'Failed to update message' });
+        }
+        
+        console.log('Message successfully marked as read');
+        res.json({ success: true, message: 'Message marked as read' });
+    } catch (error) {
+        console.error('Error marking message as read:', error);
+        console.error('Error stack:', error.stack);
+        res.status(500).json({ success: false, message: 'Failed to update message', error: error.message });
+    }
+});
+
+
+
 
 
 
@@ -333,11 +355,29 @@ app.get('/admin/users/messages', async (req, res) => {
 // displaying user info on admin page
 app.get('/admin/users', async (req, res) => {
     try {
-        const [rows] = await pool.query('SELECT id, name, username, email FROM userInfo ORDER BY id');
+        console.log('Fetching users with firstName and lastName combination...');
+        
+        // This query selects the needed columns and combines firstName and lastName into a single name field
+        const [rows] = await pool.query(`
+            SELECT 
+                id, 
+                CONCAT(firstName, ' ', lastName) AS name, 
+                username, 
+                email 
+            FROM userInfo 
+            ORDER BY id
+        `);
+        
+        console.log(`Successfully fetched ${rows.length} users`);
         res.json(rows); // Send as JSON to frontend
     } catch (error) {
         console.error('Error fetching users:', error);
-        res.status(500).send('Server error');
+        // Send detailed error for debugging
+        res.status(500).json({
+            error: 'Server error',
+            message: error.message,
+            details: error.toString()
+        });
     }
 });
 // Routes for goals
@@ -515,8 +555,11 @@ app.post('/profile/goals', verifyToken, async (req, res) => {
   });
 
 // Catch-all route should be LAST
+
+
+// And later update the catch-all route
 app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, '../pages/Home'));
+    res.sendFile(path.join(__dirname, '../../dist/index.html'));
 });
 
 // Start server

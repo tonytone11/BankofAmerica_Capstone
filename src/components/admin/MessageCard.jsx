@@ -24,7 +24,7 @@ const MessageCard = ({ message, markAsRead }) => {
         </div>
       </div>
       <p className="message-preview">
-        {message.message ? `${message.message.substring(0, 100)}...` : 'No message content'}
+        {message.message ? `${message.message}` : 'No message content'}
       </p>
       <div className="message-actions">
         {!isRead && (
@@ -44,9 +44,3 @@ const MessageCard = ({ message, markAsRead }) => {
 };
 
 export default MessageCard;
-
-
-
-
-
-
