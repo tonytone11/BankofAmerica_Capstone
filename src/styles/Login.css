@@ -1,4 +1,4 @@
-/* :root {
+:root {
     --primary-blue: #1e3a8a;
     --light-blue: #3b82f6;
     --primary-green: #4ade80;
@@ -11,15 +11,9 @@
     --text-light: #64748b;
   }
   
-  .page-container {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 100vh;
-    background-color: var(--light-gray);
-  }
+ 
   
-  .home-container {
+  .login-container {
     background: white;
     padding: 2rem;
     border-radius: 12px;
@@ -92,3 +86,12 @@
   }
   
  
+
+.green-line {
+  position: absolute;
+  bottom: -5px;
+  left: 0;
+  width: 40px;
+  height: 3px;
+  background-color: #4CAF50; /* Adjust the green color as needed */
+}

@@ -80,26 +80,11 @@
     color: #64748b;
   }
   
-  /* Player save section */
-  .player-save {
-    margin-left: auto;
-    align-self: flex-end;
-  }
-  
-  .bookmark-button {
-    background-color: #4ade80;
-    color: #ffffff;
-    border: 1px solid #4ade80;
-    padding: 0.6rem 1rem;
-    border-radius: 30px;
-    font-size: 0.9rem;
-    font-weight: 500;
-    cursor: pointer;
-    transition: all 0.2s ease;
-  }
-  
-  .bookmark-button:hover {
-    background-color: #10b981;
+  .disclaimer-message {
+    text-align: center;
+    font-size: 13px;
+    color: #64748b;
+    margin-top: 15px;
   }
   
   /* Responsive adjustments */
