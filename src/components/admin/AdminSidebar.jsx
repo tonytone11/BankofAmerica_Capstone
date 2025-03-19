@@ -5,6 +5,7 @@ import { useState, useEffect } from 'react';
 import { FaUsers } from "react-icons/fa";
 import { IoIosMail } from "react-icons/io";
 import './AdminSidebar.css';
+import { logout } from '../../utils/authUtils';
 
 const AdminSidebar = ({ activeSection, setActiveSection }) => {
     // Hook to programmatically navigate between routes
@@ -67,6 +68,12 @@ const AdminSidebar = ({ activeSection, setActiveSection }) => {
         setActiveSection(sectionName);
         navigate(`/admin/${sectionName}`);
     };
+
+    // Custom logout handler that uses authUtils logout function
+    const handleLogout = (e) => {
+        e.preventDefault();
+        logout(); // This function handles token removal and redirect
+    };
     
     return (
         <aside className="admin-sidebar">
@@ -87,11 +94,11 @@ const AdminSidebar = ({ activeSection, setActiveSection }) => {
                 </ul>
             </nav>
             
-            {/* Logout link - redirects to login page */}
+            {/* Logout link - uses the logout function from authUtils */}
             <div className="admin-logout">
-                <Link to="/login" className="logout-btn">
+                <a href="#" onClick={handleLogout} className="logout-btn">
                     <span className="icon"></span> Logout
-                </Link>
+                </a>
             </div>
         </aside>
     );
