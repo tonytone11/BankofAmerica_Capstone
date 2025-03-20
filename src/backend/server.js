@@ -430,10 +430,11 @@ app.get('/api/test-db', async (req, res) => {
   }
 });
 // Football API proxy middleware
+// Football API proxy middleware
 app.use('/football-api', async (req, res) => {
   try {
     // Get API credentials from environment variables
-    const apiKey = process.env.VITE_API_FOOTBALL_KEY;
+    const apiKey = process.env.API_FOOTBALL_KEY;
 
     if (!apiKey) {
       console.error('API-Football key not found in environment variables');
@@ -449,13 +450,14 @@ app.use('/football-api', async (req, res) => {
 
     console.log(`Proxying request to ${endpoint} with params:`, params);
 
-    // Forward the request to the API-Football service
+    // Forward the request to the API-Football service - NOTE: Fix URL construction
     const response = await axios({
       method: 'get',
-      url: `https://v3.football.api-sports.io${endpoint}`,
+      baseURL: 'https://v3.football.api-sports.io',
+      url: endpoint,
       params: params,
       headers: {
-        'x-apisports-key': apiKey  // API-Sports uses this header name
+        'x-apisports-key': apiKey
       }
     });
 
@@ -465,7 +467,7 @@ app.use('/football-api', async (req, res) => {
 
   } catch (error) {
     console.error('Error proxying request to API-Football:', error.message);
-    if (error.code) console.error('Error code:', error.code);
+    console.error('Full error:', error);
 
     // Forward API error response if available
     if (error.response) {
