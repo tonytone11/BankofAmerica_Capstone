@@ -119,9 +119,9 @@ const Admin = () => {
   const filteredMessages = messages.filter(message => {
     // Search term filter (case insensitive)
     const matchesSearch = searchTerm === '' ||
-      message.subject.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      message.adultName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      message.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      (message.subject && message.subject.toLowerCase().includes(searchTerm.toLowerCase())) ||
+      (message.adultName && message.adultName.toLowerCase().includes(searchTerm.toLowerCase())) ||
+      (message.email && message.email.toLowerCase().includes(searchTerm.toLowerCase())) ||
       (message.childName && message.childName.toLowerCase().includes(searchTerm.toLowerCase()));
 
     // Status filter
