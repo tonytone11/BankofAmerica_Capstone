@@ -429,12 +429,12 @@ app.get('/api/test-db', async (req, res) => {
     });
   }
 });
-// Football API proxy middleware
+
 // Football API proxy middleware
 app.use('/football-api', async (req, res) => {
   try {
     // Get API credentials from environment variables
-    const apiKey = process.env.API_FOOTBALL_KEY;
+    const apiKey = process.env.VITE_API_FOOTBALL_KEY;
 
     if (!apiKey) {
       console.error('API-Football key not found in environment variables');
