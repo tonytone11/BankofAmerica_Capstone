@@ -36,7 +36,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Serve static files
-app.use(express.static(path.join(__dirname, '../dist')));
+app.use(express.static(path.join(__dirname, 'dist')));
 
 // Register auth and user routes
 app.use('/api/auth', authRoutes);
@@ -413,7 +413,7 @@ app.post('/profile/goals', verifyToken, async (req, res) => {
 
 // Catch-all route should be LAST
 app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, '../dist/index.html'));
+    res.sendFile(path.join(__dirname, 'dist/index.html'));
 });
 
 // Start server
