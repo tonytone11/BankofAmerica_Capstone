@@ -39,7 +39,7 @@ const youtubeMiddleware = createYoutubeMiddleware(process.env.YOUTUBE_API_KEY);
 
 // Middleware setup
 app.use(cors({
-  origin: 'https://bankofamerica-capstone.onrender.com',
+  origin: ['https://bankofamerica-capstone.onrender.com', 'http://localhost:5173'],
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
 }));
@@ -429,7 +429,62 @@ app.get('/api/test-db', async (req, res) => {
     });
   }
 });
+// Football API proxy middleware
+app.use('/football-api', async (req, res) => {
+  try {
+    // Get API credentials from environment variables
+    const apiKey = process.env.VITE_API_FOOTBALL_KEY;
+    const apiHost = process.env.VITE_API_FOOTBALL_HOST || 'https://v3.football.api-sports.io';
 
+    if (!apiKey) {
+      console.error('API-Football key not found in environment variables');
+      return res.status(500).json({
+        success: false,
+        message: 'API configuration error'
+      });
+    }
+
+    // Get the endpoint from the original URL
+    const endpoint = req.path;
+    const params = req.query;
+
+    console.log(`Proxying request to ${endpoint} with params:`, params);
+
+    // Forward the request to the API-Football service
+    const response = await axios({
+      method: 'get',
+      url: `https://${apiHost}${endpoint}`,
+      params: params,
+      headers: {
+        'x-rapidapi-key': apiKey,
+        'x-rapidapi-host': apiHost
+      }
+    });
+
+    // Send the API response back to the client
+    console.log(`Received response from API-Football for ${endpoint}`);
+    return res.status(response.status).json(response.data);
+
+  } catch (error) {
+    console.error('Error proxying request to API-Football:', error);
+
+    // Forward API error response if available
+    if (error.response) {
+      return res.status(error.response.status).json({
+        success: false,
+        message: 'API request failed',
+        error: error.response.data
+      });
+    }
+
+    // Generic error
+    return res.status(500).json({
+      success: false,
+      message: 'Failed to proxy request to API-Football',
+      error: error.message
+    });
+  }
+});
 // Catch-all route should be LAST
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, '../../dist/index.html'));
