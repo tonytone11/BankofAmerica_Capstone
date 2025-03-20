@@ -191,7 +191,6 @@ const Training = () => {
                 <p className="video-meta">
                   {featuredVideo.channelTitle} • {featuredVideo.duration} • {featuredVideo.views} views
                 </p>
-                <button className="save-button">+ Save Video</button>
               </section>
             )}
 
