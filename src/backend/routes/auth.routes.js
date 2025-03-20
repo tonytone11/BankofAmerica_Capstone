@@ -1,14 +1,14 @@
-// routes/auth.routes.js - Refactored to use consistent jwt config
+// routes/auth.routes.js - Updated for PostgreSQL compatibility
 const express = require('express');
 const router = express.Router();
-const bcrypt = require('bcryptjs'); // Changed to match your other files using bcryptjs
+const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const pool = require('../config/db.config');
-const jwtConfig = require('../config/jwt.config'); // Import JWT config
+const jwtConfig = require('../config/jwt.config');
 
 // Signup route
 router.post('/signup', async (req, res) => {
-    let connection;
+    let client;
     try {
         console.log('Request body received:', req.body);
 
@@ -23,15 +23,15 @@ router.post('/signup', async (req, res) => {
             });
         }
 
-        connection = await pool.getConnection();
+        client = await pool.connect();
 
-        // Check if username already exists
-        const [existingUsername] = await connection.query(
-            'SELECT * FROM userInfo WHERE username = ?',
+        // Check if username already exists - note the LOWER() for case insensitivity
+        const existingUsername = await client.query(
+            'SELECT * FROM userInfo WHERE LOWER(username) = LOWER($1)',
             [userName]
         );
 
-        if (existingUsername.length > 0) {
+        if (existingUsername.rowCount > 0) {
             return res.status(409).json({
                 success: false,
                 error: 'Username already exists'
@@ -39,12 +39,12 @@ router.post('/signup', async (req, res) => {
         }
 
         // Check if email already exists
-        const [existingEmail] = await connection.query(
-            'SELECT * FROM userInfo WHERE email = ?',
+        const existingEmail = await client.query(
+            'SELECT * FROM userInfo WHERE LOWER(email) = LOWER($1)',
             [email]
         );
 
-        if (existingEmail.length > 0) {
+        if (existingEmail.rowCount > 0) {
             return res.status(409).json({
                 success: false,
                 error: 'Email already registered'
@@ -55,24 +55,16 @@ router.post('/signup', async (req, res) => {
         const saltRounds = 10;
         const hashedPassword = await bcrypt.hash(password, saltRounds);
 
-        // Important: Use parameterized query with correct parameter order
-        const insertQuery = 'INSERT INTO userInfo (firstName, lastName, username, email, password) VALUES (?, ?, ?, ?, ?)';
-        const params = [firstName, lastName, userName, email, hashedPassword];
-
-        console.log('Executing query with params:', {
-            firstName,
-            lastName,
-            userName,
-            email,
-            hashedPasswordLength: hashedPassword.length
-        });
-
-        const [result] = await connection.query(insertQuery, params);
+        // Insert user with PostgreSQL syntax using $n parameters
+        const result = await client.query(
+            'INSERT INTO userInfo (firstName, lastName, username, email, password) VALUES ($1, $2, $3, $4, $5) RETURNING id',
+            [firstName, lastName, userName, email, hashedPassword]
+        );
 
         res.status(201).json({
             success: true,
             message: 'User registered successfully',
-            userId: result.insertId
+            userId: result.rows[0].id
         });
 
     } catch (error) {
@@ -84,14 +76,13 @@ router.post('/signup', async (req, res) => {
         });
 
     } finally {
-        if (connection) connection.release();
+        if (client) client.release();
     }
 });
 
-// Login route - Modified to support both email and username login
+// Login route
 router.post('/login', async (req, res) => {
-    let connection;
-
+    let client;
 
     try {
         console.log('Login request body:', req.body);
@@ -107,37 +98,37 @@ router.post('/login', async (req, res) => {
             });
         }
 
-        connection = await pool.getConnection();
+        client = await pool.connect();
 
-        // Find user by email or username
+        // Find user by email or username with PostgreSQL syntax
         let query = 'SELECT id, firstName, lastName, username, email, password, isAdmin FROM userInfo WHERE ';
         let params = [];
 
         if (email) {
-            query += 'email = ?';
+            query += 'LOWER(email) = LOWER($1)';
             params.push(email);
         } else {
-            query += 'username = ?';
+            query += 'LOWER(username) = LOWER($1)';
             params.push(userName);
         }
 
         console.log('Executing query:', query, 'with params:', params);
 
-        const [users] = await connection.query(query, params);
+        const result = await client.query(query, params);
 
-        if (users.length === 0) {
+        if (result.rowCount === 0) {
             return res.status(401).json({
                 success: false,
                 error: 'Invalid credentials'
             });
         }
 
-        const user = users[0];
+        const user = result.rows[0];
 
         // Add debug logging
         console.log('User from database:', user);
-        console.log('Admin field from DB:', user.isAdmin);
-        console.log('Admin field type:', typeof user.isAdmin);
+        console.log('Admin field from DB:', user.isadmin);
+        console.log('Admin field type:', typeof user.isadmin);
 
         // Compare password
         const passwordMatch = await bcrypt.compare(password, user.password);
@@ -151,8 +142,8 @@ router.post('/login', async (req, res) => {
 
         console.log('User authenticated successfully. Generating token...');
 
-        // Convert admin field to boolean
-        const isAdmin = user.isAdmin === 1 || user.isAdmin === true;
+        // Convert admin field to boolean - PostgreSQL will return a true boolean
+        const isAdmin = Boolean(user.isadmin);
         console.log('Converted admin value:', isAdmin);
 
         // Generate JWT token with admin status included
@@ -161,7 +152,7 @@ router.post('/login', async (req, res) => {
                 id: user.id,
                 email: user.email,
                 userName: user.username,
-                isAdmin: user.isAdmin // Include converted admin status
+                isAdmin: isAdmin
             },
             jwtConfig.secret,
             { expiresIn: jwtConfig.expiresIn }
@@ -173,11 +164,11 @@ router.post('/login', async (req, res) => {
             token,
             user: {
                 id: user.id,
-                firstName: user.firstName,
-                lastName: user.lastName,
+                firstName: user.firstname, // Note the lowercase - PostgreSQL default behavior
+                lastName: user.lastname,   // Note the lowercase - PostgreSQL default behavior
                 username: user.username,
                 email: user.email,
-                isAdmin: isAdmin // Include converted admin status
+                isAdmin: isAdmin
             }
         });
 
@@ -190,7 +181,7 @@ router.post('/login', async (req, res) => {
         });
 
     } finally {
-        if (connection) connection.release();
+        if (client) client.release();
     }
 });
 

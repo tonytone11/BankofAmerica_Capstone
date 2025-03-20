@@ -1,13 +1,10 @@
-// server.js - Refactored to use auth middleware consistently and fix duplicate routes
+// server.js - Updated for PostgreSQL compatibility
 const express = require('express');
 const dotenv = require('dotenv');
 const cors = require('cors');
 const path = require('path');
-const mysql = require('mysql2/promise');
 const adminRoutes = require('./routes/admin.routes');
-
 const axios = require('axios');
-
 
 // Load environment variables
 dotenv.config();
@@ -15,6 +12,7 @@ dotenv.config();
 // Import middleware
 const { verifyToken } = require('./middleware/auth.middleware');
 const createYoutubeMiddleware = require('./middleware/youtube.middleware');
+
 // Import routes
 const authRoutes = require('./routes/auth.routes');
 const userRoutes = require('./routes/user.routes');
@@ -25,16 +23,20 @@ const PORT = process.env.PORT || 3003;
 
 // Import database pool from config
 const pool = require('./config/db.config');
-// Add this after initializing the app but before setting up routes
+
 // Test database connection on startup
 (async () => {
   try {
-    await pool.getConnection();
+    const client = await pool.connect();
+    console.log('Database connection test successful');
+    client.release();
   } catch (error) {
     console.error('Initial database connection test failed:', error);
   }
 })();
+
 const youtubeMiddleware = createYoutubeMiddleware(process.env.YOUTUBE_API_KEY);
+
 // Middleware setup
 app.use(cors({
   origin: 'https://bankofamerica-capstone.onrender.com',
@@ -52,14 +54,12 @@ app.use('/api/auth', authRoutes);
 app.use('/api/user', userRoutes);
 app.use('/api/admin', adminRoutes);
 
-
 app.get('/api/youtube/search', youtubeMiddleware.searchVideos);
 app.get('/api/youtube/videos', youtubeMiddleware.getVideoDetails);
 
-
 // Route to log training hours
 app.post('/profile/practice-log', verifyToken, async (req, res) => {
-  let connection;
+  let client;
   try {
     const { date, hours } = req.body;
 
@@ -73,20 +73,20 @@ app.post('/profile/practice-log', verifyToken, async (req, res) => {
     const userId = req.user.id;
     console.log('Logging hours for user:', userId, 'Date:', date, 'Hours:', hours);
 
-    connection = await pool.getConnection();
+    client = await pool.connect();
 
     // Check if an entry already exists for that date
-    const [existingEntry] = await connection.query(
-      'SELECT * FROM hoursLogged WHERE user_id = ? AND date = ?',
+    const existingEntry = await client.query(
+      'SELECT * FROM hoursLogged WHERE user_id = $1 AND date = $2',
       [userId, date]
     );
 
     let result;
-    if (existingEntry.length > 0) {
+    if (existingEntry.rowCount > 0) {
       // Update existing entry
       console.log('Updating existing entry');
-      [result] = await connection.query(
-        'UPDATE hoursLogged SET hours = ? WHERE user_id = ? AND date = ?',
+      result = await client.query(
+        'UPDATE hoursLogged SET hours = $1 WHERE user_id = $2 AND date = $3',
         [hours, userId, date]
       );
 
@@ -94,8 +94,8 @@ app.post('/profile/practice-log', verifyToken, async (req, res) => {
     } else {
       // Insert new entry
       console.log('Creating new entry');
-      [result] = await connection.query(
-        'INSERT INTO hoursLogged (user_id, date, hours) VALUES (?, ?, ?)',
+      result = await client.query(
+        'INSERT INTO hoursLogged (user_id, date, hours) VALUES ($1, $2, $3)',
         [userId, date, hours]
       );
 
@@ -116,31 +116,31 @@ app.post('/profile/practice-log', verifyToken, async (req, res) => {
     });
 
   } finally {
-    if (connection) {
+    if (client) {
       console.log('Releasing database connection');
-      connection.release();
+      client.release();
     }
   }
 });
 
-// Route to fetch user-specific training hours (removed duplicate)
+// Route to fetch user-specific training hours
 app.get('/profile/practice-log', verifyToken, async (req, res) => {
-  let connection;
+  let client;
   try {
     const userId = req.user.id;
     console.log('Fetching hours for user:', userId);
 
-    connection = await pool.getConnection();
-    const [hoursData] = await connection.query(
-      'SELECT date, hours FROM hoursLogged WHERE user_id = ?',
+    client = await pool.connect();
+    const hoursData = await client.query(
+      'SELECT date, hours FROM hoursLogged WHERE user_id = $1',
       [userId]
     );
 
-    console.log('Retrieved hours data:', hoursData);
+    console.log('Retrieved hours data:', hoursData.rows);
 
     // Format the data as expected by the frontend
     const formattedData = {};
-    hoursData.forEach(row => {
+    hoursData.rows.forEach(row => {
       // Format date as YYYY-MM-DD string for use as object key
       const dateKey = row.date.toISOString().split('T')[0];
       formattedData[dateKey] = parseFloat(row.hours);
@@ -158,9 +158,9 @@ app.get('/profile/practice-log', verifyToken, async (req, res) => {
     });
 
   } finally {
-    if (connection) {
+    if (client) {
       console.log('Releasing database connection');
-      connection.release();
+      client.release();
     }
   }
 });
@@ -185,27 +185,27 @@ app.post('/contact', async (req, res) => {
     }
 
     // Get a connection from the pool
-    let connection;
+    let client;
     try {
-      connection = await pool.getConnection();
+      client = await pool.connect();
       console.log('Database connection established');
 
-      // Insert form data into contactForms table
+      // Insert form data into contactForms table with PostgreSQL syntax
       const query = `
-                INSERT INTO contactForms 
-                (adultName, childName, email, subject, message) 
-                VALUES (?, ?, ?, ?, ?)
-            `;
+        INSERT INTO contactForms 
+        (adultName, childName, email, subject, message) 
+        VALUES ($1, $2, $3, $4, $5)
+      `;
 
       console.log('Executing query:', query);
       console.log('With values:', [adultName, childName, email, subject, message]);
 
-      const [result] = await connection.query(query, [adultName, childName, email, subject, message]);
+      const result = await client.query(query, [adultName, childName, email, subject, message]);
 
       console.log('Query result:', result);
 
       // Check if insertion was successful
-      if (result.affectedRows === 1) {
+      if (result.rowCount === 1) {
         // Successful submission
         res.status(201).json({
           success: true,
@@ -219,9 +219,9 @@ app.post('/contact', async (req, res) => {
       console.error('Database operation error:', dbError);
       throw dbError;
     } finally {
-      if (connection) {
+      if (client) {
         console.log('Releasing database connection');
-        connection.release();
+        client.release();
       }
     }
   } catch (error) {
@@ -238,17 +238,9 @@ app.post('/contact', async (req, res) => {
   }
 });
 
-// get req displaying contact messages 
-
-
-
-
-// displaying user info on admin page
-
-
 // Routes for goals
 app.post('/profile/goals', verifyToken, async (req, res) => {
-  let connection;
+  let client;
   try {
     const { goal } = req.body;
     const userId = req.user.id;
@@ -260,16 +252,16 @@ app.post('/profile/goals', verifyToken, async (req, res) => {
       });
     }
 
-    connection = await pool.getConnection();
-    const [result] = await connection.query(
-      'INSERT INTO goals (user_id, goal) VALUES (?, ?)',
+    client = await pool.connect();
+    const result = await client.query(
+      'INSERT INTO goals (user_id, goal) VALUES ($1, $2) RETURNING id',
       [userId, goal]
     );
 
     res.status(201).json({
       success: true,
       message: 'Goal added successfully',
-      id: result.insertId
+      id: result.rows[0].id
     });
   } catch (error) {
     console.error('Error adding goal:', error);
@@ -279,22 +271,22 @@ app.post('/profile/goals', verifyToken, async (req, res) => {
       message: error.message
     });
   } finally {
-    if (connection) connection.release();
+    if (client) client.release();
   }
 });
 
 app.get('/profile/goals', verifyToken, async (req, res) => {
-  let connection;
+  let client;
   try {
     const userId = req.user.id;
 
-    connection = await pool.getConnection();
-    const [goals] = await connection.query(
-      'SELECT id, goal, completed FROM goals WHERE user_id = ?',
+    client = await pool.connect();
+    const goals = await client.query(
+      'SELECT id, goal, completed FROM goals WHERE user_id = $1',
       [userId]
     );
 
-    res.status(200).json(goals);
+    res.status(200).json(goals.rows);
   } catch (error) {
     console.error('Error fetching goals:', error);
     res.status(500).json({
@@ -303,12 +295,12 @@ app.get('/profile/goals', verifyToken, async (req, res) => {
       message: error.message
     });
   } finally {
-    if (connection) connection.release();
+    if (client) client.release();
   }
 });
 
 app.put('/profile/goals/:id', verifyToken, async (req, res) => {
-  let connection;
+  let client;
   try {
     const goalId = req.params.id;
     const userId = req.user.id;
@@ -323,33 +315,30 @@ app.put('/profile/goals/:id', verifyToken, async (req, res) => {
       });
     }
 
-    connection = await pool.getConnection();
+    client = await pool.connect();
 
     // First verify the goal belongs to the user
-    const [goalCheck] = await connection.query(
-      'SELECT id FROM goals WHERE id = ? AND user_id = ?',
+    const goalCheck = await client.query(
+      'SELECT id FROM goals WHERE id = $1 AND user_id = $2',
       [goalId, userId]
     );
 
-    if (goalCheck.length === 0) {
+    if (goalCheck.rowCount === 0) {
       return res.status(404).json({
         success: false,
         message: "Goal not found or unauthorized"
       });
     }
 
-    // Ensure completed is stored as 0 or 1 in the database
-    const completedStatus = completed ? 1 : 0;
-
-    // Update the goal completion status
-    const [result] = await connection.query(
-      'UPDATE goals SET completed = ? WHERE id = ? AND user_id = ?',
-      [completedStatus, goalId, userId]
+    // Update the goal completion status - PostgreSQL handles boolean directly
+    const result = await client.query(
+      'UPDATE goals SET completed = $1 WHERE id = $2 AND user_id = $3',
+      [completed, goalId, userId]
     );
 
     console.log("Update result:", result);
 
-    if (result.affectedRows === 0) {
+    if (result.rowCount === 0) {
       return res.status(404).json({
         success: false,
         message: "Goal not updated. It may not exist."
@@ -359,7 +348,7 @@ app.put('/profile/goals/:id', verifyToken, async (req, res) => {
     res.status(200).json({
       success: true,
       message: "Goal updated successfully",
-      completed: completedStatus
+      completed: completed
     });
 
   } catch (error) {
@@ -371,36 +360,36 @@ app.put('/profile/goals/:id', verifyToken, async (req, res) => {
     });
 
   } finally {
-    if (connection) {
+    if (client) {
       console.log("Releasing database connection");
-      connection.release();
+      client.release();
     }
   }
 });
 
 app.delete('/profile/goals/:id', verifyToken, async (req, res) => {
-  let connection;
+  let client;
   try {
     const goalId = req.params.id;
     const userId = req.user.id;
 
-    connection = await pool.getConnection();
+    client = await pool.connect();
 
     // First verify the goal belongs to this user
-    const [goal] = await connection.query(
-      'SELECT * FROM goals WHERE id = ? AND user_id = ?',
+    const goal = await client.query(
+      'SELECT * FROM goals WHERE id = $1 AND user_id = $2',
       [goalId, userId]
     );
 
-    if (goal.length === 0) {
+    if (goal.rowCount === 0) {
       return res.status(404).json({
         success: false,
         message: 'Goal not found or unauthorized'
       });
     }
 
-    await connection.query(
-      'DELETE FROM goals WHERE id = ?',
+    await client.query(
+      'DELETE FROM goals WHERE id = $1',
       [goalId]
     );
 
@@ -416,7 +405,28 @@ app.delete('/profile/goals/:id', verifyToken, async (req, res) => {
       message: error.message
     });
   } finally {
-    if (connection) connection.release();
+    if (client) client.release();
+  }
+});
+
+// Add this to your server.js or app.js
+app.get('/api/test-db', async (req, res) => {
+  try {
+    const client = await pool.connect();
+    const result = await client.query('SELECT NOW() as time');
+    client.release();
+    res.json({
+      success: true,
+      message: 'Database connection successful',
+      result: result.rows[0]
+    });
+  } catch (error) {
+    console.error('Database test error:', error);
+    res.status(500).json({
+      success: false,
+      error: error.message,
+      code: error.code
+    });
   }
 });
 
@@ -428,25 +438,4 @@ app.get('*', (req, res) => {
 // Start server
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
-});
-
-// Add this to your server.js or app.js
-app.get('/api/test-db', async (req, res) => {
-  try {
-    const connection = await pool.getConnection();
-    const [result] = await connection.query('SELECT 1 as test');
-    connection.release();
-    res.json({
-      success: true,
-      message: 'Database connection successful',
-      result
-    });
-  } catch (error) {
-    console.error('Database test error:', error);
-    res.status(500).json({
-      success: false,
-      error: error.message,
-      code: error.code
-    });
-  }
 });

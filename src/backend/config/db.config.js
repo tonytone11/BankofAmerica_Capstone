@@ -1,22 +1,26 @@
-const mysql = require('mysql2/promise');
+// config/db.config.js - Updated to use PostgreSQL
+const { Pool } = require('pg');
 const dotenv = require('dotenv');
 
 dotenv.config();
 
-// Create connection string
-const connectionString = `mysql://${process.env.DB_USER}:${encodeURIComponent(process.env.DB_PASSWORD)}@${process.env.DB_HOST}:${process.env.DB_PORT || '3306'}/${process.env.DB_NAME}`;
+// Create PostgreSQL connection pool
+const pool = new Pool({
+    user: process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
+    host: process.env.DB_HOST,
+    port: process.env.DB_PORT || 5432,
+    database: process.env.DB_NAME,
+    ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false
+});
 
-console.log('Connecting to database with string (password hidden):',
-    connectionString.replace(encodeURIComponent(process.env.DB_PASSWORD), '******'));
+// Test connection on startup
+pool.on('connect', () => {
+    console.log('Connected to PostgreSQL database');
+});
 
-// Create pool with detailed error handling
-const pool = mysql.createPool({
-    uri: connectionString,
-    waitForConnections: true,
-    connectionLimit: 5,
-    queueLimit: 0,
-    connectTimeout: 60000,
-    ssl: false // Try with this set to false first
+pool.on('error', (err) => {
+    console.error('PostgreSQL connection error:', err);
 });
 
 module.exports = pool;
