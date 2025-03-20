@@ -10,6 +10,8 @@ const axios = require('axios');
 dotenv.config();
 
 // Import middleware
+// Add this near your other middleware setup
+const { createProxyMiddleware } = require('http-proxy-middleware');
 const { verifyToken } = require('./middleware/auth.middleware');
 const createYoutubeMiddleware = require('./middleware/youtube.middleware');
 
@@ -42,6 +44,27 @@ app.use(cors({
   origin: 'https://bankofamerica-capstone.onrender.com',
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
+}));
+// Add this with your other middleware configurations (after app.use(cors()) and other middleware)
+app.use('/football-api', createProxyMiddleware({
+  target: 'https://v3.football.api-sports.io',
+  changeOrigin: true,
+  pathRewrite: {
+    '^/football-api': ''
+  },
+  onProxyReq: (proxyReq, req, res) => {
+    // Add your API key to each request
+    proxyReq.setHeader('x-apisports-key', process.env.VITE_API_FOOTBALL_KEY);
+
+    // If you're using RapidAPI instead, use these:
+    // proxyReq.setHeader('x-rapidapi-key', process.env.VITE_API_FOOTBALL_KEY);
+    // proxyReq.setHeader('x-rapidapi-host', process.env.VITE_API_FOOTBALL_HOST);
+
+    console.log('Proxying request to football API:', req.method, req.url);
+  },
+  onProxyRes: (proxyRes, req, res) => {
+    console.log('Received response from football API:', proxyRes.statusCode, req.url);
+  }
 }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -429,6 +452,10 @@ app.get('/api/test-db', async (req, res) => {
     });
   }
 });
+
+
+
+
 
 // Catch-all route should be LAST
 app.get('*', (req, res) => {
