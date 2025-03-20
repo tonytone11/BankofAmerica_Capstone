@@ -441,3 +441,14 @@ app.get('/api/test-db', async (req, res) => {
     });
   }
 });
+
+// Add this to server.js
+setInterval(async () => {
+  try {
+    const connection = await pool.getConnection();
+    console.log('Database connection check: SUCCESS');
+    connection.release();
+  } catch (error) {
+    console.error('Database connection check: FAILED', error.message);
+  }
+}, 60000); // Check every minute
