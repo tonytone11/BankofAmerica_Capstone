@@ -51,7 +51,7 @@ router.get('/messages', verifyToken, verifyAdmin, async (req, res) => {
             // PostgreSQL syntax for IFNULL -> COALESCE and date formatting
             const result = await client.query(`
                 SELECT id, adultName, childName, email, subject, message, 
-                       COALESCE(readstatus, FALSE) as readMessages,
+                       COALESCE(readStatus, FALSE) as readMessages,
                        TO_CHAR(created_at, 'YYYY-MM-DD') as date
                 FROM contactForms 
                 ORDER BY id DESC
@@ -99,7 +99,7 @@ router.put('/messages/:id/read', verifyToken, verifyAdmin, async (req, res) => {
 
             // Update the message status
             const result = await client.query(
-                'UPDATE contactForms SET readstatus = TRUE WHERE id = $1',
+                'UPDATE contactForms SET readStatus = TRUE WHERE id = $1',
                 [messageId]
             );
 
