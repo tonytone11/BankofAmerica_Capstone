@@ -25,6 +25,15 @@ const PORT = process.env.PORT || 3003;
 
 // Import database pool from config
 const pool = require('./config/db.config');
+// Add this after initializing the app but before setting up routes
+// Test database connection on startup
+(async () => {
+  try {
+    await pool.testConnection();
+  } catch (error) {
+    console.error('Initial database connection test failed:', error);
+  }
+})();
 const youtubeMiddleware = createYoutubeMiddleware(process.env.YOUTUBE_API_KEY);
 // Middleware setup
 app.use(cors({

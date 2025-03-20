@@ -12,6 +12,22 @@ const pool = mysql.createPool({
     waitForConnections: true,
     connectionLimit: 10,
     queueLimit: 0,
+    ssl: {
+        rejectUnauthorized: true
+    }
 });
+
+// Add a simple test function that can be called on server startup
+pool.testConnection = async () => {
+    try {
+        const connection = await pool.getConnection();
+        console.log('✓ Database connection test successful');
+        connection.release();
+        return true;
+    } catch (error) {
+        console.error('✗ Database connection test failed:', error.message);
+        return false;
+    }
+};
 
 module.exports = pool;
