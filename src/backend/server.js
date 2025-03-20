@@ -434,7 +434,6 @@ app.use('/football-api', async (req, res) => {
   try {
     // Get API credentials from environment variables
     const apiKey = process.env.VITE_API_FOOTBALL_KEY;
-    const apiHost = process.env.VITE_API_FOOTBALL_HOST || 'https://v3.football.api-sports.io';
 
     if (!apiKey) {
       console.error('API-Football key not found in environment variables');
@@ -453,11 +452,10 @@ app.use('/football-api', async (req, res) => {
     // Forward the request to the API-Football service
     const response = await axios({
       method: 'get',
-      url: `https://${apiHost}${endpoint}`,
+      url: `https://v3.football.api-sports.io${endpoint}`,
       params: params,
       headers: {
-        'x-rapidapi-key': apiKey,
-        'x-rapidapi-host': apiHost
+        'x-apisports-key': apiKey  // API-Sports uses this header name
       }
     });
 
@@ -466,7 +464,8 @@ app.use('/football-api', async (req, res) => {
     return res.status(response.status).json(response.data);
 
   } catch (error) {
-    console.error('Error proxying request to API-Football:', error);
+    console.error('Error proxying request to API-Football:', error.message);
+    if (error.code) console.error('Error code:', error.code);
 
     // Forward API error response if available
     if (error.response) {
