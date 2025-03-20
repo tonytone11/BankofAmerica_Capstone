@@ -7,9 +7,8 @@ export default defineConfig({
   server: {
     proxy: {
       '/football-api': {
-        target: 'https://v3.football.api-sports.io',
+        target: 'http://localhost:3003', // Point to your local backend server
         changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/football-api/, ''),
         configure: (proxy, _options) => {
           proxy.on('error', (err, _req, _res) => {
             console.log('proxy error', err);
