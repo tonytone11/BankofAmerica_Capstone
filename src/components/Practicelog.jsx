@@ -230,8 +230,6 @@ const PracticeLog = () => {
 
   return (
     <div className="practice-log">
-
-      <div> <p>Log your hours on the calender, and keep track of your training</p></div>
       <h2>Practice Log</h2>
       
       {renderCalendar()}
