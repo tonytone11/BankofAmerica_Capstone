@@ -52,7 +52,7 @@ const Contact = () => {
       // Log the full request details for debugging
       console.log('Sending POST request to:', '/contact');
 
-      const response = await fetch('/contact', {
+      const response = await fetch('https://bankofamerica-capstone.onrender.com/contact', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

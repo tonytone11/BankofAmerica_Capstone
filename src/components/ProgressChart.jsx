@@ -53,7 +53,7 @@ const ProgressChart = () => {
     }
 
     try {
-      const response = await fetch('/profile/practice-log', {
+      const response = await fetch('https://bankofamerica-capstone.onrender.com/profile/practice-log', {
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json'

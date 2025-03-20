@@ -10,7 +10,7 @@ const UsersSection = ({ users, isLoading, error }) => {
     try {
       setActionStatus({ message: 'Promoting user...', isError: false });
 
-      const response = await fetch(`/api/admin/users/${userId}/promote`, {
+      const response = await fetch(`https://bankofamerica-capstone.onrender.com/api/admin/users/${userId}/promote`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -41,7 +41,7 @@ const UsersSection = ({ users, isLoading, error }) => {
     try {
       setActionStatus({ message: 'Demoting user...', isError: false });
 
-      const response = await fetch(`/api/admin/users/${userId}/demote`, {
+      const response = await fetch(`https://bankofamerica-capstone.onrender.com/api/admin/users/${userId}/demote`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

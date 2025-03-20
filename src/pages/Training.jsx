@@ -34,7 +34,7 @@ const Training = () => {
     setLoading(true);
     setError(null);
     try {
-      const response = await axios.get("/api/youtube/search", {
+      const response = await axios.get("https://bankofamerica-capstone.onrender.com/api/youtube/search", {
         params: {
           q: query,
           safeSearch: "strict",
@@ -43,7 +43,7 @@ const Training = () => {
 
       // Get video details for duration and view count
       const videoIds = response.data.items.map((item) => item.id.videoId).join(",");
-      const videoDetailsResponse = await axios.get("/api/youtube/videos", {
+      const videoDetailsResponse = await axios.get("https://bankofamerica-capstone.onrender.com/api/youtube/videos", {
         params: {
           id: videoIds,
           // key: API_KEY,

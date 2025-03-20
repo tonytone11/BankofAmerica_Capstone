@@ -24,7 +24,7 @@ const Goals = () => {
     }
 
     try {
-      const response = await fetch('/profile/goals', {
+      const response = await fetch('https://bankofamerica-capstone.onrender.com/profile/goals', {
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json'
@@ -64,7 +64,7 @@ const Goals = () => {
     }
 
     try {
-      const response = await fetch('/profile/goals', {
+      const response = await fetch('https://bankofamerica-capstone.onrender.com/profile/goals', {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -109,7 +109,7 @@ const Goals = () => {
     ));
 
     try {
-      const response = await fetch(`/profile/goals/${id}`, {
+      const response = await fetch(`https://bankofamerica-capstone.onrender.com/profile/goals/${id}`, {
         method: 'PUT',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -140,7 +140,7 @@ const Goals = () => {
     setGoals(goals.filter(goal => goal.id !== id));
 
     try {
-      const response = await fetch(`/profile/goals/${id}`, {
+      const response = await fetch(`https://bankofamerica-capstone.onrender.com/profile/goals/${id}`, {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${token}`,

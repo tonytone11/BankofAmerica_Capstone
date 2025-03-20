@@ -29,7 +29,7 @@ const Admin = () => {
     const fetchUsers = async () => {
       try {
         setUsersLoading(true);
-        const response = await fetch('/api/admin/users', {
+        const response = await fetch('https://bankofamerica-capstone.onrender.com/api/admin/users', {
           headers: getAuthHeader() // Use auth header from authUtils
         });
 
@@ -62,7 +62,7 @@ const Admin = () => {
     const fetchMessages = async () => {
       try {
         setIsLoading(true);
-        const response = await fetch('/api/admin/messages', {
+        const response = await fetch('https://bankofamerica-capstone.onrender.com/api/admin/messages', {
           headers: getAuthHeader() // Use auth header from authUtils
         });
 
@@ -144,7 +144,7 @@ const Admin = () => {
       ));
 
       // Then make the API call with auth header
-      const response = await fetch(`/api/admin/messages/${id}/read`, {
+      const response = await fetch(`https://bankofamerica-capstone.onrender.com/api/admin/messages/${id}/read`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

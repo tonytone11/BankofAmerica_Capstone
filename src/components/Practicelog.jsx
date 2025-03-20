@@ -79,7 +79,7 @@ const PracticeLog = () => {
         }));
 
         // Then send to server
-        const response = await fetch('/profile/practice-log', {
+        const response = await fetch('https://bankofamerica-capstone.onrender.com/profile/practice-log', {
           method: 'POST',
           headers: {
             'Authorization': `Bearer ${token}`,
@@ -202,7 +202,7 @@ const PracticeLog = () => {
     }
 
     try {
-      const response = await fetch('/profile/practice-log', {
+      const response = await fetch('https://bankofamerica-capstone.onrender.com/profile/practice-log', {
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json'
