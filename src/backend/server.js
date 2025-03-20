@@ -29,7 +29,7 @@ const pool = require('./config/db.config');
 // Test database connection on startup
 (async () => {
   try {
-    await pool.testConnection();
+    await pool.getConnection();
   } catch (error) {
     console.error('Initial database connection test failed:', error);
   }
