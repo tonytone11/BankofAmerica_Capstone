@@ -9,8 +9,8 @@ const UsersSection = ({ users, isLoading, error }) => {
   const promoteToAdmin = async (userId) => {
     try {
       setActionStatus({ message: 'Promoting user...', isError: false });
-      
-      const response = await fetch(`http://localhost:3003/api/admin/users/${userId}/promote`, {
+
+      const response = await fetch(`/api/admin/users/${userId}/promote`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -24,12 +24,12 @@ const UsersSection = ({ users, isLoading, error }) => {
 
       const data = await response.json();
       setActionStatus({ message: data.message || 'User promoted successfully', isError: false });
-      
+
       // Refresh the page after successful promotion
       setTimeout(() => {
         window.location.reload();
       }, 1500);
-      
+
     } catch (error) {
       console.error('Error promoting user:', error);
       setActionStatus({ message: error.message, isError: true });
@@ -40,8 +40,8 @@ const UsersSection = ({ users, isLoading, error }) => {
   const demoteAdmin = async (userId) => {
     try {
       setActionStatus({ message: 'Demoting user...', isError: false });
-      
-      const response = await fetch(`http://localhost:3003/api/admin/users/${userId}/demote`, {
+
+      const response = await fetch(`/api/admin/users/${userId}/demote`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -55,12 +55,12 @@ const UsersSection = ({ users, isLoading, error }) => {
 
       const data = await response.json();
       setActionStatus({ message: data.message || 'User demoted successfully', isError: false });
-      
+
       // Refresh the page after successful demotion
       setTimeout(() => {
         window.location.reload();
       }, 1500);
-      
+
     } catch (error) {
       console.error('Error demoting user:', error);
       setActionStatus({ message: error.message, isError: true });
@@ -80,7 +80,7 @@ const UsersSection = ({ users, isLoading, error }) => {
       )}
 
       {isLoading && <div className="loading-message">Loading users...</div>}
-      
+
       {error && (
         <div className="error-message">
           <p>Error loading users: {error}</p>
@@ -93,7 +93,7 @@ const UsersSection = ({ users, isLoading, error }) => {
           <p>No users found in the database.</p>
         </div>
       )}
-      
+
       {!isLoading && !error && users.length > 0 && (
         <div className="data-table">
           <table>

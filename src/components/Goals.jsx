@@ -15,7 +15,7 @@ const Goals = () => {
   const fetchGoals = async () => {
     setIsLoading(true);
     setError(null);
-    
+
     const token = localStorage.getItem('token');
     if (!token) {
       setError("You must be logged in to view goals");
@@ -24,7 +24,7 @@ const Goals = () => {
     }
 
     try {
-      const response = await fetch('http://localhost:3003/profile/goals', {
+      const response = await fetch('/profile/goals', {
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json'
@@ -42,7 +42,7 @@ const Goals = () => {
         text: item.goal,
         completed: item.completed === 1 || item.completed === true
       }));
-      
+
       setGoals(formattedGoals);
     } catch (error) {
       console.error("Failed to fetch goals:", error);
@@ -56,7 +56,7 @@ const Goals = () => {
   const addGoal = async (e) => {
     e.preventDefault();
     if (newGoal.trim() === "") return;
-    
+
     const token = localStorage.getItem('token');
     if (!token) {
       setError("You must be logged in to add goals");
@@ -64,7 +64,7 @@ const Goals = () => {
     }
 
     try {
-      const response = await fetch('http://localhost:3003/profile/goals', {
+      const response = await fetch('/profile/goals', {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -78,14 +78,14 @@ const Goals = () => {
       }
 
       const data = await response.json();
-      
+
       // Add the new goal to state with the ID from the server
       const newGoalItem = {
         id: data.id,
         text: newGoal,
         completed: false
       };
-      
+
       setGoals([...goals, newGoalItem]);
       setNewGoal("");
     } catch (error) {
@@ -104,12 +104,12 @@ const Goals = () => {
     if (!goalToUpdate) return;
 
     // Optimistically update the UI
-    setGoals(goals.map(goal => 
+    setGoals(goals.map(goal =>
       goal.id === id ? { ...goal, completed: !goal.completed } : goal
     ));
 
     try {
-      const response = await fetch(`http://localhost:3003/profile/goals/${id}`, {
+      const response = await fetch(`/profile/goals/${id}`, {
         method: 'PUT',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -140,7 +140,7 @@ const Goals = () => {
     setGoals(goals.filter(goal => goal.id !== id));
 
     try {
-      const response = await fetch(`http://localhost:3003/profile/goals/${id}`, {
+      const response = await fetch(`/profile/goals/${id}`, {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -163,11 +163,11 @@ const Goals = () => {
 
   return (
     <div className="goals-container">
-       <div> <p>Keep track of your Goals</p></div>
+      <div> <p>Keep track of your Goals</p></div>
       <h2>My Goals</h2>
-      
+
       {error && <p className="error-message">{error}</p>}
-      
+
       <form onSubmit={addGoal} className="goal-form">
         <input
           type="text"
@@ -178,7 +178,7 @@ const Goals = () => {
         />
         <button type="submit" className="add-goal-btn">Add Goal</button>
       </form>
-      
+
       {isLoading ? (
         <p className="loading">Loading goals...</p>
       ) : (
@@ -197,8 +197,8 @@ const Goals = () => {
                   />
                   <span className="goal-text">{goal.text}</span>
                 </label>
-                <button 
-                  onClick={() => deleteGoal(goal.id)} 
+                <button
+                  onClick={() => deleteGoal(goal.id)}
                   className="delete-goal-btn"
                 >
                   ×

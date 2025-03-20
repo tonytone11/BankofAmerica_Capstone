@@ -34,7 +34,7 @@ const Training = () => {
     setLoading(true);
     setError(null);
     try {
-      const response = await axios.get("http://localhost:3003/api/youtube/search", {
+      const response = await axios.get("/api/youtube/search", {
         params: {
           q: query,
           safeSearch: "strict",
@@ -43,7 +43,7 @@ const Training = () => {
 
       // Get video details for duration and view count
       const videoIds = response.data.items.map((item) => item.id.videoId).join(",");
-      const videoDetailsResponse = await axios.get("http://localhost:3003/api/youtube/videos", {
+      const videoDetailsResponse = await axios.get("/api/youtube/videos", {
         params: {
           id: videoIds,
           // key: API_KEY,
@@ -65,8 +65,8 @@ const Training = () => {
           viewCount > 1000000
             ? (viewCount / 1000000).toFixed(1) + "M"
             : viewCount > 1000
-            ? (viewCount / 1000).toFixed(0) + "K"
-            : viewCount;
+              ? (viewCount / 1000).toFixed(0) + "K"
+              : viewCount;
 
         return {
           id: item.id,
@@ -110,7 +110,7 @@ const Training = () => {
         // ? defaultQuery
         // : `soccer ${category.toLowerCase()} training`;
         ? "professional soccer training techniques tutorial"
-      : `professional soccer ${category.toLowerCase()} training tutorial`;
+        : `professional soccer ${category.toLowerCase()} training tutorial`;
     fetchVideos(query);
   };
 

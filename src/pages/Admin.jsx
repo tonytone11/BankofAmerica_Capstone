@@ -29,16 +29,16 @@ const Admin = () => {
     const fetchUsers = async () => {
       try {
         setUsersLoading(true);
-        const response = await fetch('http://localhost:3003/api/admin/users', {
+        const response = await fetch('/api/admin/users', {
           headers: getAuthHeader() // Use auth header from authUtils
         });
-        
+
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);
         }
-        
+
         const data = await response.json();
-        
+
         if (data.success && Array.isArray(data.users)) {
           setUsers(data.users);
         } else {
@@ -62,16 +62,16 @@ const Admin = () => {
     const fetchMessages = async () => {
       try {
         setIsLoading(true);
-        const response = await fetch('http://localhost:3003/api/admin/messages', {
+        const response = await fetch('/api/admin/messages', {
           headers: getAuthHeader() // Use auth header from authUtils
         });
-        
+
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);
         }
-        
+
         const data = await response.json();
-        
+
         if (data.success && Array.isArray(data.messages)) {
           const formattedMessages = data.messages.map(msg => ({
             id: msg.id,
@@ -83,7 +83,7 @@ const Admin = () => {
             date: msg.date || new Date().toISOString().split('T')[0],
             readMessages: msg.readMessages || false
           }));
-          
+
           setMessages(formattedMessages);
         } else {
           throw new Error('Invalid data structure received from server');
@@ -137,30 +137,30 @@ const Admin = () => {
   const markAsRead = async (id) => {
     try {
       console.log(`Marking message ${id} as read...`);
-      
+
       // First update the UI immediately for better user experience
       setMessages(messages.map(msg =>
         msg.id === id ? { ...msg, readMessages: true } : msg
       ));
-      
+
       // Then make the API call with auth header
-      const response = await fetch(`http://localhost:3003/api/admin/messages/${id}/read`, {
+      const response = await fetch(`/api/admin/messages/${id}/read`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
           ...getAuthHeader() // Include auth header
         }
       });
-      
+
       console.log('Response status:', response.status);
-      
+
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
-      
+
       const data = await response.json();
       console.log('Response data:', data);
-      
+
     } catch (error) {
       console.error('Error marking message as read:', error);
     }
@@ -183,10 +183,10 @@ const Admin = () => {
 
         <main className="admin-main">
           {activeSection === 'users' && (
-            <UsersSection 
-              users={users} 
-              isLoading={usersLoading} 
-              error={usersError} 
+            <UsersSection
+              users={users}
+              isLoading={usersLoading}
+              error={usersError}
             />
           )}
 
