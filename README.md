@@ -11,16 +11,15 @@ FutureStars is a website designed to give quality football training and developm
 Talent is universal, but opportunity is not. Millions of underprivileged youth worldwide have passion and potential for football, but lack:
 Access to quality coaching and training resources
 Tools to track their development and set meaningful goals
-Exposure to inspirational stories and role models
-Structured pathways to 
+Exposure to inspirational stories and role models.
 
 
 ## Our Solution
 FutureStars provides a comprehensive development platform that fits in a young player's pocket:
-Accessible Training Resources: Curated YouTube training videos categorized by skill, position, and level
-Simple Progress Tracking: Youth-friendly tools to monitor development without complex metrics
-Inspirational Role Models: Profiles of professional players to inspired youth
-Goal-Setting Framework: Structured approach to promote discipline
+* Accessible Training Resources: Curated YouTube training videos categorized by skill, position, and level.
+* Simple Progress Tracking: Youth-friendly tools to monitor development without complex metrics.
+* Inspirational Role Models: Profiles of professional players to inspired youth
+* Goal-Setting Framework: Structured approach to promote discipline.
 
  ## Frontend technologies:
  <img width="242" src="https://cloudmatetechnologies.com/wp-content/uploads/2024/06/react.js.png"/>  <img width="242" alt="Screenshot 2025-02-25 at 10 47 25 PM" src="https://github.com/user-attachments/assets/f0818e40-c706-4194-95f5-c5ca06019f3b" />
@@ -52,42 +51,42 @@ Goal-Setting Framework: Structured approach to promote discipline
 
  ##  Usage
 ### Home Page
-* Hero image
-* Daily Inspiration: Featured player story or quote
-* Main mission for website
-* News Feed: Brief football news highlights relevant to youth development
+* Hero image.
+* Daily Inspiration: Featured player quotes and statistics.
+* FutureStars Mission Statement.
+* News Feed: Brief FutureStar news highlights relevant to youth development.
 ### Profile page
-* Visual Progress Tracker: Easy-to-understand bars showing improvement (input your statistics/ for every training you do add a to chart ex: hours, goals etc.
-
+* Visual Progress Tracker: Easy-to-understand bar charts and calenders. showing improvement. Users have the capabilities input their training statistics.
 #### Practice Log
 * Calendar showing training consistency (user would be able to log the day that they trained).
 Bookmarked Players: Quick access to saved professional role models
-Goal Setting: Simple weekly/monthly development goals (Goals/to do list for tracking goals)
-Achievements: Milestones (from days/ hours trained) (extra feature if have time)
+Goal Setting: Simple weekly/monthly development goals (Goals/to do list for tracking goals).
+Achievements: Milestones (from days/ hours trained) (extra feature if have time).
 ### Training Page (YouTube API Integration)
 * Video Categories:
-* Skill-specific training (dribbling, shooting, passing)
-* Position-specific exercises
-* Fitness and conditioning
-* Game awareness and tactics
-* Motivational content
+* Skill-specific training (dribbling, shooting, passing).
+* Position-specific exercises.
+* Fitness and conditioning.
+* Game awareness and tactics.
+* Motivational content.
 
 ### Players Page (Football API Integration)
 * Player Search: Find professionals by name, position, team, or country
 * Player Profiles:
-* Basic information (age, nationality, position, team)
-* Key statistics relevant to their position
-* Career highlights and achievements
-* Background story (focus on players from humble beginnings)
-* Team Explorer: Browse clubs and national teams
+* Basic information (age, nationality, position, team).
+* Key statistics relevant to their position.
+* Career highlights and achievements.
+* Background story (focus on players from humble beginnings).
+* Team Explorer: Browse clubs and national teams.
 
 ### Contact Page
-* Support Form: Simple form for questions and feedback
-* FAQ Section: Common questions about the app and football development
+* Support Form: Simple form for questions and feedback.
+* Application admin have access to the messages sent from the contact form, and can directly reply to users.
+
 ### About Us Page
-Mission Statement: Focus on accessibility and opportunity through football
-Vision: How the app helps underprivileged youth develop through sport
-Team Information: About the developers and football experts involved
+Mission Statement: Focus on accessibility and opportunity through football.
+Vision: How the app helps underprivileged youth develop through sport.
+Team Information: About the developers and football experts involved.
 ### Login/SignUp page
 Creating user: input personal info and be able to access to profile page.
 

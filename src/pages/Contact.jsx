@@ -5,13 +5,18 @@ const Contact = () => {
   // Form state - updated to match backend field names
   const [formData, setFormData] = useState({
     adultName: '',
-
-    childName: '',  // Changed to match database field name
-
+    childName: '',
     email: '',
     subject: '',
     message: '',
     created_at: ''
+  });
+
+  // Validation errors state
+  const [validationErrors, setValidationErrors] = useState({
+    adultName: '',
+    subject: '',
+    message: ''
   });
 
   const [submitStatus, setSubmitStatus] = useState({
@@ -25,8 +30,6 @@ const Contact = () => {
   // Active FAQ state
   const [activeFaq, setActiveFaq] = useState();
 
-  // FAQ data remains unchanged
-
   // Handle form input changes
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -34,11 +37,65 @@ const Contact = () => {
       ...formData,
       [name]: value
     });
+    
+    // Clear validation error when user starts typing
+    if (validationErrors[name]) {
+      setValidationErrors({
+        ...validationErrors,
+        [name]: ''
+      });
+    }
+  };
+
+  // Validate form fields
+  const validateForm = () => {
+    const errors = {
+      adultName: '',
+      subject: '',
+      message: ''
+    };
+    let isValid = true;
+
+    // Validate Adult Name
+    if (!formData.adultName.trim()) {
+      errors.adultName = 'Adult Name is required';
+      isValid = false;
+    } else if (formData.adultName.trim().length < 2) {
+      errors.adultName = 'Adult Name must be at least 2 characters long';
+      isValid = false;
+    }
+
+    // Validate Subject
+    if (!formData.subject.trim()) {
+      errors.subject = 'Subject is required';
+      isValid = false;
+    }
+
+    // Validate Message
+    if (!formData.message.trim()) {
+      errors.message = 'Message is required';
+      isValid = false;
+    } else if (formData.message.trim().length < 10) {
+      errors.message = 'Message must be at least 10 characters long';
+      isValid = false;
+    } else if (formData.message.trim().length > 10000) {
+      errors.message = 'Message cannot exceed 10,000 characters';
+      isValid = false;
+    }
+
+    setValidationErrors(errors);
+    return isValid;
   };
 
   // Handle form submission - enhanced with better error handling and logging
   const handleSubmit = async (e) => {
     e.preventDefault();
+    
+    // Validate form before submission
+    if (!validateForm()) {
+      return;
+    }
+    
     setIsSubmitting(true);
     setSubmitStatus({
       message: 'Sending your message...',
@@ -67,17 +124,13 @@ const Contact = () => {
       if (data.success) {
         setSubmitStatus({
           message: 'Thank you for your message! We will get back to you soon.',
-
           isError: false
-
         });
 
         // Reset form
         setFormData({
           adultName: '',
-
-          childName: '',  // Changed to match database field name
-
+          childName: '',
           email: '',
           subject: '',
           message: ''
@@ -101,7 +154,9 @@ const Contact = () => {
     }
   };
 
-  // Toggle FAQ item functionality remains unchanged
+  // Calculate message character count and limits
+  const messageLength = formData.message.length;
+  const messageRemaining = 10000 - messageLength;
 
   return (
     <div>
@@ -134,30 +189,31 @@ const Contact = () => {
 
               <form onSubmit={handleSubmit}>
                 <div className="form-group">
-                  <label className='full-name-form' htmlFor="adultName">Adult Name</label>
+                  <label className='full-name-form' htmlFor="adultName">Adult Name *</label>
                   <input
                     type="text"
                     id="adultName"
                     name="adultName"
                     value={formData.adultName}
                     onChange={handleInputChange}
-                    required
+                    className={validationErrors.adultName ? 'input-error' : ''}
                   />
+                  {validationErrors.adultName && (
+                    <p className="error-text">{validationErrors.adultName}</p>
+                  )}
                 </div>
                 <div className='form-group'>
-
                   <label htmlFor="childName">Child's Name (if applicable)</label>
                   <input
                     type="text"
                     id="childName"
-                    name="childName"  // Changed to match database field name
+                    name="childName"
                     value={formData.childName}
-
                     onChange={handleInputChange}
                   />
                 </div>
                 <div className="form-group">
-                  <label htmlFor="email">Email Address</label>
+                  <label htmlFor="email">Email Address *</label>
                   <input
                     type="email"
                     id="email"
@@ -169,27 +225,39 @@ const Contact = () => {
                 </div>
 
                 <div className="form-group">
-                  <label htmlFor="subject">Subject</label>
+                  <label htmlFor="subject">Subject *</label>
                   <input
                     type="text"
                     id="subject"
                     name="subject"
                     value={formData.subject}
                     onChange={handleInputChange}
-                    required
+                    className={validationErrors.subject ? 'input-error' : ''}
                   />
+                  {validationErrors.subject && (
+                    <p className="error-text">{validationErrors.subject}</p>
+                  )}
                 </div>
 
                 <div className="form-group">
-                  <label htmlFor="message">Message</label>
+                  <label htmlFor="message">Message *</label>
                   <textarea
                     id="message"
                     name="message"
                     value={formData.message}
                     onChange={handleInputChange}
                     rows="5"
-                    required
+                    className={validationErrors.message ? 'input-error' : ''}
                   ></textarea>
+                  {validationErrors.message && (
+                    <p className="error-text">{validationErrors.message}</p>
+                  )}
+                  <p className="character-count">
+                    {messageLength} / 10000 characters
+                    {messageLength > 0 && messageLength < 10 && (
+                      <span className="count-warning"> (minimum 10 characters required)</span>
+                    )}
+                  </p>
                 </div>
                 <button
                   type="submit"

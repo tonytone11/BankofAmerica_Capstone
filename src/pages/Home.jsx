@@ -25,6 +25,7 @@ const Home = () => {
             {/* Hero Section */}
             <section className="hero-section">
                 <div className="hero-content">
+                    {/* <video src="hero.mp4"></video> */}
                     <h1>DEVELOP YOUR TALENT</h1>
                     <h2>Track your progress. Learn from the pros.</h2>
                     <h2>Achieve your football dreams.</h2>
