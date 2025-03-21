@@ -95,7 +95,6 @@ Achievements: Milestones (from days/ hours trained) (extra feature if have time)
 ### Contact Page
 <img width="1679" alt="Image" src="https://github.com/user-attachments/assets/5aa6edfa-99ba-407b-8560-7f71105b00a5" />
 * Support Form: Simple form for questions and feedback
-* FAQ Section: Common questions about the app and football development
   
 ### About Us Page
 <img width="1679" alt="Image" src="https://github.com/user-attachments/assets/3691b0f6-105d-455a-a14b-9aa6d9a692c7" />
