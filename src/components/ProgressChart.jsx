@@ -46,14 +46,14 @@ const ProgressChart = () => {
 
   const fetchPracticeData = async () => {
     const token = localStorage.getItem('token');
-    
+
     if (!token) {
       console.error("No authentication token found");
       return;
     }
 
     try {
-      const response = await fetch('http://localhost:3003/profile/practice-log', {
+      const response = await fetch('https://bankofamerica-capstone.onrender.com/profile/practice-log', {
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json'
@@ -78,23 +78,23 @@ const ProgressChart = () => {
     const dayOfWeek = today.getDay(); // 0 = Sunday, 1 = Monday, etc.
     const startOfWeek = new Date(today);
     startOfWeek.setDate(today.getDate() - dayOfWeek + (dayOfWeek === 0 ? -6 : 1)); // Monday of current week
-    
+
     const weekDays = [];
     const weekData = [0, 0, 0, 0, 0, 0, 0]; // Initialize with zeros for each day
-    
+
     // Create array of dates for this week
     for (let i = 0; i < 7; i++) {
       const day = new Date(startOfWeek);
       day.setDate(startOfWeek.getDate() + i);
       const dateKey = day.toISOString().split('T')[0];
       weekDays.push(dateKey);
-      
+
       // If we have practice data for this day, use it
       if (practiceData[dateKey]) {
         weekData[i] = practiceData[dateKey];
       }
     }
-    
+
     // Update chart data
     setChartData({
       ...chartData,
