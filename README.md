@@ -11,8 +11,7 @@ FutureStars is a website designed to give quality football training and developm
 Talent is universal, but opportunity is not. Millions of underprivileged youth worldwide have passion and potential for football, but lack:
 Access to quality coaching and training resources
 Tools to track their development and set meaningful goals
-Exposure to inspirational stories and role models
-Structured pathways to 
+Exposure to inspirational stories and role models.
 
 
 ## Our Solution
