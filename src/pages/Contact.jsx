@@ -102,31 +102,31 @@ const Contact = () => {
       isError: false,
       details: ''
     });
-    
+
     console.log('Attempting to submit form data:', formData);
-    
+
     try {
       // Log the full request details for debugging
       console.log('Sending POST request to:', '/contact');
-      
-      const response = await fetch('http://localhost:3003/contact', {
+
+      const response = await fetch('https://bankofamerica-capstone.onrender.com/contact', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(formData),
       });
-      
+
       console.log('Response status:', response.status);
       const data = await response.json();
       console.log('Response data:', data);
-      
+
       if (data.success) {
         setSubmitStatus({
           message: 'Thank you for your message! We will get back to you soon.',
           isError: false
         });
-        
+
         // Reset form
         setFormData({
           adultName: '',
@@ -166,7 +166,7 @@ const Contact = () => {
           <h1>Contact Us</h1>
           <p className="page-subtitle">Need help or have questions? We're here to support your football journey.</p>
         </div>
-        
+
         {/* Contact Form Section */}
         <section className="contact-form-section">
           <div className="form-container">
@@ -176,7 +176,7 @@ const Contact = () => {
                 <p className="page-note-1"><strong>For young players:</strong> Please ask your parent or guardian to help you contact us.</p>
                 <p className="page-note-2"><strong>Parents:</strong> Feel free to contact us with any questions.</p>
               </div>
-              
+
               {/* Status message display */}
               {submitStatus.message && (
                 <div className={`status-message ${submitStatus.isError ? 'error' : 'success'}`}>
@@ -186,7 +186,7 @@ const Contact = () => {
                   )}
                 </div>
               )}
-              
+
               <form onSubmit={handleSubmit}>
                 <div className="form-group">
                   <label className='full-name-form' htmlFor="adultName">Adult Name *</label>
@@ -223,7 +223,7 @@ const Contact = () => {
                     required
                   />
                 </div>
-                
+
                 <div className="form-group">
                   <label htmlFor="subject">Subject *</label>
                   <input
@@ -238,7 +238,7 @@ const Contact = () => {
                     <p className="error-text">{validationErrors.subject}</p>
                   )}
                 </div>
-                
+
                 <div className="form-group">
                   <label htmlFor="message">Message *</label>
                   <textarea
@@ -259,9 +259,9 @@ const Contact = () => {
                     )}
                   </p>
                 </div>
-                <button 
-                  type="submit" 
-                  className="submit-btn" 
+                <button
+                  type="submit"
+                  className="submit-btn"
                   disabled={isSubmitting}
                 >
                   {isSubmitting ? 'SENDING...' : 'SEND MESSAGE'}

@@ -1,17 +1,16 @@
 import React from 'react';
 import './MessageCard.css';
 
-const MessageCard = ({ message, markAsRead }) => {
+const MessageCard = ({ message }) => {
   // Check for either readMessages or read property
   const isRead = message.readMessages || message.read;
-  
+
   return (
     <div className={`message-card ${isRead ? 'read' : 'unread'}`}>
       <div className="message-header">
         <h3>{message.subject || 'No Subject'}</h3>
         <div className="message-meta">
           <span className="message-date">{message.date || 'No date'}</span>
-          {!isRead && <span className="unread-badge">New</span>}
 
         </div>
       </div>
@@ -28,13 +27,7 @@ const MessageCard = ({ message, markAsRead }) => {
         {message.message ? `${message.message}` : 'No message content'}
       </p>
       <div className="message-actions">
-        {!isRead && (
-
-          <button className="mark-read-btn" onClick={() => markAsRead(message.id)}>
-            Mark as Read
-          </button>
-        )}
-        <a 
+        <a
 
           href={`mailto:${message.email}?subject=Re: ${message.subject || 'Your message'}`}
 

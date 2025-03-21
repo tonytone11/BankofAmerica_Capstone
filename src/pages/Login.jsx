@@ -13,30 +13,30 @@ const Login = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       console.log("Sending login request with:", formData);
-      
-      const response = await fetch("http://localhost:3003/api/auth/login", {
+
+      const response = await fetch("https://bankofamerica-capstone.onrender.com/api/auth/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(formData),
       });
-  
+
       const data = await response.json();
       console.log("Login response data:", data);
-      
+
       if (!response.ok) {
         throw new Error(data.error || "Login failed");
       }
-  
-      if(data.token){
+
+      if (data.token) {
         localStorage.setItem('token', data.token);
-        
+
         // Store user information, including admin status
         const userData = {
           id: data.user.id,
@@ -46,15 +46,15 @@ const Login = () => {
           email: data.user.email,
           isAdmin: data.user.isAdmin // Store the admin status
         };
-        
+
         console.log("Storing user data:", userData);
         localStorage.setItem('user', JSON.stringify(userData));
-        
+
         // Check what's stored in localStorage
         const storedUser = JSON.parse(localStorage.getItem('user'));
         console.log("Retrieved user from localStorage:", storedUser);
         console.log("Admin status in localStorage:", storedUser.isAdmin);
-      } else{
+      } else {
         console.warn("No token received from server");
       }
   
@@ -62,7 +62,7 @@ const Login = () => {
       
       // Debug admin status before redirection
       console.log("Is admin?", data.user.isAdmin);
-      
+
       // Redirect based on admin status
       if (data.user.isAdmin) {
         console.log("Redirecting to admin page");
@@ -71,9 +71,9 @@ const Login = () => {
         console.log("Redirecting to profile page");
         window.location.href = '/profile'; // Redirect regular users to profile
       }
-      
+
       setErrorMessage("");
-    } catch (error){
+    } catch (error) {
       console.error("Login error:", error);
       setErrorMessage(error.message);
     }
@@ -83,7 +83,7 @@ const Login = () => {
     
     <div className="page-container">
 
-    <div className="login-container">
+      <div className="login-container">
         <div className="main">
       <h2 className="loginh2">Login</h2>
       <div className="green-line"></div>

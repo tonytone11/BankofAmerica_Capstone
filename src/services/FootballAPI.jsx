@@ -1,16 +1,10 @@
 import axios from 'axios';
 
-const API_KEY = import.meta.env.VITE_API_FOOTBALL_KEY;
-const API_HOST = import.meta.env.VITE_API_FOOTBALL_HOST;
-
-// Create reusable API instance - Updated to use proxy
+// Create reusable API instance that uses the backend proxy
 const footballApi = axios.create({
-    // Use the proxy path instead of the direct API URL
+    // Use the proxy endpoint we created in the backend
     baseURL: '/football-api',
-    headers: {
-        'x-rapidapi-key': API_KEY,
-        'x-rapidapi-host': API_HOST
-    }
+    // No API keys needed in frontend requests - they're added by the backend
 });
 
 // Search players by name
@@ -30,7 +24,6 @@ export const searchPlayers = async (query) => {
 };
 
 // Get player statistics by ID 
-// Featured player
 export const getPlayerStatistics = async (playerId, season = 2023) => {
     try {
         const response = await footballApi.get('/players', {
@@ -68,7 +61,6 @@ export const getPlayerById = async (playerId) => {
         return null;
     } catch (error) {
         console.error(`Error fetching player ${playerId}:`, error);
-        // Add more detailed error logging
         if (error.response) {
             console.error('Error response:', error.response.data);
             console.error('Status:', error.response.status);
