@@ -92,6 +92,7 @@
     .featured-player {
       flex-direction: column;
       align-items: flex-start;
+      height: auto;
     }
     
     .player-photo {

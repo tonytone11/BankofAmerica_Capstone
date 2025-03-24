@@ -80,9 +80,13 @@
 /* Tablet Devices */
 @media screen and (max-width: 768px) {
   .player-search-bar {
-    max-width: 90%;
+    max-width: 76%;
   }
   
+  .player-search-result {
+    max-width: 76%;
+  }
+
   .player-info {
     padding: 10px 12px;
     font-size: 15px;
@@ -100,9 +104,9 @@
 }
 
 /* Mobile Devices */
-@media screen and (max-width: 480px) {
+@media screen and (max-width: 425px) {
   .player-search-bar {
-    max-width: 95%;
+    max-width: 42%;
     height: 40px;
   }
   
@@ -111,7 +115,11 @@
     font-size: 14px;
     border-radius: 20px;
   }
-  
+
+  .player-search-result {
+    max-width: 42%;
+  }
+
   .player-info {
     padding: 8px 10px;
     font-size: 14px;
