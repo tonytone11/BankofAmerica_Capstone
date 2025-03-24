@@ -4,6 +4,8 @@ import '../styles/Home.css';
 import Quotes from '../components/Quotes';
 import News from '../components/FootballNews';
 import { isAuthenticated } from '../utils/authUtils';
+import { GiSoccerBall } from "react-icons/gi";
+
 
 const Home = () => {
     const navigate = useNavigate();
@@ -21,9 +23,19 @@ const Home = () => {
 
     return (
         <div className="page-container">
-            <main className="home-container">
+        <main className="home-container">
             {/* Hero Section */}
             <section className="hero-section">
+                {/* First soccer ball */}
+                <div className="soccer-ball-top-left">
+                    <GiSoccerBall />
+                </div>
+                
+                {/* Second soccer ball */}
+                <div className="soccer-ball-bottom-right">
+                    <GiSoccerBall />
+                </div>
+                
                 <div className="hero-content">
                     <h1>DEVELOP YOUR TALENT</h1>
                     <h2>Track your progress. Learn from the pros.</h2>
