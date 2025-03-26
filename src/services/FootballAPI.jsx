@@ -24,7 +24,7 @@ export const searchPlayers = async (query) => {
 };
 
 // Get player statistics by ID 
-export const getPlayerStatistics = async (playerId, season = 2023) => {
+export const getPlayerStatistics = async (playerId, season = 2025) => {
     try {
         const response = await footballApi.get('/players', {
             params: {
